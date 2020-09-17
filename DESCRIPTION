@@ -9,6 +9,7 @@ Depends:
     R (>= 3.5.0),
     DatabaseConnector (>= 3.0.0)
 Imports:
+    ScyllaCharacterization (>= 0.0.3),
     SqlRender (>= 1.6.8),
     EmpiricalCalibration (>= 2.0.2),
     Cyclops (>= 3.0.0),
@@ -22,15 +23,16 @@ Imports:
     rlang,
     MethodEvaluation (>= 2.0.0),
     OhdsiSharing (>= 0.2.2),
-	ParallelLogger (>= 2.0.0),
-	survival,
-	plyr
+	  ParallelLogger (>= 2.0.0),
+	  survival,
+	  plyr
 Suggests:
     knitr,
     rmarkdown,
     DT,
     shiny
 Remotes:
+    ohdsi-studies/ScyllaCharacterization,
     ohdsi/FeatureExtraction,
     ohdsi/CohortMethod,
     ohdsi/MethodEvaluation,
