@@ -1,0 +1,36 @@
+targetId,comparatorId,outcomeId,outcomeName,type
+1,2,24609,Hypoglycemia,outcome
+1,2,29735,Candidiasis of mouth,outcome
+1,2,73754,Restless legs,outcome
+1,2,80004,Injury of hand,outcome
+1,2,134718,Hirsutism,outcome
+1,2,139099,Ingrowing nail,outcome
+1,2,141932,Senile hyperkeratosis,outcome
+1,2,192367,Dysplasia of cervix,outcome
+1,2,193739,Ovarian failure,outcome
+1,2,194997,Prostatitis,outcome
+1,2,197236,Uterine leiomyoma,outcome
+1,2,199074,Acute pancreatitis,outcome
+1,2,255573,Chronic obstructive lung disease,outcome
+1,2,257007,Allergic rhinitis,outcome
+1,2,313459,Sleep apnea,outcome
+1,2,314658,Cardiomegaly,outcome
+1,2,316084,Lymphadenitis,outcome
+1,2,319843,Mitral valve disorder,outcome
+1,2,321596,Peripheral venous insufficiency,outcome
+1,2,374366,Sensorineural hearing loss,outcome
+1,2,375292,Perforation of tympanic membrane,outcome
+1,2,380094,Carpal tunnel syndrome,outcome
+1,2,433753,Alcohol abuse,outcome
+1,2,433811,Hydronephrosis,outcome
+1,2,436665,Bipolar disorder,outcome
+1,2,436676,Posttraumatic stress disorder,outcome
+1,2,436940,Metabolic syndrome X,outcome
+1,2,437784,Infectious mononucleosis,outcome
+1,2,438134,Hypersomnia,outcome
+1,2,440358,Lipoma,outcome
+1,2,440374,Obsessive-compulsive disorder,outcome
+1,2,443617,Conduct disorder,outcome
+1,2,443800,Amenorrhea,outcome
+1,2,4084966,Candida infection of genital region,outcome
+1,2,4288310,Carotid artery obstruction,outcome
