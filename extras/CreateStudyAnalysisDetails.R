@@ -118,6 +118,10 @@ createAnalysesDetails <- function(workFolder) {
   CohortMethod::saveCmAnalysisList(cmAnalysisList, file.path(workFolder, "cmAnalysisList.json"))
 }
 
+createTcoAndNegativeContolDetails <- function(workFolder) {
+  # TODO
+}
+
 createPositiveControlSynthesisArgs <- function(workFolder) {
   settings <- list(outputIdOffset = 10000,
                    firstExposureOnly = TRUE,
