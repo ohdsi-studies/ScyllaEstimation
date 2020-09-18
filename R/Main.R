@@ -18,7 +18,7 @@
 #'
 #' @details
 #' This function executes the ScyllaEstimation Study.
-#' 
+#'
 #' The \code{createCohorts}, \code{synthesizePositiveControls}, \code{runAnalyses}, and \code{runDiagnostics} arguments
 #' are intended to be used to run parts of the full study at a time, but none of the parts are considered to be optional.
 #'
@@ -47,10 +47,10 @@
 #' @param createCohorts        Create the cohortTable table with the exposure and outcome cohorts?
 #' @param synthesizePositiveControls  Should positive controls be synthesized?
 #' @param runAnalyses          Perform the cohort method analyses?
-#' @param packageResults       Should results be packaged for later sharing?     
+#' @param packageResults       Should results be packaged for later sharing?
 #' @param maxCores             How many parallel cores should be used? If more cores are made available
 #'                             this can speed up the analyses.
-#' @param minCellCount         The minimum number of subjects contributing to a count before it can be included 
+#' @param minCellCount         The minimum number of subjects contributing to a count before it can be included
 #'                             in packaged results.
 #'
 #' @examples
@@ -92,7 +92,7 @@ execute <- function(connectionDetails,
   ParallelLogger::addDefaultErrorReportLogger(file.path(outputFolder, "errorReportR.txt"))
   on.exit(ParallelLogger::unregisterLogger("DEFAULT_FILE_LOGGER", silent = TRUE))
   on.exit(ParallelLogger::unregisterLogger("DEFAULT_ERRORREPORT_LOGGER", silent = TRUE), add = TRUE)
-  
+
   if (createCohorts) {
     ParallelLogger::logInfo("Creating exposure and outcome cohorts")
     createCohorts(connectionDetails = connectionDetails,
@@ -102,10 +102,10 @@ execute <- function(connectionDetails,
                   oracleTempSchema = oracleTempSchema,
                   outputFolder = outputFolder)
   }
-  
+
   # Set doPositiveControlSynthesis to FALSE if you don't want to use synthetic positive controls:
   # Start doPositiveControlSynthesis
-  doPositiveControlSynthesis <- TRUE
+  doPositiveControlSynthesis <- FALSE
   # End doPositiveControlSynthesis
   if (doPositiveControlSynthesis) {
     if (synthesizePositiveControls) {
@@ -119,7 +119,7 @@ execute <- function(connectionDetails,
                                  maxCores = maxCores)
     }
   }
-  
+
   if (runAnalyses) {
     ParallelLogger::logInfo("Running CohortMethod analyses")
     runCohortMethod(connectionDetails = connectionDetails,
@@ -130,7 +130,7 @@ execute <- function(connectionDetails,
                     outputFolder = outputFolder,
                     maxCores = maxCores)
   }
-  
+
   if (packageResults) {
     ParallelLogger::logInfo("Packaging results")
     exportResults(outputFolder = outputFolder,
@@ -140,6 +140,6 @@ execute <- function(connectionDetails,
                   minCellCount = minCellCount,
                   maxCores = maxCores)
   }
-  
+
   invisible(NULL)
 }

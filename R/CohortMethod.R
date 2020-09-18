@@ -104,6 +104,34 @@ runCohortMethod <- function(connectionDetails,
                                  balanceFolder = balanceFolder)
     ParallelLogger::stopCluster(cluster)
   }
+
+  ParallelLogger::logInfo("Extract log-likelihood profiles")
+  profileFolder <- file.path(outputFolder, "profile")
+  if (!file.exists(profileFolder)) {
+    dir.create(profileFolder)
+  }
+  subset <- results[results$outcomeId %in% outcomesOfInterest, ] # TODO Do we want negative controls?
+  subset <- subset[subset$outcomeModelFile != "", ]
+  if (nrow(subset) > 0) {
+    subset <- split(subset, seq(nrow(subset)))
+    cluster <- ParallelLogger::makeCluster(min(3, maxCores))
+    ParallelLogger::clusterApply(cluster, subset, extractProfile,
+                                 cmOutputFolder = cmOutputFolder,
+                                 profileFolder = profileFolder)
+    ParallelLogger::stopCluster(cluster)
+  }
+}
+
+extractProfile <- function(row, cmOutputFolder, profileFolder) {
+  outputFileName <- file.path(profileFolder,
+                              sprintf("prof_t%s_c%s_o%s_a%s.rds",
+                                      row$targetId, row$comparatorId, row$outcomeId,
+                                      row$analysisId))
+  outcomeFile <- file.path(cmOutputFolder, row$outcomeModelFile)
+  outcome <- readRDS(outcomeFile)
+  if (!is.null(outcome$logLikelihoodProfile)) {
+    saveRDS(outcome$logLikelihoodProfile, outputFileName)
+  }
 }
 
 computeCovariateBalance <- function(row, cmOutputFolder, balanceFolder) {
@@ -118,9 +146,11 @@ computeCovariateBalance <- function(row, cmOutputFolder, balanceFolder) {
     cohortMethodData <- CohortMethod::loadCohortMethodData(cohortMethodDataFile)
     strataFile <- file.path(cmOutputFolder, row$strataFile)
     strata <- readRDS(strataFile)
-    balance <- CohortMethod::computeCovariateBalance(population = strata,
-                                                     cohortMethodData = cohortMethodData)
-    saveRDS(balance, outputFileName)
+     if (nrow(strata) > 0) {
+      balance <- CohortMethod::computeCovariateBalance(population = strata,
+                                                       cohortMethodData = cohortMethodData)
+      saveRDS(balance, outputFileName)
+    }
   }
 }
 
@@ -176,7 +206,7 @@ createTcos <- function(outputFolder) {
     if (length(includeConceptIds) == 1 && is.na(includeConceptIds)) {
       includeConceptIds <- c()
     } else if (length(includeConceptIds) > 0) {
-      includeConceptIds <- as.numeric(strsplit(excludeConceptIds, split = ";")[[1]])
+      includeConceptIds <- as.numeric(strsplit(includeConceptIds, split = ";")[[1]])
     }
     tco <- CohortMethod::createTargetComparatorOutcomes(targetId = targetId,
                                                         comparatorId = comparatorId,
