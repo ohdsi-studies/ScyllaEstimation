@@ -1,0 +1,8 @@
+exposureClass, name, atlasId
+antibiotic, amoxicillin, 1127
+antibiotic, azithromycin, 1125
+antiviral, hydroxychloroquine, 731
+antiviral, "hydroxychloroquine + azithromycin", 706
+antithrombotic, enoxaparin, 862
+antithrombotic, heparin, 736
+antithrombotic, aspirin, 1137
