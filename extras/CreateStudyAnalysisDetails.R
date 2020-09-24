@@ -118,6 +118,31 @@ createAnalysesDetails <- function(workFolder) {
   CohortMethod::saveCmAnalysisList(cmAnalysisList, file.path(workFolder, "cmAnalysisList.json"))
 }
 
+createExposureConceptSet <- function(workFolder) {
+  exposureCohortRefFile <- system.file("settings", "CohortsToCreateTarget.csv", package = "ScyllaCharacterization")
+  exposureCohortRef <- read.csv(exposureCohortRefFile)
+  rows <- split(exposureCohortRef, exposureCohortRef$cohortId)
+
+  getExposureConcepts <- function(row) {
+    cohortJsonFile <- system.file("cohorts", sprintf("%s.json", row$cohortId), package = "ScyllaCharacterization")
+    cohortJson <- readLines(cohortJsonFile)
+    cohortJson <- jsonlite::fromJSON(cohortJson)
+    concepts <- tibble::tibble()
+    for (i in 1:length(cohortJson$ConceptSets$expression$items)) {
+      conceptRow <- cohortJson$ConceptSets$expression$items[[i]]$concept
+      names(conceptRow) <- SqlRender::snakeCaseToCamelCase(names(conceptRow))
+      conceptRow <- dplyr::bind_cols(row, conceptRow)
+      concepts <- dplyr::bind_rows(concepts, conceptRow)
+    }
+    return(concepts)
+  }
+
+  exposureConcepts <- lapply(rows, getExposureConcepts)
+  exposureConcepts <- dplyr::bind_rows(exposureConcepts)
+  exposureConcepts <- exposureConcepts[exposureConcepts$conceptClassId == "Ingredient", ]
+  write.csv(exposureConcepts, file.path(workFolder, "ExposureCohortConceptIds.csv"), row.names = FALSE)
+}
+
 createTcoAndNegativeContolDetails <- function(workFolder) {
   # TODO
 }
