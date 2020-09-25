@@ -17,6 +17,13 @@
 createAnalysesDetails <- function(workFolder) {
 
   covarSettings <- FeatureExtraction::createDefaultCovariateSettings()
+  # covarSettings$endDays <- -1
+  # TODO Do we need to subgroup analysisIds by exposure cohorts?
+  #
+  # - Washout, treatment on date of admission and prior to intensive services, -1 endDays
+  # - No washout, treatment on date of admission and prior to intensive services, 0 endDays
+  # - Washout, treatment during hospitalization, -1 endDays
+  # - Washout, after COVID+ test, 0 endDays
 
   getDbCmDataArgs <-
     CohortMethod::createGetDbCohortMethodDataArgs(studyStartDate = "20200101",
