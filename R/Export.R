@@ -544,12 +544,26 @@ calibrate <- function(subset, allControls) {
   ncs <- ncs[!is.na(ncs$seLogRr), ]
   if (nrow(ncs) > 5) {
     null <- EmpiricalCalibration::fitMcmcNull(ncs$logRr, ncs$seLogRr)
+    model <- EmpiricalCalibration::convertNullToErrorModel(null)
     calibratedP <- EmpiricalCalibration::calibrateP(null = null,
                                                     logRr = subset$logRr,
                                                     seLogRr = subset$seLogRr)
+    calibratedCi <- EmpiricalCalibration::calibrateConfidenceInterval(logRr = subset$logRr,
+                                                                      seLogRr = subset$seLogRr,
+                                                                      model = model)
     subset$calibratedP <- calibratedP$p
+    subset$calibratedRr <- exp(calibratedCi$logRr)
+    subset$calibratedCi95Lb <- exp(calibratedCi$logLb95Rr)
+    subset$calibratedCi95Ub <- exp(calibratedCi$logUb95Rr)
+    subset$calibratedLogRr <- calibratedCi$logRr
+    subset$calibratedSeLogRr <- calibratedCi$seLogRr
   } else {
     subset$calibratedP <- rep(NA, nrow(subset))
+    subset$calibratedRr <- rep(NA, nrow(subset))
+    subset$calibratedCi95Lb <- rep(NA, nrow(subset))
+    subset$calibratedCi95Ub <- rep(NA, nrow(subset))
+    subset$calibratedLogRr <- rep(NA, nrow(subset))
+    subset$calibratedSeLogRr <- rep(NA, nrow(subset))
   }
   pcs <- subset[subset$outcomeId %in% allControls$outcomeId[allControls$targetEffectSize != 1], ]
   pcs <- pcs[!is.na(pcs$seLogRr), ]
@@ -567,12 +581,6 @@ calibrate <- function(subset, allControls) {
     subset$calibratedCi95Ub <- exp(calibratedCi$logUb95Rr)
     subset$calibratedLogRr <- calibratedCi$logRr
     subset$calibratedSeLogRr <- calibratedCi$seLogRr
-  } else {
-    subset$calibratedRr <- rep(NA, nrow(subset))
-    subset$calibratedCi95Lb <- rep(NA, nrow(subset))
-    subset$calibratedCi95Ub <- rep(NA, nrow(subset))
-    subset$calibratedLogRr <- rep(NA, nrow(subset))
-    subset$calibratedSeLogRr <- rep(NA, nrow(subset))
   }
   subset$i2 <- rep(NA, nrow(subset))
   subset <- subset[, c("targetId",
@@ -777,6 +785,14 @@ exportDiagnostics <- function(outputFolder,
     balance$targetMeanAfter[is.na(balance$targetMeanAfter)] <- 0
     balance$comparatorMeanAfter[is.na(balance$comparatorMeanAfter)] <- 0
     balance$stdDiffAfter <- round(balance$stdDiffAfter, 3)
+
+    balance <- balance[!(round(balance$targetMeanBefore, 3) == 0 &
+                           round(balance$comparatorMeanBefore, 3) == 0 &
+                           round(balance$targetMeanAfter, 3) == 0 &
+                           round(balance$comparatorMeanAfter, 3) == 0 &
+                           round(balance$stdDiffBefore, 3) == 0 &
+                           round(balance$stdDiffAfter, 3) == 0), ]
+
     balance <- enforceMinCellValue(balance,
                                    "targetMeanBefore",
                                    minCellCount/inferredTargetBeforeSize,
@@ -797,9 +813,7 @@ exportDiagnostics <- function(outputFolder,
     balance$comparatorMeanBefore <- round(balance$comparatorMeanBefore, 3)
     balance$targetMeanAfter <- round(balance$targetMeanAfter, 3)
     balance$comparatorMeanAfter <- round(balance$comparatorMeanAfter, 3)
-    balance <- balance[balance$targetMeanBefore != 0 & balance$comparatorMeanBefore != 0 & balance$targetMeanAfter !=
-                         0 & balance$comparatorMeanAfter != 0 & balance$stdDiffBefore != 0 & balance$stdDiffAfter !=
-                         0, ]
+
     balance <- balance[!is.na(balance$targetId), ]
     colnames(balance) <- SqlRender::camelCaseToSnakeCase(colnames(balance))
     write.table(x = balance,
