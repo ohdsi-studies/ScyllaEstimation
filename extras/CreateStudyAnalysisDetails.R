@@ -16,25 +16,36 @@
 
 createAnalysesDetails <- function(workFolder) {
 
-  covarSettings <- FeatureExtraction::createDefaultCovariateSettings()
-  # covarSettings$endDays <- -1
+  createScyllaCovariateSettings <- function(endDays) {
+    covarSettings <- FeatureExtraction::createDefaultCovariateSettings()
+    covarSettings$endDays <- endDays
+    return(covarSettings)
+  }
+
   # TODO Do we need to subgroup analysisIds by exposure cohorts?
   #
-  # - Washout, treatment on date of admission and prior to intensive services, -1 endDays
-  # - No washout, treatment on date of admission and prior to intensive services, 0 endDays
-  # - Washout, treatment during hospitalization, -1 endDays
-  # - Washout, after COVID+ test, 0 endDays
+  # - 100+: Washout, treatment on date of admission and prior to intensive services, -1 endDays
+  # - 200+: No washout, treatment on date of admission and prior to intensive services, 0 endDays
+  # - 300+: Washout, treatment during hospitalization, -1 endDays
+  # - 400+: Washout, after COVID+ test, 0 endDays
 
-  getDbCmDataArgs <-
+  getDbCmDataArgsZeroDays <-
     CohortMethod::createGetDbCohortMethodDataArgs(studyStartDate = "20200101",
                                                   studyEndDate = "",
                                                   excludeDrugsFromCovariates = TRUE,
                                                   firstExposureOnly = TRUE,
                                                   restrictToCommonPeriod = TRUE,
-                                                  covariateSettings = covarSettings)
+                                                  covariateSettings = createScyllaCovariateSettings(endDays = 0))
+
+  getDbCmDataArgsMinusOneDays <-
+    CohortMethod::createGetDbCohortMethodDataArgs(studyStartDate = "20200101",
+                                                  studyEndDate = "",
+                                                  excludeDrugsFromCovariates = TRUE,
+                                                  firstExposureOnly = TRUE,
+                                                  restrictToCommonPeriod = TRUE,
+                                                  covariateSettings = createScyllaCovariateSettings(endDays = -1))
 
   createScyllaStudyPopulation <- function(washoutPeriod, riskWindowEnd) {
-
     CohortMethod::createCreateStudyPopulationArgs(washoutPeriod = washoutPeriod,
                                                   removeDuplicateSubjects = "keep first",
                                                   removeSubjectsWithPriorOutcome = TRUE,
@@ -117,61 +128,113 @@ createAnalysesDetails <- function(workFolder) {
                                    fitOutcomeModelArgs = fitOutcomeModelArgs)
   }
 
-  createSetOfScyllaCmAnalysis <- function(startId, descriptionStub, functor) {
+  createSetOfScyllaCmAnalysis <- function(startId, descriptionStub, washoutPeriod,
+                                          getDbCmDataArgs,
+                                          fitLogisticOutcomeModelArgs,
+                                          fitCoxOutcomeModelArgs,
+                                          functor) {
     list(
       functor(analysisId = startId + 0,
-              description = paste(descriptionStub, "no washout; 7 days; logistic"),
+              description = paste(descriptionStub, "7 days; logistic"),
               getDbCohortMethodDataArgs = getDbCmDataArgs,
-              createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = 0,
+              createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = washoutPeriod,
                                                                riskWindowEnd = 7),
-              fitOutcomeModelArgs = fitOutcomeModelArgsLogisticNoStrata),
+              fitOutcomeModelArgs = fitLogisticOutcomeModelArgs),
 
       functor(analysisId = startId + 1,
-              description = paste(descriptionStub, "no washout; 30 days; logistic"),
+              description = paste(descriptionStub, "30 days; logistic"),
               getDbCohortMethodDataArgs = getDbCmDataArgs,
-              createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = 0,
+              createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = washoutPeriod,
                                                                riskWindowEnd = 30),
-              fitOutcomeModelArgs = fitOutcomeModelArgsLogisticNoStrata),
+              fitOutcomeModelArgs = fitLogisticOutcomeModelArgs),
 
       functor(analysisId = startId + 2,
-              description = paste(descriptionStub, "no washout; on treatment; logistic"),
+              description = paste(descriptionStub, "on treatment; logistic"),
               getDbCohortMethodDataArgs = getDbCmDataArgs,
-              createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = 0,
+              createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = washoutPeriod,
                                                                riskWindowEnd = 9999),
-              fitOutcomeModelArgs = fitOutcomeModelArgsLogisticNoStrata),
+              fitOutcomeModelArgs = fitLogisticOutcomeModelArgs),
 
       functor(analysisId = startId + 3,
-              description = paste(descriptionStub, "no washout; 7 days; cox"),
+              description = paste(descriptionStub, "7 days; cox"),
               getDbCohortMethodDataArgs = getDbCmDataArgs,
-              createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = 0,
+              createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = washoutPeriod,
                                                                riskWindowEnd = 7),
-              fitOutcomeModelArgs = fitOutcomeModelArgsCoxNoStrata),
+              fitOutcomeModelArgs = fitCoxOutcomeModelArgs),
 
       functor(analysisId = startId + 4,
-              description = paste(descriptionStub, "no washout; 30 days; cox"),
+              description = paste(descriptionStub, "30 days; cox"),
               getDbCohortMethodDataArgs = getDbCmDataArgs,
-              createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = 0,
+              createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = washoutPeriod,
                                                                riskWindowEnd = 30),
-              fitOutcomeModelArgs = fitOutcomeModelArgsCoxNoStrata),
+              fitOutcomeModelArgs = fitCoxOutcomeModelArgs),
 
       functor(analysisId = startId + 5,
-              description = paste(descriptionStub, "no washout; on treatment; cox"),
+              description = paste(descriptionStub, "on treatment; cox"),
               getDbCohortMethodDataArgs = getDbCmDataArgs,
-              createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = 0,
+              createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = washoutPeriod,
                                                                riskWindowEnd = 9999),
-              fitOutcomeModelArgs = fitOutcomeModelArgsCoxNoStrata)
+              fitOutcomeModelArgs = fitCoxOutcomeModelArgs)
     )
   }
 
-  crudeAnalysisList <- createSetOfScyllaCmAnalysis(1, "Crude;", createCrudeScyllaCmAnalysis)
+  createLargerSetOfScyllaCmAnalysis <- function(startId, descriptionStub, washoutPeriod, getDbCmDataArgs) {
+    c(
+      createSetOfScyllaCmAnalysis(startId = startId + 0,
+                                  descriptionStub = paste(descriptionStub, "Crude;"),
+                                  washoutPeriod = washoutPeriod,
+                                  getDbCmDataArgs = getDbCmDataArgs,
+                                  fitLogisticOutcomeModelArgs = fitOutcomeModelArgsLogisticNoStrata,
+                                  fitCoxOutcomeModelArgs = fitOutcomeModelArgsCoxNoStrata,
+                                  functor = createCrudeScyllaCmAnalysis),
 
-  oneToOneMatchedAnalysisList <- createSetOfScyllaCmAnalysis(7, "1-to-1 matched;", createOneToOneMatchScyllaCmAnalysis)
+      createSetOfScyllaCmAnalysis(startId = startId + 6,
+                                  descriptionStub = paste(descriptionStub, "1-to-1 matched;"),
+                                  washoutPeriod = washoutPeriod,
+                                  getDbCmDataArgs = getDbCmDataArgs,
+                                  fitLogisticOutcomeModelArgs = fitOutcomeModelArgsLogisticNoStrata,
+                                  fitCoxOutcomeModelArgs = fitOutcomeModelArgsCoxNoStrata,
+                                  functor = createOneToOneMatchScyllaCmAnalysis),
 
-  oneToManyMatchedAnalysisList <- createSetOfScyllaCmAnalysis(13, "1-to-many matched;", createOneToManyMatchScyllaCmAnalysis)
+      createSetOfScyllaCmAnalysis(startId = startId + 12,
+                                  descriptionStub = paste(descriptionStub, "1-to-many matched;"),
+                                  washoutPeriod = washoutPeriod,
+                                  getDbCmDataArgs = getDbCmDataArgs,
+                                  fitLogisticOutcomeModelArgs = fitOutcomeModelArgsLogisticWithStrata,
+                                  fitCoxOutcomeModelArgs = fitOutcomeModelArgsCoxWithStrata,
+                                  functor = createOneToManyMatchScyllaCmAnalysis),
 
-  stratifiedAnalysisList <- createSetOfScyllaCmAnalysis(24, "Stratified;", createStratifiedScyllaCmAnalysis)
+      createSetOfScyllaCmAnalysis(startId = startId + 18,
+                                  descriptionStub = paste(descriptionStub, "Stratified;"),
+                                  washoutPeriod = washoutPeriod,
+                                  getDbCmDataArgs = getDbCmDataArgs,
+                                  fitLogisticOutcomeModelArgs = fitOutcomeModelArgsLogisticWithStrata,
+                                  fitCoxOutcomeModelArgs = fitOutcomeModelArgsCoxWithStrata,
+                                  functor = createStratifiedScyllaCmAnalysis)
+    )
+  }
 
-  cmAnalysisList <- c(crudeAnalysisList, oneToOneMatchedAnalysisList, oneToManyMatchedAnalysisList, stratifiedAnalysisList)
+  cmAnalysisList <- c(
+    createLargerSetOfScyllaCmAnalysis(startId = 101,
+                                      descriptionStub = "Washout; -1 end days",
+                                      washoutPeriod = 365,
+                                      getDbCmDataArgs = getDbCmDataArgsMinusOneDays),
+
+    createLargerSetOfScyllaCmAnalysis(startId = 201,
+                                      descriptionStub = "No washout; 0 end days",
+                                      washoutPeriod = 0,
+                                      getDbCmDataArgs = getDbCmDataArgsZeroDays),
+
+    createLargerSetOfScyllaCmAnalysis(startId = 301,
+                                      descriptionStub = "Washout; -1 end days",
+                                      washoutPeriod = 365,
+                                      getDbCmDataArgs = getDbCmDataArgsMinusOneDays),
+
+    createLargerSetOfScyllaCmAnalysis(startId = 401,
+                                      descriptionStub = "Washout; 0 end days",
+                                      washoutPeriod = 365,
+                                      getDbCmDataArgs = getDbCmDataArgsZeroDays)
+  )
 
   CohortMethod::saveCmAnalysisList(cmAnalysisList, file.path(workFolder, "cmAnalysisList.json"))
 }
