@@ -216,22 +216,22 @@ createAnalysesDetails <- function(workFolder) {
 
   cmAnalysisList <- c(
     createLargerSetOfScyllaCmAnalysis(startId = 101,
-                                      descriptionStub = "Washout; -1 end days;",
+                                      descriptionStub = "Admission to intensive services; washout; -1 end days;",
                                       washoutPeriod = 365,
                                       getDbCmDataArgs = getDbCmDataArgsMinusOneDays),
 
     createLargerSetOfScyllaCmAnalysis(startId = 201,
-                                      descriptionStub = "No washout; 0 end days;",
+                                      descriptionStub = "Admission to intensive services; no washout; 0 end days;",
                                       washoutPeriod = 0,
                                       getDbCmDataArgs = getDbCmDataArgsZeroDays),
 
     createLargerSetOfScyllaCmAnalysis(startId = 301,
-                                      descriptionStub = "Washout; -1 end days;",
+                                      descriptionStub = "During hospitalization to intensive services; washout; -1 end days;",
                                       washoutPeriod = 365,
                                       getDbCmDataArgs = getDbCmDataArgsMinusOneDays),
 
     createLargerSetOfScyllaCmAnalysis(startId = 401,
-                                      descriptionStub = "Washout; 0 end days;",
+                                      descriptionStub = "Post testing to hospitalization; washout; 0 end days;",
                                       washoutPeriod = 365,
                                       getDbCmDataArgs = getDbCmDataArgsZeroDays)
   )

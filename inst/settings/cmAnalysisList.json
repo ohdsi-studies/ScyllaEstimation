@@ -1,7 +1,7 @@
 [
   {
     "analysisId": 101,
-    "description": "Washout; -1 end days; Crude; 7 days; logistic",
+    "description": "Admission to intensive services; washout; -1 end days; Crude; 7 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -120,7 +120,7 @@
   },
   {
     "analysisId": 102,
-    "description": "Washout; -1 end days; Crude; 30 days; logistic",
+    "description": "Admission to intensive services; washout; -1 end days; Crude; 30 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -239,7 +239,7 @@
   },
   {
     "analysisId": 103,
-    "description": "Washout; -1 end days; Crude; on treatment; logistic",
+    "description": "Admission to intensive services; washout; -1 end days; Crude; on treatment; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -358,7 +358,7 @@
   },
   {
     "analysisId": 104,
-    "description": "Washout; -1 end days; Crude; 7 days; cox",
+    "description": "Admission to intensive services; washout; -1 end days; Crude; 7 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -477,7 +477,7 @@
   },
   {
     "analysisId": 105,
-    "description": "Washout; -1 end days; Crude; 30 days; cox",
+    "description": "Admission to intensive services; washout; -1 end days; Crude; 30 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -596,7 +596,7 @@
   },
   {
     "analysisId": 106,
-    "description": "Washout; -1 end days; Crude; on treatment; cox",
+    "description": "Admission to intensive services; washout; -1 end days; Crude; on treatment; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -715,7 +715,7 @@
   },
   {
     "analysisId": 107,
-    "description": "Washout; -1 end days; 1-to-1 matched; 7 days; logistic",
+    "description": "Admission to intensive services; washout; -1 end days; 1-to-1 matched; 7 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -881,7 +881,7 @@
   },
   {
     "analysisId": 108,
-    "description": "Washout; -1 end days; 1-to-1 matched; 30 days; logistic",
+    "description": "Admission to intensive services; washout; -1 end days; 1-to-1 matched; 30 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -1047,7 +1047,7 @@
   },
   {
     "analysisId": 109,
-    "description": "Washout; -1 end days; 1-to-1 matched; on treatment; logistic",
+    "description": "Admission to intensive services; washout; -1 end days; 1-to-1 matched; on treatment; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -1213,7 +1213,7 @@
   },
   {
     "analysisId": 110,
-    "description": "Washout; -1 end days; 1-to-1 matched; 7 days; cox",
+    "description": "Admission to intensive services; washout; -1 end days; 1-to-1 matched; 7 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -1379,7 +1379,7 @@
   },
   {
     "analysisId": 111,
-    "description": "Washout; -1 end days; 1-to-1 matched; 30 days; cox",
+    "description": "Admission to intensive services; washout; -1 end days; 1-to-1 matched; 30 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -1545,7 +1545,7 @@
   },
   {
     "analysisId": 112,
-    "description": "Washout; -1 end days; 1-to-1 matched; on treatment; cox",
+    "description": "Admission to intensive services; washout; -1 end days; 1-to-1 matched; on treatment; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -1711,7 +1711,7 @@
   },
   {
     "analysisId": 113,
-    "description": "Washout; -1 end days; 1-to-many matched; 7 days; logistic",
+    "description": "Admission to intensive services; washout; -1 end days; 1-to-many matched; 7 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -1877,7 +1877,7 @@
   },
   {
     "analysisId": 114,
-    "description": "Washout; -1 end days; 1-to-many matched; 30 days; logistic",
+    "description": "Admission to intensive services; washout; -1 end days; 1-to-many matched; 30 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -2043,7 +2043,7 @@
   },
   {
     "analysisId": 115,
-    "description": "Washout; -1 end days; 1-to-many matched; on treatment; logistic",
+    "description": "Admission to intensive services; washout; -1 end days; 1-to-many matched; on treatment; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -2209,7 +2209,7 @@
   },
   {
     "analysisId": 116,
-    "description": "Washout; -1 end days; 1-to-many matched; 7 days; cox",
+    "description": "Admission to intensive services; washout; -1 end days; 1-to-many matched; 7 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -2375,7 +2375,7 @@
   },
   {
     "analysisId": 117,
-    "description": "Washout; -1 end days; 1-to-many matched; 30 days; cox",
+    "description": "Admission to intensive services; washout; -1 end days; 1-to-many matched; 30 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -2541,7 +2541,7 @@
   },
   {
     "analysisId": 118,
-    "description": "Washout; -1 end days; 1-to-many matched; on treatment; cox",
+    "description": "Admission to intensive services; washout; -1 end days; 1-to-many matched; on treatment; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -2707,7 +2707,7 @@
   },
   {
     "analysisId": 119,
-    "description": "Washout; -1 end days; Stratified; 7 days; logistic",
+    "description": "Admission to intensive services; washout; -1 end days; Stratified; 7 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -2871,7 +2871,7 @@
   },
   {
     "analysisId": 120,
-    "description": "Washout; -1 end days; Stratified; 30 days; logistic",
+    "description": "Admission to intensive services; washout; -1 end days; Stratified; 30 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -3035,7 +3035,7 @@
   },
   {
     "analysisId": 121,
-    "description": "Washout; -1 end days; Stratified; on treatment; logistic",
+    "description": "Admission to intensive services; washout; -1 end days; Stratified; on treatment; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -3199,7 +3199,7 @@
   },
   {
     "analysisId": 122,
-    "description": "Washout; -1 end days; Stratified; 7 days; cox",
+    "description": "Admission to intensive services; washout; -1 end days; Stratified; 7 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -3363,7 +3363,7 @@
   },
   {
     "analysisId": 123,
-    "description": "Washout; -1 end days; Stratified; 30 days; cox",
+    "description": "Admission to intensive services; washout; -1 end days; Stratified; 30 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -3527,7 +3527,7 @@
   },
   {
     "analysisId": 124,
-    "description": "Washout; -1 end days; Stratified; on treatment; cox",
+    "description": "Admission to intensive services; washout; -1 end days; Stratified; on treatment; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -3691,7 +3691,7 @@
   },
   {
     "analysisId": 201,
-    "description": "No washout; 0 end days; Crude; 7 days; logistic",
+    "description": "Admission to intensive services; no washout; 0 end days; Crude; 7 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -3810,7 +3810,7 @@
   },
   {
     "analysisId": 202,
-    "description": "No washout; 0 end days; Crude; 30 days; logistic",
+    "description": "Admission to intensive services; no washout; 0 end days; Crude; 30 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -3929,7 +3929,7 @@
   },
   {
     "analysisId": 203,
-    "description": "No washout; 0 end days; Crude; on treatment; logistic",
+    "description": "Admission to intensive services; no washout; 0 end days; Crude; on treatment; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -4048,7 +4048,7 @@
   },
   {
     "analysisId": 204,
-    "description": "No washout; 0 end days; Crude; 7 days; cox",
+    "description": "Admission to intensive services; no washout; 0 end days; Crude; 7 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -4167,7 +4167,7 @@
   },
   {
     "analysisId": 205,
-    "description": "No washout; 0 end days; Crude; 30 days; cox",
+    "description": "Admission to intensive services; no washout; 0 end days; Crude; 30 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -4286,7 +4286,7 @@
   },
   {
     "analysisId": 206,
-    "description": "No washout; 0 end days; Crude; on treatment; cox",
+    "description": "Admission to intensive services; no washout; 0 end days; Crude; on treatment; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -4405,7 +4405,7 @@
   },
   {
     "analysisId": 207,
-    "description": "No washout; 0 end days; 1-to-1 matched; 7 days; logistic",
+    "description": "Admission to intensive services; no washout; 0 end days; 1-to-1 matched; 7 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -4571,7 +4571,7 @@
   },
   {
     "analysisId": 208,
-    "description": "No washout; 0 end days; 1-to-1 matched; 30 days; logistic",
+    "description": "Admission to intensive services; no washout; 0 end days; 1-to-1 matched; 30 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -4737,7 +4737,7 @@
   },
   {
     "analysisId": 209,
-    "description": "No washout; 0 end days; 1-to-1 matched; on treatment; logistic",
+    "description": "Admission to intensive services; no washout; 0 end days; 1-to-1 matched; on treatment; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -4903,7 +4903,7 @@
   },
   {
     "analysisId": 210,
-    "description": "No washout; 0 end days; 1-to-1 matched; 7 days; cox",
+    "description": "Admission to intensive services; no washout; 0 end days; 1-to-1 matched; 7 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -5069,7 +5069,7 @@
   },
   {
     "analysisId": 211,
-    "description": "No washout; 0 end days; 1-to-1 matched; 30 days; cox",
+    "description": "Admission to intensive services; no washout; 0 end days; 1-to-1 matched; 30 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -5235,7 +5235,7 @@
   },
   {
     "analysisId": 212,
-    "description": "No washout; 0 end days; 1-to-1 matched; on treatment; cox",
+    "description": "Admission to intensive services; no washout; 0 end days; 1-to-1 matched; on treatment; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -5401,7 +5401,7 @@
   },
   {
     "analysisId": 213,
-    "description": "No washout; 0 end days; 1-to-many matched; 7 days; logistic",
+    "description": "Admission to intensive services; no washout; 0 end days; 1-to-many matched; 7 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -5567,7 +5567,7 @@
   },
   {
     "analysisId": 214,
-    "description": "No washout; 0 end days; 1-to-many matched; 30 days; logistic",
+    "description": "Admission to intensive services; no washout; 0 end days; 1-to-many matched; 30 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -5733,7 +5733,7 @@
   },
   {
     "analysisId": 215,
-    "description": "No washout; 0 end days; 1-to-many matched; on treatment; logistic",
+    "description": "Admission to intensive services; no washout; 0 end days; 1-to-many matched; on treatment; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -5899,7 +5899,7 @@
   },
   {
     "analysisId": 216,
-    "description": "No washout; 0 end days; 1-to-many matched; 7 days; cox",
+    "description": "Admission to intensive services; no washout; 0 end days; 1-to-many matched; 7 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -6065,7 +6065,7 @@
   },
   {
     "analysisId": 217,
-    "description": "No washout; 0 end days; 1-to-many matched; 30 days; cox",
+    "description": "Admission to intensive services; no washout; 0 end days; 1-to-many matched; 30 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -6231,7 +6231,7 @@
   },
   {
     "analysisId": 218,
-    "description": "No washout; 0 end days; 1-to-many matched; on treatment; cox",
+    "description": "Admission to intensive services; no washout; 0 end days; 1-to-many matched; on treatment; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -6397,7 +6397,7 @@
   },
   {
     "analysisId": 219,
-    "description": "No washout; 0 end days; Stratified; 7 days; logistic",
+    "description": "Admission to intensive services; no washout; 0 end days; Stratified; 7 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -6561,7 +6561,7 @@
   },
   {
     "analysisId": 220,
-    "description": "No washout; 0 end days; Stratified; 30 days; logistic",
+    "description": "Admission to intensive services; no washout; 0 end days; Stratified; 30 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -6725,7 +6725,7 @@
   },
   {
     "analysisId": 221,
-    "description": "No washout; 0 end days; Stratified; on treatment; logistic",
+    "description": "Admission to intensive services; no washout; 0 end days; Stratified; on treatment; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -6889,7 +6889,7 @@
   },
   {
     "analysisId": 222,
-    "description": "No washout; 0 end days; Stratified; 7 days; cox",
+    "description": "Admission to intensive services; no washout; 0 end days; Stratified; 7 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -7053,7 +7053,7 @@
   },
   {
     "analysisId": 223,
-    "description": "No washout; 0 end days; Stratified; 30 days; cox",
+    "description": "Admission to intensive services; no washout; 0 end days; Stratified; 30 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -7217,7 +7217,7 @@
   },
   {
     "analysisId": 224,
-    "description": "No washout; 0 end days; Stratified; on treatment; cox",
+    "description": "Admission to intensive services; no washout; 0 end days; Stratified; on treatment; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -7381,7 +7381,7 @@
   },
   {
     "analysisId": 301,
-    "description": "Washout; -1 end days; Crude; 7 days; logistic",
+    "description": "During hospitalization to intensive services; washout; -1 end days; Crude; 7 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -7500,7 +7500,7 @@
   },
   {
     "analysisId": 302,
-    "description": "Washout; -1 end days; Crude; 30 days; logistic",
+    "description": "During hospitalization to intensive services; washout; -1 end days; Crude; 30 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -7619,7 +7619,7 @@
   },
   {
     "analysisId": 303,
-    "description": "Washout; -1 end days; Crude; on treatment; logistic",
+    "description": "During hospitalization to intensive services; washout; -1 end days; Crude; on treatment; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -7738,7 +7738,7 @@
   },
   {
     "analysisId": 304,
-    "description": "Washout; -1 end days; Crude; 7 days; cox",
+    "description": "During hospitalization to intensive services; washout; -1 end days; Crude; 7 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -7857,7 +7857,7 @@
   },
   {
     "analysisId": 305,
-    "description": "Washout; -1 end days; Crude; 30 days; cox",
+    "description": "During hospitalization to intensive services; washout; -1 end days; Crude; 30 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -7976,7 +7976,7 @@
   },
   {
     "analysisId": 306,
-    "description": "Washout; -1 end days; Crude; on treatment; cox",
+    "description": "During hospitalization to intensive services; washout; -1 end days; Crude; on treatment; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -8095,7 +8095,7 @@
   },
   {
     "analysisId": 307,
-    "description": "Washout; -1 end days; 1-to-1 matched; 7 days; logistic",
+    "description": "During hospitalization to intensive services; washout; -1 end days; 1-to-1 matched; 7 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -8261,7 +8261,7 @@
   },
   {
     "analysisId": 308,
-    "description": "Washout; -1 end days; 1-to-1 matched; 30 days; logistic",
+    "description": "During hospitalization to intensive services; washout; -1 end days; 1-to-1 matched; 30 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -8427,7 +8427,7 @@
   },
   {
     "analysisId": 309,
-    "description": "Washout; -1 end days; 1-to-1 matched; on treatment; logistic",
+    "description": "During hospitalization to intensive services; washout; -1 end days; 1-to-1 matched; on treatment; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -8593,7 +8593,7 @@
   },
   {
     "analysisId": 310,
-    "description": "Washout; -1 end days; 1-to-1 matched; 7 days; cox",
+    "description": "During hospitalization to intensive services; washout; -1 end days; 1-to-1 matched; 7 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -8759,7 +8759,7 @@
   },
   {
     "analysisId": 311,
-    "description": "Washout; -1 end days; 1-to-1 matched; 30 days; cox",
+    "description": "During hospitalization to intensive services; washout; -1 end days; 1-to-1 matched; 30 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -8925,7 +8925,7 @@
   },
   {
     "analysisId": 312,
-    "description": "Washout; -1 end days; 1-to-1 matched; on treatment; cox",
+    "description": "During hospitalization to intensive services; washout; -1 end days; 1-to-1 matched; on treatment; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -9091,7 +9091,7 @@
   },
   {
     "analysisId": 313,
-    "description": "Washout; -1 end days; 1-to-many matched; 7 days; logistic",
+    "description": "During hospitalization to intensive services; washout; -1 end days; 1-to-many matched; 7 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -9257,7 +9257,7 @@
   },
   {
     "analysisId": 314,
-    "description": "Washout; -1 end days; 1-to-many matched; 30 days; logistic",
+    "description": "During hospitalization to intensive services; washout; -1 end days; 1-to-many matched; 30 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -9423,7 +9423,7 @@
   },
   {
     "analysisId": 315,
-    "description": "Washout; -1 end days; 1-to-many matched; on treatment; logistic",
+    "description": "During hospitalization to intensive services; washout; -1 end days; 1-to-many matched; on treatment; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -9589,7 +9589,7 @@
   },
   {
     "analysisId": 316,
-    "description": "Washout; -1 end days; 1-to-many matched; 7 days; cox",
+    "description": "During hospitalization to intensive services; washout; -1 end days; 1-to-many matched; 7 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -9755,7 +9755,7 @@
   },
   {
     "analysisId": 317,
-    "description": "Washout; -1 end days; 1-to-many matched; 30 days; cox",
+    "description": "During hospitalization to intensive services; washout; -1 end days; 1-to-many matched; 30 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -9921,7 +9921,7 @@
   },
   {
     "analysisId": 318,
-    "description": "Washout; -1 end days; 1-to-many matched; on treatment; cox",
+    "description": "During hospitalization to intensive services; washout; -1 end days; 1-to-many matched; on treatment; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -10087,7 +10087,7 @@
   },
   {
     "analysisId": 319,
-    "description": "Washout; -1 end days; Stratified; 7 days; logistic",
+    "description": "During hospitalization to intensive services; washout; -1 end days; Stratified; 7 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -10251,7 +10251,7 @@
   },
   {
     "analysisId": 320,
-    "description": "Washout; -1 end days; Stratified; 30 days; logistic",
+    "description": "During hospitalization to intensive services; washout; -1 end days; Stratified; 30 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -10415,7 +10415,7 @@
   },
   {
     "analysisId": 321,
-    "description": "Washout; -1 end days; Stratified; on treatment; logistic",
+    "description": "During hospitalization to intensive services; washout; -1 end days; Stratified; on treatment; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -10579,7 +10579,7 @@
   },
   {
     "analysisId": 322,
-    "description": "Washout; -1 end days; Stratified; 7 days; cox",
+    "description": "During hospitalization to intensive services; washout; -1 end days; Stratified; 7 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -10743,7 +10743,7 @@
   },
   {
     "analysisId": 323,
-    "description": "Washout; -1 end days; Stratified; 30 days; cox",
+    "description": "During hospitalization to intensive services; washout; -1 end days; Stratified; 30 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -10907,7 +10907,7 @@
   },
   {
     "analysisId": 324,
-    "description": "Washout; -1 end days; Stratified; on treatment; cox",
+    "description": "During hospitalization to intensive services; washout; -1 end days; Stratified; on treatment; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -11071,7 +11071,7 @@
   },
   {
     "analysisId": 401,
-    "description": "Washout; 0 end days; Crude; 7 days; logistic",
+    "description": "Post testing to hospitalization; washout; 0 end days; Crude; 7 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -11190,7 +11190,7 @@
   },
   {
     "analysisId": 402,
-    "description": "Washout; 0 end days; Crude; 30 days; logistic",
+    "description": "Post testing to hospitalization; washout; 0 end days; Crude; 30 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -11309,7 +11309,7 @@
   },
   {
     "analysisId": 403,
-    "description": "Washout; 0 end days; Crude; on treatment; logistic",
+    "description": "Post testing to hospitalization; washout; 0 end days; Crude; on treatment; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -11428,7 +11428,7 @@
   },
   {
     "analysisId": 404,
-    "description": "Washout; 0 end days; Crude; 7 days; cox",
+    "description": "Post testing to hospitalization; washout; 0 end days; Crude; 7 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -11547,7 +11547,7 @@
   },
   {
     "analysisId": 405,
-    "description": "Washout; 0 end days; Crude; 30 days; cox",
+    "description": "Post testing to hospitalization; washout; 0 end days; Crude; 30 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -11666,7 +11666,7 @@
   },
   {
     "analysisId": 406,
-    "description": "Washout; 0 end days; Crude; on treatment; cox",
+    "description": "Post testing to hospitalization; washout; 0 end days; Crude; on treatment; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -11785,7 +11785,7 @@
   },
   {
     "analysisId": 407,
-    "description": "Washout; 0 end days; 1-to-1 matched; 7 days; logistic",
+    "description": "Post testing to hospitalization; washout; 0 end days; 1-to-1 matched; 7 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -11951,7 +11951,7 @@
   },
   {
     "analysisId": 408,
-    "description": "Washout; 0 end days; 1-to-1 matched; 30 days; logistic",
+    "description": "Post testing to hospitalization; washout; 0 end days; 1-to-1 matched; 30 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -12117,7 +12117,7 @@
   },
   {
     "analysisId": 409,
-    "description": "Washout; 0 end days; 1-to-1 matched; on treatment; logistic",
+    "description": "Post testing to hospitalization; washout; 0 end days; 1-to-1 matched; on treatment; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -12283,7 +12283,7 @@
   },
   {
     "analysisId": 410,
-    "description": "Washout; 0 end days; 1-to-1 matched; 7 days; cox",
+    "description": "Post testing to hospitalization; washout; 0 end days; 1-to-1 matched; 7 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -12449,7 +12449,7 @@
   },
   {
     "analysisId": 411,
-    "description": "Washout; 0 end days; 1-to-1 matched; 30 days; cox",
+    "description": "Post testing to hospitalization; washout; 0 end days; 1-to-1 matched; 30 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -12615,7 +12615,7 @@
   },
   {
     "analysisId": 412,
-    "description": "Washout; 0 end days; 1-to-1 matched; on treatment; cox",
+    "description": "Post testing to hospitalization; washout; 0 end days; 1-to-1 matched; on treatment; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -12781,7 +12781,7 @@
   },
   {
     "analysisId": 413,
-    "description": "Washout; 0 end days; 1-to-many matched; 7 days; logistic",
+    "description": "Post testing to hospitalization; washout; 0 end days; 1-to-many matched; 7 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -12947,7 +12947,7 @@
   },
   {
     "analysisId": 414,
-    "description": "Washout; 0 end days; 1-to-many matched; 30 days; logistic",
+    "description": "Post testing to hospitalization; washout; 0 end days; 1-to-many matched; 30 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -13113,7 +13113,7 @@
   },
   {
     "analysisId": 415,
-    "description": "Washout; 0 end days; 1-to-many matched; on treatment; logistic",
+    "description": "Post testing to hospitalization; washout; 0 end days; 1-to-many matched; on treatment; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -13279,7 +13279,7 @@
   },
   {
     "analysisId": 416,
-    "description": "Washout; 0 end days; 1-to-many matched; 7 days; cox",
+    "description": "Post testing to hospitalization; washout; 0 end days; 1-to-many matched; 7 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -13445,7 +13445,7 @@
   },
   {
     "analysisId": 417,
-    "description": "Washout; 0 end days; 1-to-many matched; 30 days; cox",
+    "description": "Post testing to hospitalization; washout; 0 end days; 1-to-many matched; 30 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -13611,7 +13611,7 @@
   },
   {
     "analysisId": 418,
-    "description": "Washout; 0 end days; 1-to-many matched; on treatment; cox",
+    "description": "Post testing to hospitalization; washout; 0 end days; 1-to-many matched; on treatment; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -13777,7 +13777,7 @@
   },
   {
     "analysisId": 419,
-    "description": "Washout; 0 end days; Stratified; 7 days; logistic",
+    "description": "Post testing to hospitalization; washout; 0 end days; Stratified; 7 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -13941,7 +13941,7 @@
   },
   {
     "analysisId": 420,
-    "description": "Washout; 0 end days; Stratified; 30 days; logistic",
+    "description": "Post testing to hospitalization; washout; 0 end days; Stratified; 30 days; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -14105,7 +14105,7 @@
   },
   {
     "analysisId": 421,
-    "description": "Washout; 0 end days; Stratified; on treatment; logistic",
+    "description": "Post testing to hospitalization; washout; 0 end days; Stratified; on treatment; logistic",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -14269,7 +14269,7 @@
   },
   {
     "analysisId": 422,
-    "description": "Washout; 0 end days; Stratified; 7 days; cox",
+    "description": "Post testing to hospitalization; washout; 0 end days; Stratified; 7 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -14433,7 +14433,7 @@
   },
   {
     "analysisId": 423,
-    "description": "Washout; 0 end days; Stratified; 30 days; cox",
+    "description": "Post testing to hospitalization; washout; 0 end days; Stratified; 30 days; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
@@ -14597,7 +14597,7 @@
   },
   {
     "analysisId": 424,
-    "description": "Washout; 0 end days; Stratified; on treatment; cox",
+    "description": "Post testing to hospitalization; washout; 0 end days; Stratified; on treatment; cox",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
