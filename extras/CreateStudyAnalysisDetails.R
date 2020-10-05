@@ -15,105 +15,226 @@
 # limitations under the License.
 
 createAnalysesDetails <- function(workFolder) {
-  covarSettings <- FeatureExtraction::createDefaultCovariateSettings(addDescendantsToExclude = TRUE)
 
-  getDbCmDataArgs <- CohortMethod::createGetDbCohortMethodDataArgs(washoutPeriod = 183,
-                                                                   restrictToCommonPeriod = FALSE,
-                                                                   firstExposureOnly = TRUE,
-                                                                   removeDuplicateSubjects = "remove all",
-                                                                   studyStartDate = "",
-                                                                   studyEndDate = "",
-                                                                   excludeDrugsFromCovariates = FALSE,
-                                                                   covariateSettings = covarSettings)
+  createScyllaCovariateSettings <- function(endDays) {
+    covarSettings <- FeatureExtraction::createDefaultCovariateSettings()
+    covarSettings$endDays <- endDays
+    return(covarSettings)
+  }
 
-  createStudyPopArgs <- CohortMethod::createCreateStudyPopulationArgs(removeSubjectsWithPriorOutcome = TRUE,
-                                                                      minDaysAtRisk = 1,
-                                                                      riskWindowStart = 0,
-                                                                      addExposureDaysToStart = FALSE,
-                                                                      riskWindowEnd = 30,
-                                                                      addExposureDaysToEnd = TRUE)
+  # TODO Do we need to subgroup analysisIds by exposure cohorts?
+  #
+  # - 100+: Washout, treatment on date of admission and prior to intensive services, -1 endDays
+  # - 200+: No washout, treatment on date of admission and prior to intensive services, 0 endDays
+  # - 300+: Washout, treatment during hospitalization, -1 endDays
+  # - 400+: Washout, after COVID+ test, 0 endDays
 
-  fitOutcomeModelArgs1 <- CohortMethod::createFitOutcomeModelArgs(useCovariates = FALSE,
-                                                                  modelType = "cox",
-                                                                  stratified = FALSE)
+  getDbCmDataArgsZeroDays <-
+    CohortMethod::createGetDbCohortMethodDataArgs(studyStartDate = "20200101",
+                                                  studyEndDate = "",
+                                                  excludeDrugsFromCovariates = TRUE,
+                                                  firstExposureOnly = TRUE,
+                                                  restrictToCommonPeriod = TRUE,
+                                                  covariateSettings = createScyllaCovariateSettings(endDays = 0))
 
-  cmAnalysis1 <- CohortMethod::createCmAnalysis(analysisId = 1,
-                                                description = "No matching",
-                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs,
-                                                fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs1)
+  getDbCmDataArgsMinusOneDays <-
+    CohortMethod::createGetDbCohortMethodDataArgs(studyStartDate = "20200101",
+                                                  studyEndDate = "",
+                                                  excludeDrugsFromCovariates = TRUE,
+                                                  firstExposureOnly = TRUE,
+                                                  restrictToCommonPeriod = TRUE,
+                                                  covariateSettings = createScyllaCovariateSettings(endDays = -1))
 
-  createPsArgs <- CohortMethod::createCreatePsArgs(control = Cyclops::createControl(cvType = "auto",
-                                                                                    startingVariance = 0.01,
-                                                                                    noiseLevel = "quiet",
-                                                                                    tolerance = 2e-07,
-                                                                                    cvRepetitions = 10))
+  createScyllaStudyPopulation <- function(washoutPeriod, riskWindowEnd) {
+    CohortMethod::createCreateStudyPopulationArgs(washoutPeriod = washoutPeriod,
+                                                  removeDuplicateSubjects = "keep first",
+                                                  removeSubjectsWithPriorOutcome = TRUE,
+                                                  firstExposureOnly = TRUE,
+                                                  minDaysAtRisk = 1,
+                                                  riskWindowStart = 1,
+                                                  riskWindowEnd = riskWindowEnd,
+                                                  censorAtNewRiskWindow = TRUE)
+  }
 
-  matchOnPsArgs1 <- CohortMethod::createMatchOnPsArgs(maxRatio = 1)
+  fitScyllaOutcomeModelArgs <- function(modelType, stratified) {
+    args <- CohortMethod::createFitOutcomeModelArgs(modelType = modelType,
+                                                    stratified = stratified)
+    args$control$profileLogLikelihood <- TRUE
+    return(args)
+  }
 
-  fitOutcomeModelArgs2 <- CohortMethod::createFitOutcomeModelArgs(useCovariates = FALSE,
-                                                                  modelType = "cox",
-                                                                  stratified = TRUE)
+  fitOutcomeModelArgsLogisticNoStrata <- fitScyllaOutcomeModelArgs(modelType = "logistic", stratified = FALSE)
 
-  cmAnalysis2 <- CohortMethod::createCmAnalysis(analysisId = 2,
-                                                description = "One-on-one matching",
-                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs,
-                                                createPs = TRUE,
-                                                createPsArgs = createPsArgs,
-                                                matchOnPs = TRUE,
-                                                matchOnPsArgs = matchOnPsArgs1,
-                                                fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs2)
+  fitOutcomeModelArgsCoxNoStrata <- fitScyllaOutcomeModelArgs(modelType = "cox", stratified = FALSE)
 
-  matchOnPsArgs2 <- CohortMethod::createMatchOnPsArgs(maxRatio = 100)
+  fitOutcomeModelArgsLogisticWithStrata <- fitScyllaOutcomeModelArgs(modelType = "logistic", stratified = TRUE)
 
-  cmAnalysis3 <- CohortMethod::createCmAnalysis(analysisId = 3,
-                                                description = "Variable ratio matching",
-                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs,
-                                                createPs = TRUE,
-                                                createPsArgs = createPsArgs,
-                                                matchOnPs = TRUE,
-                                                matchOnPsArgs = matchOnPsArgs2,
-                                                fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs2)
+  fitOutcomeModelArgsCoxWithStrata <- fitScyllaOutcomeModelArgs(modelType = "cox", stratified = TRUE)
+
+  createPsArgs <- CohortMethod::createCreatePsArgs()
+
+  matchOnPsOneToOneArgs <- CohortMethod::createMatchOnPsArgs(maxRatio = 1)
+
+  matchOnPsOneToManyArgs <- CohortMethod::createMatchOnPsArgs(maxRatio = 100)
+  matchOnPsOneToManyArgs$allowReverseMatch <- TRUE
 
   stratifyByPsArgs <- CohortMethod::createStratifyByPsArgs(numberOfStrata = 5)
 
-  cmAnalysis4 <- CohortMethod::createCmAnalysis(analysisId = 4,
-                                                description = "Stratification",
-                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs,
-                                                createPs = TRUE,
-                                                createPsArgs = createPsArgs,
-                                                stratifyByPs = TRUE,
-                                                stratifyByPsArgs = stratifyByPsArgs,
-                                                fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs2)
+  createCrudeScyllaCmAnalysis <- function(analysisId, description, getDbCohortMethodDataArgs, createStudyPopArgs, fitOutcomeModelArgs) {
+    CohortMethod::createCmAnalysis(analysisId = analysisId,
+                                   description = description,
+                                   getDbCohortMethodDataArgs = getDbCohortMethodDataArgs,
+                                   createStudyPopArgs = createStudyPopArgs,
+                                   fitOutcomeModel = TRUE,
+                                   fitOutcomeModelArgs = fitOutcomeModelArgs)
+  }
 
-  interactionCovariateIds <- c(8532001,
-                               201826210,
-                               21600960413)  # Female, T2DM, concurent use of antithrombotic agents
+  createOneToOneMatchScyllaCmAnalysis <- function(analysisId, description, getDbCohortMethodDataArgs, createStudyPopArgs, fitOutcomeModelArgs) {
+    CohortMethod::createCmAnalysis(analysisId = analysisId,
+                                   description = description,
+                                   getDbCohortMethodDataArgs = getDbCohortMethodDataArgs,
+                                   createStudyPopArgs = createStudyPopArgs,
+                                   createPs = TRUE,
+                                   createPsArgs = createPsArgs,
+                                   matchOnPs = TRUE,
+                                   matchOnPsArgs = matchOnPsOneToOneArgs,
+                                   fitOutcomeModel = TRUE,
+                                   fitOutcomeModelArgs = fitOutcomeModelArgs)
+  }
 
-  fitOutcomeModelArgs3 <- CohortMethod::createFitOutcomeModelArgs(modelType = "cox",
-                                                                  stratified = TRUE,
-                                                                  useCovariates = FALSE,
-                                                                  interactionCovariateIds = interactionCovariateIds)
+  createOneToManyMatchScyllaCmAnalysis <- function(analysisId, description, getDbCohortMethodDataArgs, createStudyPopArgs, fitOutcomeModelArgs) {
+    CohortMethod::createCmAnalysis(analysisId = analysisId,
+                                   description = description,
+                                   getDbCohortMethodDataArgs = getDbCohortMethodDataArgs,
+                                   createStudyPopArgs = createStudyPopArgs,
+                                   createPs = TRUE,
+                                   createPsArgs = createPsArgs,
+                                   matchOnPs = TRUE,
+                                   matchOnPsArgs = matchOnPsOneToManyArgs,
+                                   fitOutcomeModel = TRUE,
+                                   fitOutcomeModelArgs = fitOutcomeModelArgs)
+  }
 
-  cmAnalysis5 <- CohortMethod::createCmAnalysis(analysisId = 5,
-                                                description = "Stratification with interaction terms",
-                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs,
-                                                createPs = TRUE,
-                                                createPsArgs = createPsArgs,
-                                                stratifyByPs = TRUE,
-                                                stratifyByPsArgs = stratifyByPsArgs,
-                                                fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs3)
+  createStratifiedScyllaCmAnalysis <- function(analysisId, description, getDbCohortMethodDataArgs, createStudyPopArgs, fitOutcomeModelArgs) {
+    CohortMethod::createCmAnalysis(analysisId = analysisId,
+                                   description = description,
+                                   getDbCohortMethodDataArgs = getDbCohortMethodDataArgs,
+                                   createStudyPopArgs = createStudyPopArgs,
+                                   createPs = TRUE,
+                                   createPsArgs = createPsArgs,
+                                   stratifyByPs = TRUE,
+                                   stratifyByPsArgs = stratifyByPsArgs,
+                                   fitOutcomeModel = TRUE,
+                                   fitOutcomeModelArgs = fitOutcomeModelArgs)
+  }
 
-  cmAnalysisList <- list(cmAnalysis1, cmAnalysis2, cmAnalysis3, cmAnalysis4, cmAnalysis5)
+  createSetOfScyllaCmAnalysis <- function(startId, descriptionStub, washoutPeriod,
+                                          getDbCmDataArgs,
+                                          fitLogisticOutcomeModelArgs,
+                                          fitCoxOutcomeModelArgs,
+                                          functor) {
+    list(
+      functor(analysisId = startId + 0,
+              description = paste(descriptionStub, "7 days; logistic"),
+              getDbCohortMethodDataArgs = getDbCmDataArgs,
+              createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = washoutPeriod,
+                                                               riskWindowEnd = 7),
+              fitOutcomeModelArgs = fitLogisticOutcomeModelArgs),
+
+      functor(analysisId = startId + 1,
+              description = paste(descriptionStub, "30 days; logistic"),
+              getDbCohortMethodDataArgs = getDbCmDataArgs,
+              createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = washoutPeriod,
+                                                               riskWindowEnd = 30),
+              fitOutcomeModelArgs = fitLogisticOutcomeModelArgs),
+
+      functor(analysisId = startId + 2,
+              description = paste(descriptionStub, "on treatment; logistic"),
+              getDbCohortMethodDataArgs = getDbCmDataArgs,
+              createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = washoutPeriod,
+                                                               riskWindowEnd = 9999),
+              fitOutcomeModelArgs = fitLogisticOutcomeModelArgs),
+
+      functor(analysisId = startId + 3,
+              description = paste(descriptionStub, "7 days; cox"),
+              getDbCohortMethodDataArgs = getDbCmDataArgs,
+              createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = washoutPeriod,
+                                                               riskWindowEnd = 7),
+              fitOutcomeModelArgs = fitCoxOutcomeModelArgs),
+
+      functor(analysisId = startId + 4,
+              description = paste(descriptionStub, "30 days; cox"),
+              getDbCohortMethodDataArgs = getDbCmDataArgs,
+              createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = washoutPeriod,
+                                                               riskWindowEnd = 30),
+              fitOutcomeModelArgs = fitCoxOutcomeModelArgs),
+
+      functor(analysisId = startId + 5,
+              description = paste(descriptionStub, "on treatment; cox"),
+              getDbCohortMethodDataArgs = getDbCmDataArgs,
+              createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = washoutPeriod,
+                                                               riskWindowEnd = 9999),
+              fitOutcomeModelArgs = fitCoxOutcomeModelArgs)
+    )
+  }
+
+  createLargerSetOfScyllaCmAnalysis <- function(startId, descriptionStub, washoutPeriod, getDbCmDataArgs) {
+    c(
+      createSetOfScyllaCmAnalysis(startId = startId + 0,
+                                  descriptionStub = paste(descriptionStub, "Crude;"),
+                                  washoutPeriod = washoutPeriod,
+                                  getDbCmDataArgs = getDbCmDataArgs,
+                                  fitLogisticOutcomeModelArgs = fitOutcomeModelArgsLogisticNoStrata,
+                                  fitCoxOutcomeModelArgs = fitOutcomeModelArgsCoxNoStrata,
+                                  functor = createCrudeScyllaCmAnalysis),
+
+      createSetOfScyllaCmAnalysis(startId = startId + 6,
+                                  descriptionStub = paste(descriptionStub, "1-to-1 matched;"),
+                                  washoutPeriod = washoutPeriod,
+                                  getDbCmDataArgs = getDbCmDataArgs,
+                                  fitLogisticOutcomeModelArgs = fitOutcomeModelArgsLogisticNoStrata,
+                                  fitCoxOutcomeModelArgs = fitOutcomeModelArgsCoxNoStrata,
+                                  functor = createOneToOneMatchScyllaCmAnalysis),
+
+      createSetOfScyllaCmAnalysis(startId = startId + 12,
+                                  descriptionStub = paste(descriptionStub, "1-to-many matched;"),
+                                  washoutPeriod = washoutPeriod,
+                                  getDbCmDataArgs = getDbCmDataArgs,
+                                  fitLogisticOutcomeModelArgs = fitOutcomeModelArgsLogisticWithStrata,
+                                  fitCoxOutcomeModelArgs = fitOutcomeModelArgsCoxWithStrata,
+                                  functor = createOneToManyMatchScyllaCmAnalysis),
+
+      createSetOfScyllaCmAnalysis(startId = startId + 18,
+                                  descriptionStub = paste(descriptionStub, "Stratified;"),
+                                  washoutPeriod = washoutPeriod,
+                                  getDbCmDataArgs = getDbCmDataArgs,
+                                  fitLogisticOutcomeModelArgs = fitOutcomeModelArgsLogisticWithStrata,
+                                  fitCoxOutcomeModelArgs = fitOutcomeModelArgsCoxWithStrata,
+                                  functor = createStratifiedScyllaCmAnalysis)
+    )
+  }
+
+  cmAnalysisList <- c(
+    createLargerSetOfScyllaCmAnalysis(startId = 101,
+                                      descriptionStub = "Admission to intensive services; washout; -1 end days;",
+                                      washoutPeriod = 365,
+                                      getDbCmDataArgs = getDbCmDataArgsMinusOneDays),
+
+    createLargerSetOfScyllaCmAnalysis(startId = 201,
+                                      descriptionStub = "Admission to intensive services; no washout; 0 end days;",
+                                      washoutPeriod = 0,
+                                      getDbCmDataArgs = getDbCmDataArgsZeroDays),
+
+    createLargerSetOfScyllaCmAnalysis(startId = 301,
+                                      descriptionStub = "During hospitalization to intensive services; washout; -1 end days;",
+                                      washoutPeriod = 365,
+                                      getDbCmDataArgs = getDbCmDataArgsMinusOneDays),
+
+    createLargerSetOfScyllaCmAnalysis(startId = 401,
+                                      descriptionStub = "Post testing to hospitalization; washout; 0 end days;",
+                                      washoutPeriod = 365,
+                                      getDbCmDataArgs = getDbCmDataArgsZeroDays)
+  )
 
   CohortMethod::saveCmAnalysisList(cmAnalysisList, file.path(workFolder, "cmAnalysisList.json"))
 }
