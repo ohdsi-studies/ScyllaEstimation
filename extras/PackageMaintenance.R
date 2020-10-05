@@ -46,9 +46,11 @@ ROhdsiWebApi::insertCohortDefinitionSetInPackage(fileName = "CohortsToCreate.csv
                                                  packageName = "ScyllaEstimation")
 
 # Create analysis details -------------------------------------------------
+library(magrittr)
 source("extras/CreateStudyAnalysisDetails.R")
 createAnalysesDetails("inst/settings/")
-createExposureConceptSet("inst/settings/")
+createExposureConceptSet("inst/settings/") # readLines(cohortJsonFile) warnings: incomplete final line
+createTcoDetails("inst/settings")
 createPositiveControlSynthesisArgs("inst/settings/")
 
 # Store environment in which the study was executed -----------------------

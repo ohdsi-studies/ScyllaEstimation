@@ -1,0 +1,84 @@
+name,targetId,targetCategoryId
+Amoxicillin,1009,AB
+Azithromycin,1007,AB
+Ceftriaxone,1010,AB
+Fluoroquinolones,1008,AB
+DPP-4 inhibitors,1065,AD
+GLP1 inhibitors,1067,AD
+metformin,1064,AD
+SGLT2 inhibitors,1066,AD
+acenocoumarol,1041,AT
+alteplase,1047,AT
+apixaban,1042,AT
+aspirin,1045,AT
+bemiparin,1043,AT
+clopidogrel,1044,AT
+dabigatran,1039,AT
+edoxaban,1038,AT
+enoxaparin,1037,AT
+heparin,1036,AT
+prasugrel,1046,AT
+rivaroxaban,1040,AT
+warfarin,1035,AT
+Azithromycin,1007,AV
+Chloroquine,1006,AV
+emtricitabine,1082,AV
+favipiravir,1029,AV
+HIV Protease inhibitors,1024,AV
+Hydroxychloroquine ,1001,AV
+Hydroxychloroquine + Amoxicillin,1004,AV
+Hydroxychloroquine + Azithromycin ,1002,AV
+Hydroxychloroquine + ceftriaxone,1005,AV
+Hydroxychloroquine + Fluoroquinolones,1003,AV
+Interferon alfa 2a,1028,AV
+Interferon beta 1a,1027,AV
+Interferon beta 1b,1026,AV
+itraconazole,1034,AV
+Ivermectin,1033,AV
+oseltamivir,1032,AV
+raloxifene,1059,AV
+Remdesivir,1030,AV
+ribavirin,1031,AV
+ritonavir/lopinavir,1025,AV
+abiraterone,1080,C
+"Alpha-1 blockers (Doxazosin, prazosin, terazosin, tasulosin, silodosin, alfuzosin)",1070,C
+"Antifibrinolytics (tranexamic acid, aminocaproic acid)",1048,C
+BCG vaccine,1075,C
+bicalutamide,1081,C
+Colchicine,1076,C
+doxazosin,1073,C
+prazosin,1071,C
+tamsulosin,1074,C
+terazosin,1072,C
+tranexamic acid,1049,C
+ACE inhibitors,1052,CV
+Angiotensin receptor blockers (ARBs),1053,CV
+Losartan,1077,CV
+Non-Dihydropyridine Calcium Channel Blocker (ndCCB),1054,CV
+Statins,1063,CV
+Thiazide or thiazide-like diuretics,1055,CV
+adalimumab,1019,IB
+Anakinra,1023,IB
+baricitinib,1016,IB
+Bevacizumab,1060,IB
+cholecalciferol,1078,IB
+dexamethasone,1057,IB
+eculizumab ,1062,IB
+etanercept,1020,IB
+famotidine,1069,IB
+Fingolimod,1061,IB
+H2 receptor antagonist,1068,IB
+Hydrocortisone,1056,IB
+Ibrutinib,1079,IB
+"IL6 inhibitors (tocilizumab, sarilumab, siltuximab)",1011,IB
+infliximab,1021,IB
+"JAK inhibitors (ruxolitinib, tofacitinib, oclacitinib, baricitinib, fedratinib, upadacitinib)",1015,IB
+prednisone or prednisolone,1058,IB
+Ruxolitinib,1050,IB
+sarilumab,1014,IB
+siltuximab,1013,IB
+tacrolimus,1083,IB
+"TNF inhibitors (infliximab, golimumab, etanercept, certolizumab pegol, adalimumab)",1018,IB
+tocilizumab,1012,IB
+tofacitinib,1017,IB
+ustekinumab,1022,IB

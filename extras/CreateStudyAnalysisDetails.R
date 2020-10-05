@@ -139,12 +139,58 @@ createExposureConceptSet <- function(workFolder) {
 
   exposureConcepts <- lapply(rows, getExposureConcepts)
   exposureConcepts <- dplyr::bind_rows(exposureConcepts)
-  exposureConcepts <- exposureConcepts[exposureConcepts$conceptClassId == "Ingredient", ]
-  write.csv(exposureConcepts, file.path(workFolder, "ExposureCohortConceptIds.csv"), row.names = FALSE)
+  exposureConcepts <- exposureConcepts %>%
+    dplyr::group_by(cohortId) %>%
+    dplyr::summarise(conceptIds = paste(conceptId, collapse = ";"), .groups = "drop")
+  write.csv(exposureConcepts, file.path(workFolder, "TargetCohortConceptIds.csv"), row.names = FALSE)
 }
 
-createTcoAndNegativeContolDetails <- function(workFolder) {
-  # TODO
+createTcoDetails <- function(workFolder, exposureGroupCohortIds = c(1100, 1101, 1102, 1103, 1104, 1105, 1106)) {
+  fileInputs <- list(targetCohortCategories = c("TargetCohortCategories.csv", "ScyllaEstimation"),
+                     targetCohortConceptIds = c("TargetCohortConceptIds.csv", "ScyllaEstimation"),
+                     targetSubgroupXref = c("targetSubgroupXref.csv", "ScyllaCharacterization"),
+                     outcomeCohorts = c("OutcomeCohorts.csv", "ScyllaEstimation"))
+
+  loadFile <- function(fileInput) {
+    fileName <- system.file("settings", fileInput[1], package = fileInput[2])
+    df <-  read.csv(fileName)
+    return(df)
+  }
+
+  dfs <- lapply(fileInputs, loadFile)
+  list2env(dfs, envir = .GlobalEnv)
+
+  targetCohortCategories$name <- NULL # note 2x azithromycin 1007 (classified as AB and AV)
+  targetSubgroupXref <- targetSubgroupXref[targetSubgroupXref$subgroupId %in% c(2002, 2004), ] # keep cohorts in scope for estimation with >=365d prior observation
+  targetSubgroupXref <- targetSubgroupXref[!(targetSubgroupXref$targetId %in% exposureGroupCohortIds), ] # drops exposure group cohorts (e.g. antivirals class)
+  targetSubgroupXref <- merge(targetSubgroupXref, targetCohortConceptIds, by.x = "targetId", by.y = "cohortId")
+  targetSubgroupXref <- merge(targetSubgroupXref, targetCohortCategories)
+
+  categories <- split(targetSubgroupXref, paste(targetSubgroupXref$targetCategoryId, targetSubgroupXref$subgroupId))
+
+  createTcosByCategoryAndSubgroup <- function(category) { # category <- categories[[9]]
+    tcos <- data.frame(t(combn(category$cohortId, 2)))
+    names(tcos) <- c("targetId", "comparatorId")
+    outcomeIds <- outcomeCohorts$cohortId[outcomeCohorts$subgroupId == category$subgroupId[1]]
+    tcos$outcomeIds <- rep(paste(outcomeIds, collapse = ";"), nrow(tcos))
+    tcos <- merge(tcos, category[, c("cohortId", "conceptIds")], by.x = "targetId", by.y = "cohortId")
+    names(tcos)[names(tcos) == "conceptIds"] <- "tExcludedCovariateConceptIds"
+    tcos <- merge(tcos, category[, c("cohortId", "conceptIds")], by.x = "comparatorId", by.y = "cohortId")
+    names(tcos)[names(tcos) == "conceptIds"] <- "cExcludedCovariateConceptIds"
+    tcos$excludedCovariateConceptIds <- paste(tcos$tExcludedCovariateConceptIds, tcos$cExcludedCovariateConceptIds, sep = ";")
+    tcos <- subset(tcos, select = -c(tExcludedCovariateConceptIds, cExcludedCovariateConceptIds))
+    return(tcos)
+  }
+
+  tcos <- lapply(categories, createTcosByCategoryAndSubgroup)
+  tcos <- dplyr::bind_rows(tcos)
+  tcos <- tcos[, c("targetId", "comparatorId", "outcomeIds", "excludedCovariateConceptIds")]
+  write.csv(tcos, file.path(workFolder, "TcosOfInterest.csv"), row.names = FALSE)
+}
+
+
+createNegativeContolDetails <- function(workFolder) {
+
 }
 
 createPositiveControlSynthesisArgs <- function(workFolder) {
