@@ -22,7 +22,7 @@
   },
   "control": {
     "maxIterations": 1000,
-    "tolerance": 1e-006,
+    "tolerance": 1e-06,
     "convergenceType": "gradient",
     "autoSearch": true,
     "fold": 10,

@@ -5,8 +5,9 @@
 extras
 ^\.Rprofile$
 documents
-readme.md
-studyReadme.md
+Readme.md
+StudyExecution.md
+StudyPackageSetup.md
 HydraConfig.json
 renv.lock
 

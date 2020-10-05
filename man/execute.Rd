@@ -65,7 +65,7 @@ Synthetic Public Use Files (SynPUFs)').}
 \item{maxCores}{How many parallel cores should be used? If more cores are made available
 this can speed up the analyses.}
 
-\item{minCellCount}{The minimum number of subjects contributing to a count before it can be included 
+\item{minCellCount}{The minimum number of subjects contributing to a count before it can be included
 in packaged results.}
 }
 \description{
