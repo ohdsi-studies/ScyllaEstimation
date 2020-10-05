@@ -38,6 +38,8 @@ This guide will take you through the process of running the study to produce coh
 # variables.
 ````
 
+1.5 MAS prefers `keyring` (that is encrypted).  TODO
+
 2. Now you have set-up your environment, you can use the following `R` script to load in your library and configure your environment connection details:
 
 ```
