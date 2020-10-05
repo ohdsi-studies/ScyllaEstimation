@@ -311,7 +311,25 @@ createTcoDetails <- function(workFolder, exposureGroupCohortIds = c(1100, 1101, 
 
 
 createNegativeContolDetails <- function(workFolder) {
+  fileInputs <- list(tcosOfInterest = c("TcosOfInterest.csv", "ScyllaEstimation"),
+                     netagtiveControlConceptIds = c("NegativeControlConceptIds.csv", "ScyllaEstimation"))
 
+  loadFile <- function(fileInput) {
+    fileName <- system.file("settings", fileInput[1], package = fileInput[2])
+    df <-  read.csv(fileName)
+    return(df)
+  }
+
+  dfs <- lapply(fileInputs, loadFile)
+  list2env(dfs, envir = .GlobalEnv)
+
+  tcs <- tcosOfInterest[, c("targetId", "comparatorId")]
+  tcNegativeControls <- merge(tcs, netagtiveControlConceptIds)
+  order1 <- paste(tcNegativeControls$targetId, tcNegativeControls$comparatorId)
+  order2 <- paste(tcs$targetId, tcs$comparatorId)
+  tcNegativeControls <- tcNegativeControls[order(match(order1, order2)), ]
+  tcNegativeControls$type <- rep("outcome", nrow(tcNegativeControls))
+  write.csv(tcNegativeControls, file.path(workFolder, "NegativeControls.csv"), row.names = FALSE)
 }
 
 createPositiveControlSynthesisArgs <- function(workFolder) {

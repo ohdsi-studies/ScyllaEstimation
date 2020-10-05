@@ -51,6 +51,7 @@ source("extras/CreateStudyAnalysisDetails.R")
 createAnalysesDetails("inst/settings/")
 createExposureConceptSet("inst/settings/") # readLines(cohortJsonFile) warnings: incomplete final line
 createTcoDetails("inst/settings")
+createNegativeContolDetails("inst/settings")
 createPositiveControlSynthesisArgs("inst/settings/")
 
 # Store environment in which the study was executed -----------------------
