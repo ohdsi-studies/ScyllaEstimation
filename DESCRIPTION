@@ -1,12 +1,16 @@
 Package: ScyllaEstimation
 Type: Package
-Title: A Package Skeleton for Comparative Effectiveness Studies
+Title: Comparative effectiveness of emerging drug therapies in the treatment of COVID-19
 Version: 0.0.1
 Author: Marc A. Suchard [aut, cre], James Weaver [aut, cre]
 Maintainer: James Weaver <jweave17@ITS.JNJ.com>
-Description: A skeleton package, to be used as a starting point when implementing comparative effect studies.
+Description:  This OHDSI network study assesses the comparative effectiveness and safety
+    among treatments administered during hospitalization and prior to intensive services. 
+    It also assesses the comparative effectiveness and safety among treatments administered
+    after COVID-19 positive testing or diagnosis in the outpatient setting without prior
+    hospitalization.
 Depends:
-    R (>= 3.5.0),
+    R (>= 4.0.0),
     DatabaseConnector (>= 3.0.0)
 Imports:
     ScyllaCharacterization (>= 0.0.3),
