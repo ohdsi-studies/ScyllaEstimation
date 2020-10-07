@@ -282,14 +282,14 @@ createTcoDetails <- function(workFolder, exposureGroupCohortIds = c(1100, 1101, 
   list2env(dfs, envir = .GlobalEnv)
 
   targetCohortCategories$name <- NULL # note 2x azithromycin 1007 (classified as AB and AV)
-  targetSubgroupXref <- targetSubgroupXref[targetSubgroupXref$subgroupId %in% c(2002, 2004), ] # keep cohorts in scope for estimation with >=365d prior observation
+  targetSubgroupXref <- targetSubgroupXref[targetSubgroupXref$subgroupId %in% c(1, 2, 3, 2002), ] # keep subgroups in scope to estimation study
   targetSubgroupXref <- targetSubgroupXref[!(targetSubgroupXref$targetId %in% exposureGroupCohortIds), ] # drops exposure group cohorts (e.g. antivirals class)
   targetSubgroupXref <- merge(targetSubgroupXref, targetCohortConceptIds, by.x = "targetId", by.y = "cohortId")
   targetSubgroupXref <- merge(targetSubgroupXref, targetCohortCategories)
 
   categories <- split(targetSubgroupXref, paste(targetSubgroupXref$targetCategoryId, targetSubgroupXref$subgroupId))
 
-  createTcosByCategoryAndSubgroup <- function(category) { # category <- categories[[9]]
+  createTcosByCategoryAndSubgroup <- function(category) { # category <- categories[[1]]
     tcos <- data.frame(t(combn(category$cohortId, 2)))
     names(tcos) <- c("targetId", "comparatorId")
     outcomeIds <- outcomeCohorts$cohortId[outcomeCohorts$subgroupId == category$subgroupId[1]]

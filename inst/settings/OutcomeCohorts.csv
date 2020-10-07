@@ -29,31 +29,87 @@ tracheostomy during hospitalization,[COVID ID179 V1] tracheostomy during hospita
 Transient ischemic attack events,[COVID ID189 V1] Transient ischemic attack events,20,189,2002
 Venous thromboembolic (pulmonary embolism and deep vein thrombosis) events ,[COVID ID156 V1] Venous thromboembolic (pulmonary embolism and deep vein thrombosis) events ,7,156,2002
 ventricular arrhythmia or cardiac arrest during hospitalization,[COVID ID163 V1] ventricular arrhythmia or cardiac arrest during hospitalization,842,163,2002
-Acute kidney injury (AKI) diagnosis during hospitalization,[COVID ID154 V1] Acute kidney injury (AKI) diagnosis during hospitalization,849,154,2004
-Acute kidney injury (AKI) using diagnosis codes and change in measurements during hospitlization,Acute kidney injury (AKI) using diagnosis codes and change in measurements during hospitlization,-1,201,2004
-Acute myocardial infarction events,[COVID ID193 V1] Acute myocardial infarction events,22,193,2004
-Acute pancreatitis events,[COVID ID185 V1] Acute pancreatitis events,11,185,2004
-Acute Respiratory Distress syndrome (ARDS) during hospitalization,[COVID ID153 V1] Acute Respiratory Distress syndrome (ARDS) during hospitalization,76,153,2004
-Bradycardia or heart block during hospitalization,[COVID ID161 V1] Bradycardia or heart block during hospitalization,817,161,2004
-Cardiac arrhythmia during hospitalization,[COVID ID160 V1] Cardiac arrhythmia during hospitalization,841,160,2004
-Cardiovascular-related mortality,[COVID ID188 V1] Cardiovascular-related mortality,19,188,2004
-death,[COVID ID164 V1] Death,166,164,2004
-Discharge from hospitalization,Discharge from hospitalization,-1,202,2004
-ECMO during hospitalization,[COVID ID180 V1] ECMO during hospitalization,935,180,2004
-Gastrointestinal bleeding events,[COVID ID187 V1] Gastrointestinal bleeding events,17,187,2004
-Heart failure during hospitalization,[COVID ID159 V1] Heart failure during hospitalization,932,159,2004
-Hemorrhagic stroke (intracerebral bleeding) events,[COVID ID192 V1] Hemorrhagic stroke (intracerebral bleeding) events,926,192,2004
-intensive services during hospitalization,[COVID ID177 V1] intensive services during hospitalization,933,177,2004
-Ischemic stroke events,[COVID ID191 V1] Ischemic stroke events,924,191,2004
-mechanical ventilation during hospitalization,[COVID ID178 V1] mechanical ventilation during hospitalization,934,178,2004
-Persons with chest pain or angina,[COVID ID182 V1] Persons with chest pain or angina,6,182,2004
-Persons with hepatic failure,[COVID ID184 V1] Persons with hepatic failure,10,184,2004
-Pneumonia during hospitalization,[COVID ID152 V1] Pneumonia during hospitalization,781,152,2004
-Sepsis during hospitalization,[COVID ID155 V1] Sepsis during hospitalization,923,155,2004
-Stroke (ischemic or hemorrhagic) events,[COVID ID190 V1] Stroke (ischemic or hemorrhagic) events,21,190,2004
-Supraventricular arrythymia during hospitalization,[COVID ID162 V1] Supraventricular arrythymia during hospitalization,816,162,2004
-Total cardiovascular disease events,[COVID ID186 V1] Total cardiovascular disease events,245,186,2004
-tracheostomy during hospitalization,[COVID ID179 V1] tracheostomy during hospitalization,936,179,2004
-Transient ischemic attack events,[COVID ID189 V1] Transient ischemic attack events,20,189,2004
-Venous thromboembolic (pulmonary embolism and deep vein thrombosis) events ,[COVID ID156 V1] Venous thromboembolic (pulmonary embolism and deep vein thrombosis) events ,7,156,2004
-ventricular arrhythmia or cardiac arrest during hospitalization,[COVID ID163 V1] ventricular arrhythmia or cardiac arrest during hospitalization,842,163,2004
+Acute kidney injury (AKI) diagnosis during hospitalization,[COVID ID154 V1] Acute kidney injury (AKI) diagnosis during hospitalization,849,154,1
+Acute kidney injury (AKI) using diagnosis codes and change in measurements during hospitlization,Acute kidney injury (AKI) using diagnosis codes and change in measurements during hospitlization,-1,201,1
+Acute myocardial infarction events,[COVID ID193 V1] Acute myocardial infarction events,22,193,1
+Acute pancreatitis events,[COVID ID185 V1] Acute pancreatitis events,11,185,1
+Acute Respiratory Distress syndrome (ARDS) during hospitalization,[COVID ID153 V1] Acute Respiratory Distress syndrome (ARDS) during hospitalization,76,153,1
+Bradycardia or heart block during hospitalization,[COVID ID161 V1] Bradycardia or heart block during hospitalization,817,161,1
+Cardiac arrhythmia during hospitalization,[COVID ID160 V1] Cardiac arrhythmia during hospitalization,841,160,1
+Cardiovascular-related mortality,[COVID ID188 V1] Cardiovascular-related mortality,19,188,1
+death,[COVID ID164 V1] Death,166,164,1
+Discharge from hospitalization,Discharge from hospitalization,-1,202,1
+ECMO during hospitalization,[COVID ID180 V1] ECMO during hospitalization,935,180,1
+Gastrointestinal bleeding events,[COVID ID187 V1] Gastrointestinal bleeding events,17,187,1
+Heart failure during hospitalization,[COVID ID159 V1] Heart failure during hospitalization,932,159,1
+Hemorrhagic stroke (intracerebral bleeding) events,[COVID ID192 V1] Hemorrhagic stroke (intracerebral bleeding) events,926,192,1
+intensive services during hospitalization,[COVID ID177 V1] intensive services during hospitalization,933,177,1
+Ischemic stroke events,[COVID ID191 V1] Ischemic stroke events,924,191,1
+mechanical ventilation during hospitalization,[COVID ID178 V1] mechanical ventilation during hospitalization,934,178,1
+Persons with chest pain or angina,[COVID ID182 V1] Persons with chest pain or angina,6,182,1
+Persons with hepatic failure,[COVID ID184 V1] Persons with hepatic failure,10,184,1
+Pneumonia during hospitalization,[COVID ID152 V1] Pneumonia during hospitalization,781,152,1
+Sepsis during hospitalization,[COVID ID155 V1] Sepsis during hospitalization,923,155,1
+Stroke (ischemic or hemorrhagic) events,[COVID ID190 V1] Stroke (ischemic or hemorrhagic) events,21,190,1
+Supraventricular arrythymia during hospitalization,[COVID ID162 V1] Supraventricular arrythymia during hospitalization,816,162,1
+Total cardiovascular disease events,[COVID ID186 V1] Total cardiovascular disease events,245,186,1
+tracheostomy during hospitalization,[COVID ID179 V1] tracheostomy during hospitalization,936,179,1
+Transient ischemic attack events,[COVID ID189 V1] Transient ischemic attack events,20,189,1
+Venous thromboembolic (pulmonary embolism and deep vein thrombosis) events ,[COVID ID156 V1] Venous thromboembolic (pulmonary embolism and deep vein thrombosis) events ,7,156,1
+ventricular arrhythmia or cardiac arrest during hospitalization,[COVID ID163 V1] ventricular arrhythmia or cardiac arrest during hospitalization,842,163,1
+Acute kidney injury (AKI) diagnosis during hospitalization,[COVID ID154 V1] Acute kidney injury (AKI) diagnosis during hospitalization,849,154,2
+Acute kidney injury (AKI) using diagnosis codes and change in measurements during hospitlization,Acute kidney injury (AKI) using diagnosis codes and change in measurements during hospitlization,-1,201,2
+Acute myocardial infarction events,[COVID ID193 V1] Acute myocardial infarction events,22,193,2
+Acute pancreatitis events,[COVID ID185 V1] Acute pancreatitis events,11,185,2
+Acute Respiratory Distress syndrome (ARDS) during hospitalization,[COVID ID153 V1] Acute Respiratory Distress syndrome (ARDS) during hospitalization,76,153,2
+Bradycardia or heart block during hospitalization,[COVID ID161 V1] Bradycardia or heart block during hospitalization,817,161,2
+Cardiac arrhythmia during hospitalization,[COVID ID160 V1] Cardiac arrhythmia during hospitalization,841,160,2
+Cardiovascular-related mortality,[COVID ID188 V1] Cardiovascular-related mortality,19,188,2
+death,[COVID ID164 V1] Death,166,164,2
+Discharge from hospitalization,Discharge from hospitalization,-1,202,2
+ECMO during hospitalization,[COVID ID180 V1] ECMO during hospitalization,935,180,2
+Gastrointestinal bleeding events,[COVID ID187 V1] Gastrointestinal bleeding events,17,187,2
+Heart failure during hospitalization,[COVID ID159 V1] Heart failure during hospitalization,932,159,2
+Hemorrhagic stroke (intracerebral bleeding) events,[COVID ID192 V1] Hemorrhagic stroke (intracerebral bleeding) events,926,192,2
+intensive services during hospitalization,[COVID ID177 V1] intensive services during hospitalization,933,177,2
+Ischemic stroke events,[COVID ID191 V1] Ischemic stroke events,924,191,2
+mechanical ventilation during hospitalization,[COVID ID178 V1] mechanical ventilation during hospitalization,934,178,2
+Persons with chest pain or angina,[COVID ID182 V1] Persons with chest pain or angina,6,182,2
+Persons with hepatic failure,[COVID ID184 V1] Persons with hepatic failure,10,184,2
+Pneumonia during hospitalization,[COVID ID152 V1] Pneumonia during hospitalization,781,152,2
+Sepsis during hospitalization,[COVID ID155 V1] Sepsis during hospitalization,923,155,2
+Stroke (ischemic or hemorrhagic) events,[COVID ID190 V1] Stroke (ischemic or hemorrhagic) events,21,190,2
+Supraventricular arrythymia during hospitalization,[COVID ID162 V1] Supraventricular arrythymia during hospitalization,816,162,2
+Total cardiovascular disease events,[COVID ID186 V1] Total cardiovascular disease events,245,186,2
+tracheostomy during hospitalization,[COVID ID179 V1] tracheostomy during hospitalization,936,179,2
+Transient ischemic attack events,[COVID ID189 V1] Transient ischemic attack events,20,189,2
+Venous thromboembolic (pulmonary embolism and deep vein thrombosis) events ,[COVID ID156 V1] Venous thromboembolic (pulmonary embolism and deep vein thrombosis) events ,7,156,2
+ventricular arrhythmia or cardiac arrest during hospitalization,[COVID ID163 V1] ventricular arrhythmia or cardiac arrest during hospitalization,842,163,2
+Acute kidney injury (AKI) diagnosis during hospitalization,[COVID ID154 V1] Acute kidney injury (AKI) diagnosis during hospitalization,849,154,3
+Acute kidney injury (AKI) using diagnosis codes and change in measurements during hospitlization,Acute kidney injury (AKI) using diagnosis codes and change in measurements during hospitlization,-1,201,3
+Acute myocardial infarction events,[COVID ID193 V1] Acute myocardial infarction events,22,193,3
+Acute pancreatitis events,[COVID ID185 V1] Acute pancreatitis events,11,185,3
+Acute Respiratory Distress syndrome (ARDS) during hospitalization,[COVID ID153 V1] Acute Respiratory Distress syndrome (ARDS) during hospitalization,76,153,3
+Bradycardia or heart block during hospitalization,[COVID ID161 V1] Bradycardia or heart block during hospitalization,817,161,3
+Cardiac arrhythmia during hospitalization,[COVID ID160 V1] Cardiac arrhythmia during hospitalization,841,160,3
+Cardiovascular-related mortality,[COVID ID188 V1] Cardiovascular-related mortality,19,188,3
+death,[COVID ID164 V1] Death,166,164,3
+Discharge from hospitalization,Discharge from hospitalization,-1,202,3
+ECMO during hospitalization,[COVID ID180 V1] ECMO during hospitalization,935,180,3
+Gastrointestinal bleeding events,[COVID ID187 V1] Gastrointestinal bleeding events,17,187,3
+Heart failure during hospitalization,[COVID ID159 V1] Heart failure during hospitalization,932,159,3
+Hemorrhagic stroke (intracerebral bleeding) events,[COVID ID192 V1] Hemorrhagic stroke (intracerebral bleeding) events,926,192,3
+intensive services during hospitalization,[COVID ID177 V1] intensive services during hospitalization,933,177,3
+Ischemic stroke events,[COVID ID191 V1] Ischemic stroke events,924,191,3
+mechanical ventilation during hospitalization,[COVID ID178 V1] mechanical ventilation during hospitalization,934,178,3
+Persons with chest pain or angina,[COVID ID182 V1] Persons with chest pain or angina,6,182,3
+Persons with hepatic failure,[COVID ID184 V1] Persons with hepatic failure,10,184,3
+Pneumonia during hospitalization,[COVID ID152 V1] Pneumonia during hospitalization,781,152,3
+Sepsis during hospitalization,[COVID ID155 V1] Sepsis during hospitalization,923,155,3
+Stroke (ischemic or hemorrhagic) events,[COVID ID190 V1] Stroke (ischemic or hemorrhagic) events,21,190,3
+Supraventricular arrythymia during hospitalization,[COVID ID162 V1] Supraventricular arrythymia during hospitalization,816,162,3
+Total cardiovascular disease events,[COVID ID186 V1] Total cardiovascular disease events,245,186,3
+tracheostomy during hospitalization,[COVID ID179 V1] tracheostomy during hospitalization,936,179,3
+Transient ischemic attack events,[COVID ID189 V1] Transient ischemic attack events,20,189,3
+Venous thromboembolic (pulmonary embolism and deep vein thrombosis) events ,[COVID ID156 V1] Venous thromboembolic (pulmonary embolism and deep vein thrombosis) events ,7,156,3
+ventricular arrhythmia or cardiac arrest during hospitalization,[COVID ID163 V1] ventricular arrhythmia or cardiac arrest during hospitalization,842,163,3

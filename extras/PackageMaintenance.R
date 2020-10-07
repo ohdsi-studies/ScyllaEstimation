@@ -46,13 +46,14 @@ ROhdsiWebApi::insertCohortDefinitionSetInPackage(fileName = "CohortsToCreate.csv
                                                  packageName = "ScyllaEstimation")
 
 # Create analysis details -------------------------------------------------
+# remotes::install_github("ohdsi-studies/ScyllaCharacterization", ref = "develop")
 library(magrittr)
 source("extras/CreateStudyAnalysisDetails.R")
-createAnalysesDetails("inst/settings/")
-createExposureConceptSet("inst/settings/") # readLines(cohortJsonFile) warnings: incomplete final line
-createTcoDetails("inst/settings")
-createNegativeContolDetails("inst/settings")
-createPositiveControlSynthesisArgs("inst/settings/")
+createAnalysesDetails("inst/settings/") # rebuild after executing
+createExposureConceptSet("inst/settings/") # rebuild after executing (note: readLines(cohortJsonFile) warnings: incomplete final line)
+createTcoDetails("inst/settings") # rebuild after executing
+createNegativeContolDetails("inst/settings") # rebuild after executing
+createPositiveControlSynthesisArgs("inst/settings/") # rebuild after executing
 
 # Store environment in which the study was executed -----------------------
 OhdsiRTools::createRenvLockFile("ScyllaEstimation")
