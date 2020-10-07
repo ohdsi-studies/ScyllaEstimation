@@ -61,7 +61,30 @@ runCohortMethod <- function(connectionDetails,
 
   for (analysisDesign in c(100, 200, 300, 400)) {
 
-    subTcosList <- tcosList # Need to filter
+    # 1. subgroup (with 365d prior obs) where cohort start date = target cohort start date (protocol figure 1) => 100
+    # 2. subgroup (no prior obs required) where cohort start date = target cohort start date (protocol figure 2) => 200
+    # 3. subgroup (with 365d prior obs) where cohort start date is between -7d to 0d relative to target cohort start date (protocol figure 3) => 300
+    # 4. cohorts for protocol figure 4 are already implemented with subgroupId=2002 => 400
+
+    getDesign <- function(x) {
+      tcoDesign <- as.integer(
+        sub(pattern = "[[:digit:]]{4}", replacement = "",
+            sub(pattern = "1$", replacement = "", x$targetId)))
+      if (tcoDesign == 1) {
+        return(100)
+      } else if (tcoDesign == 2) {
+        return(200)
+      } else if (tcoDesign == 3) {
+        return(300)
+      } else if (tcoDesign == 2002) {
+        return(400)
+      } else {
+        stop(paste("Unknown analysis plan for targetId", x$targetId))
+      }
+    }
+
+    subTcosList <- Filter(function(x) { getDesign(x) == analysisDesign },
+                          tcosList)
 
     subCmAnalysisList <- Filter(function(x) { x$analysisId > analysisDesign && x$analysisId < (analysisDesign + 100) },
                                 cmAnalysisList)

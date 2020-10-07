@@ -80,7 +80,7 @@ execute <- function(connectionDetails,
                     databaseName = "Unknown",
                     databaseDescription = "Unknown",
                     createCohorts = TRUE,
-                    synthesizePositiveControls = TRUE,
+                    synthesizePositiveControls = FALSE,
                     runAnalyses = TRUE,
                     packageResults = TRUE,
                     maxCores = 4,
@@ -103,10 +103,6 @@ execute <- function(connectionDetails,
                   outputFolder = outputFolder)
   }
 
-  # Set doPositiveControlSynthesis to FALSE if you don't want to use synthetic positive controls:
-  # Start doPositiveControlSynthesis
-  doPositiveControlSynthesis <- FALSE
-  # End doPositiveControlSynthesis
   if (doPositiveControlSynthesis) {
     if (synthesizePositiveControls) {
       ParallelLogger::logInfo("Synthesizing positive controls")
