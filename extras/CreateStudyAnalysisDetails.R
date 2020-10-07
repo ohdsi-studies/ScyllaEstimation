@@ -300,12 +300,13 @@ createTcoDetails <- function(workFolder, exposureGroupCohortIds = c(1100, 1101, 
     names(tcos)[names(tcos) == "conceptIds"] <- "cExcludedCovariateConceptIds"
     tcos$excludedCovariateConceptIds <- paste(tcos$tExcludedCovariateConceptIds, tcos$cExcludedCovariateConceptIds, sep = ";")
     tcos <- subset(tcos, select = -c(tExcludedCovariateConceptIds, cExcludedCovariateConceptIds))
+    tcos$subgroupId <- category$subgroupId[1]
     return(tcos)
   }
 
   tcos <- lapply(categories, createTcosByCategoryAndSubgroup)
   tcos <- dplyr::bind_rows(tcos)
-  tcos <- tcos[, c("targetId", "comparatorId", "outcomeIds", "excludedCovariateConceptIds")]
+  tcos <- tcos[, c("targetId", "comparatorId", "outcomeIds", "excludedCovariateConceptIds", "subgroupId")]
   write.csv(tcos, file.path(workFolder, "TcosOfInterest.csv"), row.names = FALSE)
 }
 
