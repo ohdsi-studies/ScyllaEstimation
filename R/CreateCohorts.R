@@ -14,55 +14,141 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-.createCohorts <- function(connection,
-                           cdmDatabaseSchema,
-                           vocabularyDatabaseSchema = cdmDatabaseSchema,
-                           cohortDatabaseSchema,
-                           cohortTable,
-                           oracleTempSchema,
-                           outputFolder) {
-  
-  # Create study cohort table structure:
-  sql <- SqlRender::loadRenderTranslateSql(sqlFilename = "CreateCohortTable.sql",
-                                           packageName = "ScyllaEstimation",
-                                           dbms = attr(connection, "dbms"),
-                                           oracleTempSchema = oracleTempSchema,
-                                           cohort_database_schema = cohortDatabaseSchema,
-                                           cohort_table = cohortTable)
-  DatabaseConnector::executeSql(connection, sql, progressBar = FALSE, reportOverallTime = FALSE)
-  
-  
-  
-  # Instantiate cohorts:
-  pathToCsv <- system.file("settings", "CohortsToCreate.csv", package = "ScyllaEstimation")
-  cohortsToCreate <- read.csv(pathToCsv)
-  for (i in 1:nrow(cohortsToCreate)) {
-    writeLines(paste("Creating cohort:", cohortsToCreate$name[i]))
-    sql <- SqlRender::loadRenderTranslateSql(sqlFilename = paste0(cohortsToCreate$name[i], ".sql"),
-                                             packageName = "ScyllaEstimation",
-                                             dbms = attr(connection, "dbms"),
-                                             oracleTempSchema = oracleTempSchema,
-                                             cdm_database_schema = cdmDatabaseSchema,
-                                             vocabulary_database_schema = vocabularyDatabaseSchema,
-                                                
-                                             target_database_schema = cohortDatabaseSchema,
-                                             target_cohort_table = cohortTable,
-                                             target_cohort_id = cohortsToCreate$cohortId[i])
-    DatabaseConnector::executeSql(connection, sql)
+#' Create the exposure and outcome cohorts
+#'
+#' @details
+#' This function will create the target, subgroup, and outcome cohorts using inputs
+#' from this study package and using functions from ScyllaCharacterization
+#'
+#' @export
+createCohorts <- function(connectionDetails,
+                          connection = NULL,
+                          cdmDatabaseSchema,
+                          oracleTempSchema = NULL,
+                          cohortDatabaseSchema,
+                          cohortTable = "cohort",
+                          cohortIdsToExcludeFromExecution = c(1100, 1101, 1102, 1103, 1104, 1105, 1106, # exposure classes (e.g. antivirals class)
+                                                              2001, # subgroup where covid19+ before hosp w/o required 1y prior obs
+                                                              2005, 2006), # subgroup where covid19+ after intensive services
+                          cohortGroups = getUserSelectableCohortGroups(),
+                          minCellCount = 0,
+                          incremental = TRUE,
+                          outputFolder,
+                          incrementalFolder = file.path(outputFolder, "RecordKeeping")) {
+
+  start <- Sys.time()
+
+  if (!file.exists(outputFolder)) {
+    dir.create(outputFolder, recursive = TRUE)
   }
-  
-  # Fetch cohort counts:
-  sql <- "SELECT cohort_definition_id, COUNT(*) AS count FROM @cohort_database_schema.@cohort_table GROUP BY cohort_definition_id"
-  sql <- SqlRender::render(sql,
-                              cohort_database_schema = cohortDatabaseSchema,
-                              cohort_table = cohortTable)
-  sql <- SqlRender::translate(sql, targetDialect = attr(connection, "dbms"))
-  counts <- DatabaseConnector::querySql(connection, sql)
-  names(counts) <- SqlRender::snakeCaseToCamelCase(names(counts))
-  counts <- merge(counts, data.frame(cohortDefinitionId = cohortsToCreate$cohortId,
-                                     cohortName  = cohortsToCreate$name))
-  write.csv(counts, file.path(outputFolder, "CohortCounts.csv"))
-  
-  
+
+  if (incremental) {
+    if (is.null(incrementalFolder)) {
+      stop("Must specify incrementalFolder when incremental = TRUE")
+    }
+    if (!file.exists(incrementalFolder)) {
+      dir.create(incrementalFolder, recursive = TRUE)
+    }
+  }
+
+  if (!is.null(getOption("andromedaTempFolder")) && !file.exists(getOption("andromedaTempFolder"))) {
+    warning("andromedaTempFolder '", getOption("andromedaTempFolder"), "' not found. Attempting to create folder")
+    dir.create(getOption("andromedaTempFolder"), recursive = TRUE)
+  }
+
+  if (is.null(connection)) {
+    connection <- DatabaseConnector::connect(connectionDetails)
+    on.exit(DatabaseConnector::disconnect(connection))
+  }
+
+  # Instantiate cohorts --------------------------------------------------------
+
+  cohorts <- getCohortsToCreate()
+  cohorts <- cohorts[!(cohorts$cohortId %in% cohortIdsToExcludeFromExecution), ] # Remove cohorts to be excluded
+  targetCohortIds <- cohorts[cohorts$cohortType %in% cohortGroups, "cohortId"][[1]]
+  subgroupCohortIds <- cohorts[cohorts$cohortType == "subgroup", "cohortId"][[1]]
+  featureCohorts <- loadFile(c("OutcomeCohorts.csv", "ScyllaEstimation")) # use outcomes from OutcomeCohorts.csv, not full outcome set from ScyllaCharacterization
+  featureCohortIds <- unique(featureCohorts$cohortId)
+
+  # for dev ---
+  targetCohortIds <- targetCohortIds[1:10]
+  featureCohortIds <- featureCohortIds[1:10]
+
+  if (length(targetCohortIds) > 0) {
+    ParallelLogger::logInfo(" ---- Creating target cohorts ---- ")
+    instantiateCohortSet(connectionDetails = connectionDetails,
+                         connection = connection,
+                         cdmDatabaseSchema = cdmDatabaseSchema,
+                         oracleTempSchema = oracleTempSchema,
+                         cohortDatabaseSchema = cohortDatabaseSchema,
+                         cohortTable = cohortTable,
+                         cohortIds = targetCohortIds,
+                         createCohortTable = TRUE,
+                         generateInclusionStats = FALSE,
+                         incremental = incremental,
+                         incrementalFolder = incrementalFolder,
+                         inclusionStatisticsFolder = outputFolder)
+  }
+
+  if (length(subgroupCohortIds) > 0) {
+    ParallelLogger::logInfo(" ---- Creating subgroup cohorts ---- ")
+    instantiateCohortSet(connectionDetails = connectionDetails,
+                         connection = connection,
+                         cdmDatabaseSchema = cdmDatabaseSchema,
+                         oracleTempSchema = oracleTempSchema,
+                         cohortDatabaseSchema = cohortDatabaseSchema,
+                         cohortTable = cohortTable,
+                         cohortIds = subgroupCohortIds,
+                         createCohortTable = FALSE,
+                         generateInclusionStats = FALSE,
+                         incremental = incremental,
+                         incrementalFolder = incrementalFolder,
+                         inclusionStatisticsFolder = outputFolder)
+  }
+
+  if (length(featureCohortIds) > 0) {
+    ParallelLogger::logInfo(" ---- Creating outcome cohorts ---- ")
+    instantiateCohortSet(connectionDetails = connectionDetails,
+                         connection = connection,
+                         cdmDatabaseSchema = cdmDatabaseSchema,
+                         oracleTempSchema = oracleTempSchema,
+                         cohortDatabaseSchema = cohortDatabaseSchema,
+                         cohortTable = cohortTable,
+                         cohortIds = featureCohortIds,
+                         createCohortTable = FALSE,
+                         generateInclusionStats = FALSE,
+                         incremental = incremental,
+                         incrementalFolder = incrementalFolder,
+                         inclusionStatisticsFolder = outputFolder)
+  }
+
+  # Create the subgrouped cohorts
+  ParallelLogger::logInfo(" ---- Creating subgrouped target cohorts ---- ")
+  createBulkSubgroupFromFile(connection = connection,
+                             cdmDatabaseSchema = cdmDatabaseSchema,
+                             cohortDatabaseSchema = cohortDatabaseSchema,
+                             cohortStagingTable = cohortTable,
+                             targetIds = targetCohortIds,
+                             oracleTempSchema = oracleTempSchema)
+
+  # Cohort counts --------------------------------------------------------------
+  ParallelLogger::logInfo("Counting cohorts")
+  counts <- getCohortCounts(connection = connection,
+                            cohortDatabaseSchema = cohortDatabaseSchema,
+                            cohortTable = cohortTable)
+  if (nrow(counts) > 0) {
+    counts$databaseId <- databaseId
+    counts <- enforceMinCellValue(counts, "cohortEntries", minCellCount)
+    counts <- enforceMinCellValue(counts, "cohortSubjects", minCellCount)
+  }
+  targetSubgroupXref <- getTargetSubgroupXref()
+  targetSubgroupCohortRef <- targetSubgroupXref[targetSubgroupXref$targetId %in% targetCohortIds & targetSubgroupXref$subgroupId %in% c(1, 2, 3, 2002), c("cohortId", "name")]
+  featureCohortRef <- unique(featureCohorts[, c("cohortId", "name")])
+  cohortRef <- rbind(targetSubgroupCohortRef, featureCohortRef)
+  counts <- dplyr::left_join(x = cohortRef, y = counts, by = "cohortId")
+  writeToCsv(counts, file.path(outputFolder, "cohort_count.csv"), incremental = incremental, cohortId = counts$cohortId)
 }
+
+
+
 
