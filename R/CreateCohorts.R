@@ -71,8 +71,8 @@ createCohorts <- function(connectionDetails,
   featureCohortIds <- unique(featureCohorts$cohortId)
 
   # for dev ---
-  targetCohortIds <- targetCohortIds[1:10]
-  featureCohortIds <- featureCohortIds[1:10]
+  targetCohortIds <- targetCohortIds[1:13]
+  featureCohortIds <- featureCohortIds[1:13]
 
   if (length(targetCohortIds) > 0) {
     ParallelLogger::logInfo(" ---- Creating target cohorts ---- ")
@@ -137,7 +137,6 @@ createCohorts <- function(connectionDetails,
                             cohortDatabaseSchema = cohortDatabaseSchema,
                             cohortTable = cohortTable)
   if (nrow(counts) > 0) {
-    counts$databaseId <- databaseId
     counts <- enforceMinCellValue(counts, "cohortEntries", minCellCount)
     counts <- enforceMinCellValue(counts, "cohortSubjects", minCellCount)
   }
@@ -146,6 +145,7 @@ createCohorts <- function(connectionDetails,
   featureCohortRef <- unique(featureCohorts[, c("cohortId", "name")])
   cohortRef <- rbind(targetSubgroupCohortRef, featureCohortRef)
   counts <- dplyr::left_join(x = cohortRef, y = counts, by = "cohortId")
+  counts$databaseId <- databaseId
   writeToCsv(counts, file.path(outputFolder, "cohort_count.csv"), incremental = incremental, cohortId = counts$cohortId)
 }
 
