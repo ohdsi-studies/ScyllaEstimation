@@ -67,7 +67,7 @@ createCohorts <- function(connectionDetails,
   cohorts <- cohorts[!(cohorts$cohortId %in% cohortIdsToExcludeFromExecution), ] # Remove cohorts to be excluded
   targetCohortIds <- cohorts[cohorts$cohortType %in% cohortGroups, "cohortId"][[1]]
   subgroupCohortIds <- cohorts[cohorts$cohortType == "subgroup", "cohortId"][[1]]
-  featureCohorts <- loadFile(c("OutcomeCohorts.csv", "ScyllaEstimation")) # use outcomes from OutcomeCohorts.csv, not full outcome set from ScyllaCharacterization
+  featureCohorts <- readCsv("settings/OutcomeCohorts.csv", "ScyllaEstimation")
   featureCohortIds <- unique(featureCohorts$cohortId)
 
   # for dev ---
