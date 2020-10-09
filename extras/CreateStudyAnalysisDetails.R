@@ -266,19 +266,13 @@ createExposureConceptSet <- function(workFolder) {
   write.csv(exposureConcepts, file.path(workFolder, "TargetCohortConceptIds.csv"), row.names = FALSE)
 }
 
-createTcoDetails <- function(workFolder, exposureGroupCohortIds = c(1100, 1101, 1102, 1103, 1104, 1105, 1106)) {
-  fileInputs <- list(targetCohortCategories = c("TargetCohortCategories.csv", "ScyllaEstimation"),
-                     targetCohortConceptIds = c("TargetCohortConceptIds.csv", "ScyllaEstimation"),
-                     targetSubgroupXref = c("targetSubgroupXref.csv", "ScyllaCharacterization"),
-                     outcomeCohorts = c("OutcomeCohorts.csv", "ScyllaEstimation"))
-
-  loadFile <- function(fileInput) {
-    fileName <- system.file("settings", fileInput[1], package = fileInput[2])
-    df <-  read.csv(fileName)
-    return(df)
-  }
-
-  dfs <- lapply(fileInputs, loadFile)
+createTcoDetails <- function(workFolder,
+                             exposureGroupCohortIds = c(1100, 1101, 1102, 1103, 1104, 1105, 1106)) {
+  fileInputs <- list(targetCohortCategories = c("settings/TargetCohortCategories.csv", "ScyllaEstimation"),
+                     targetCohortConceptIds = c("settings/TargetCohortConceptIds.csv", "ScyllaEstimation"),
+                     targetSubgroupXref = c("settings/targetSubgroupXref.csv", "ScyllaCharacterization"),
+                     outcomeCohorts = c("settings/OutcomeCohorts.csv", "ScyllaEstimation"))
+  dfs <- lapply(fileInputs, function(x) return(readCsv(x[1], x[2])))
   list2env(dfs, envir = .GlobalEnv)
 
   targetCohortCategories$name <- NULL # note 2x azithromycin 1007 (classified as AB and AV)
@@ -300,7 +294,6 @@ createTcoDetails <- function(workFolder, exposureGroupCohortIds = c(1100, 1101, 
     names(tcos)[names(tcos) == "conceptIds"] <- "cExcludedCovariateConceptIds"
     tcos$excludedCovariateConceptIds <- paste(tcos$tExcludedCovariateConceptIds, tcos$cExcludedCovariateConceptIds, sep = ";")
     tcos <- subset(tcos, select = -c(tExcludedCovariateConceptIds, cExcludedCovariateConceptIds))
-    tcos$subgroupId <- category$subgroupId[1]
     return(tcos)
   }
 
@@ -312,16 +305,9 @@ createTcoDetails <- function(workFolder, exposureGroupCohortIds = c(1100, 1101, 
 
 
 createNegativeContolDetails <- function(workFolder) {
-  fileInputs <- list(tcosOfInterest = c("TcosOfInterest.csv", "ScyllaEstimation"),
-                     netagtiveControlConceptIds = c("NegativeControlConceptIds.csv", "ScyllaEstimation"))
-
-  loadFile <- function(fileInput) {
-    fileName <- system.file("settings", fileInput[1], package = fileInput[2])
-    df <-  read.csv(fileName)
-    return(df)
-  }
-
-  dfs <- lapply(fileInputs, loadFile)
+  fileInputs <- list(tcosOfInterest = c("settings/TcosOfInterest.csv", "ScyllaEstimation"),
+                     netagtiveControlConceptIds = c("settings/NegativeControlConceptIds.csv", "ScyllaEstimation"))
+  dfs <- lapply(fileInputs, function(x) return(readCsv(x[1], x[2])))
   list2env(dfs, envir = .GlobalEnv)
 
   tcs <- tcosOfInterest[, c("targetId", "comparatorId")]
