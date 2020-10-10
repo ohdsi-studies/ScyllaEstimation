@@ -46,6 +46,7 @@ runCohortMethod <- function(connectionDetails,
                             cohortDatabaseSchema,
                             cohortTable,
                             oracleTempSchema,
+                            minExposureCount = 5,
                             outputFolder,
                             maxCores) {
   cmOutputFolder <- file.path(outputFolder, "cmOutput")
@@ -58,6 +59,15 @@ runCohortMethod <- function(connectionDetails,
   cmAnalysisList <- CohortMethod::loadCmAnalysisList(cmAnalysisListFile)
   tcosList <- createTcos(outputFolder = outputFolder)
   outcomesOfInterest <- getOutcomesOfInterest()
+
+  # get exposure cohort IDs with counts >= 5
+  pathToCsv <- file.path(outputFolder, "cohort_count.csv")
+  cohortsForAnalysis <- readr::read_csv(pathToCsv, col_types = readr::cols())
+  colnames(cohortsForAnalysis) <- SqlRender::snakeCaseToCamelCase(colnames(cohortsForAnalysis))
+  cohortsForAnalysis <- cohortsForAnalysis[!is.na(cohortsForAnalysis$cohortSubjects), ]
+  targetSubgroupCohortIds <- getTargetSubgroupXref()$cohortId
+  exposureKeeps <- cohortsForAnalysis$cohortId %in% targetSubgroupCohortIds & cohortsForAnalysis$cohortSubjects >= minExposureCount
+  exposureIdsForAnalysis <- cohortsForAnalysis$cohortId[exposureKeeps]
 
   for (analysisDesign in c(100, 200, 300, 400)) {
 
@@ -86,28 +96,41 @@ runCohortMethod <- function(connectionDetails,
     subTcosList <- Filter(function(x) { getDesign(x) == analysisDesign },
                           tcosList)
 
+    checkMinExposureCounts <- function(subTcos) {
+      if (subTcos$targetId %in% exposureIdsForAnalysis & subTcos$comparatorId %in% exposureIdsForAnalysis) {
+        return(subTcos)
+      } else {
+        return(NULL)
+      }
+    }
+
+    subTcosList <- lapply(subTcosList, checkMinExposureCounts)
+    subTcosList <- subTcosList[-which(sapply(subTcosList, is.null))]
+
     subCmAnalysisList <- Filter(function(x) { x$analysisId > analysisDesign && x$analysisId < (analysisDesign + 100) },
                                 cmAnalysisList)
 
-    results <- CohortMethod::runCmAnalyses(connectionDetails = connectionDetails,
-                                           cdmDatabaseSchema = cdmDatabaseSchema,
-                                           exposureDatabaseSchema = cohortDatabaseSchema,
-                                           exposureTable = cohortTable,
-                                           outcomeDatabaseSchema = cohortDatabaseSchema,
-                                           outcomeTable = cohortTable,
-                                           outputFolder = cmOutputFolder,
-                                           oracleTempSchema = oracleTempSchema,
-                                           cmAnalysisList = subCmAnalysisList,
-                                           targetComparatorOutcomesList = subTcosList,
-                                           getDbCohortMethodDataThreads = min(3, maxCores),
-                                           createStudyPopThreads = min(3, maxCores),
-                                           createPsThreads = max(1, round(maxCores/10)),
-                                           psCvThreads = min(10, maxCores),
-                                           trimMatchStratifyThreads = min(10, maxCores),
-                                           fitOutcomeModelThreads = max(1, round(maxCores/4)),
-                                           outcomeCvThreads = min(4, maxCores),
-                                           refitPsForEveryOutcome = FALSE,
-                                           outcomeIdsOfInterest = outcomesOfInterest)
+    if (length(subTcosList) > 0) {
+      results <- CohortMethod::runCmAnalyses(connectionDetails = connectionDetails,
+                                             cdmDatabaseSchema = cdmDatabaseSchema,
+                                             exposureDatabaseSchema = cohortDatabaseSchema,
+                                             exposureTable = cohortTable,
+                                             outcomeDatabaseSchema = cohortDatabaseSchema,
+                                             outcomeTable = cohortTable,
+                                             outputFolder = cmOutputFolder,
+                                             oracleTempSchema = oracleTempSchema,
+                                             cmAnalysisList = subCmAnalysisList,
+                                             targetComparatorOutcomesList = subTcosList,
+                                             getDbCohortMethodDataThreads = min(3, maxCores),
+                                             createStudyPopThreads = min(3, maxCores),
+                                             createPsThreads = max(1, round(maxCores/10)),
+                                             psCvThreads = min(10, maxCores),
+                                             trimMatchStratifyThreads = min(10, maxCores),
+                                             fitOutcomeModelThreads = max(1, round(maxCores/4)),
+                                             outcomeCvThreads = min(4, maxCores),
+                                             refitPsForEveryOutcome = FALSE,
+                                             outcomeIdsOfInterest = outcomesOfInterest)
+    }
   }
 
   ParallelLogger::logInfo("Summarizing results")
