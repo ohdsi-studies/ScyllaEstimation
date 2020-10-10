@@ -103,6 +103,7 @@ execute <- function(connectionDetails,
                   outputFolder = outputFolder)
   }
 
+  doPositiveControlSynthesis <- TRUE
   if (doPositiveControlSynthesis) {
     if (synthesizePositiveControls) {
       ParallelLogger::logInfo("Synthesizing positive controls")

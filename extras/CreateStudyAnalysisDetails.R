@@ -240,8 +240,7 @@ createAnalysesDetails <- function(workFolder) {
 }
 
 createExposureConceptSet <- function(workFolder) {
-  exposureCohortRefFile <- system.file("settings", "CohortsToCreateTarget.csv", package = "ScyllaCharacterization")
-  exposureCohortRef <- read.csv(exposureCohortRefFile)
+  exposureCohortRef <- readCsv("settings/CohortsToCreateTarget.csv", "ScyllaCharacterization")
   rows <- split(exposureCohortRef, exposureCohortRef$cohortId)
 
   getExposureConcepts <- function(row) {
@@ -263,6 +262,13 @@ createExposureConceptSet <- function(workFolder) {
   exposureConcepts <- exposureConcepts %>%
     dplyr::group_by(cohortId) %>%
     dplyr::summarise(conceptIds = paste(conceptId, collapse = ";"), .groups = "drop")
+
+  additionalExcludedCovariates <- readCsv("settings/AdditionalExcludedCovariateConceptIds.csv", "ScyllaEstimation")
+  exposureConcepts <- dplyr::left_join(exposureConcepts, additionalExcludedCovariates, by = "cohortId")
+  adds <- !is.na(exposureConcepts$additionalExcludedCovariateConceptIds)
+  exposureConcepts$conceptIds[adds] <- paste(exposureConcepts$conceptIds[adds], exposureConcepts$additionalExcludedCovariateConceptIds[adds], sep = ";")
+  exposureConcepts <- subset(exposureConcepts, select = -additionalExcludedCovariateConceptIds)
+
   write.csv(exposureConcepts, file.path(workFolder, "TargetCohortConceptIds.csv"), row.names = FALSE)
 }
 
@@ -299,7 +305,7 @@ createTcoDetails <- function(workFolder,
 
   tcos <- lapply(categories, createTcosByCategoryAndSubgroup)
   tcos <- dplyr::bind_rows(tcos)
-  tcos <- tcos[, c("targetId", "comparatorId", "outcomeIds", "excludedCovariateConceptIds", "subgroupId")]
+  tcos <- tcos[, c("targetId", "comparatorId", "outcomeIds", "excludedCovariateConceptIds")]
   write.csv(tcos, file.path(workFolder, "TcosOfInterest.csv"), row.names = FALSE)
 }
 
