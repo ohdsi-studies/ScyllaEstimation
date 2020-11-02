@@ -17,7 +17,7 @@
 createAnalysesDetails <- function(workFolder) {
 
   createScyllaCovariateSettings <- function(endDays) {
-    covarSettings <- FeatureExtraction::createDefaultCovariateSettings()
+    covarSettings <- FeatureExtraction::createDefaultCovariateSettings(addDescendantsToExclude = TRUE)
     covarSettings$endDays <- endDays
     return(covarSettings)
   }
