@@ -65,7 +65,7 @@ runCohortMethod <- function(connectionDetails,
   cohortsForAnalysis <- readr::read_csv(pathToCsv, col_types = readr::cols())
   colnames(cohortsForAnalysis) <- SqlRender::snakeCaseToCamelCase(colnames(cohortsForAnalysis))
   cohortsForAnalysis <- cohortsForAnalysis[!is.na(cohortsForAnalysis$cohortSubjects), ]
-  targetSubgroupCohortIds <- getTargetSubgroupXref()$cohortId
+  targetSubgroupCohortIds <- ScyllaCharacterization::getTargetSubgroupXref()$cohortId
   exposureKeeps <- cohortsForAnalysis$cohortId %in% targetSubgroupCohortIds & cohortsForAnalysis$cohortSubjects >= minExposureCount
   exposureIdsForAnalysis <- cohortsForAnalysis$cohortId[exposureKeeps]
 
@@ -136,10 +136,10 @@ runCohortMethod <- function(connectionDetails,
   ParallelLogger::logInfo("Summarizing results")
   analysisSummary <- CohortMethod::summarizeAnalyses(referenceTable = results,
                                                      outputFolder = cmOutputFolder)
-  analysisSummary <- addCohortNames(analysisSummary, "targetId", "targetName")
-  analysisSummary <- addCohortNames(analysisSummary, "comparatorId", "comparatorName")
-  analysisSummary <- addCohortNames(analysisSummary, "outcomeId", "outcomeName")
-  analysisSummary <- addAnalysisDescription(analysisSummary, "analysisId", "analysisDescription")
+  analysisSummary <- ScyllaCharacterization::addCohortNames(analysisSummary, "targetId", "targetName")
+  analysisSummary <- ScyllaCharacterization::addCohortNames(analysisSummary, "comparatorId", "comparatorName")
+  analysisSummary <- ScyllaCharacterization::addCohortNames(analysisSummary, "outcomeId", "outcomeName")
+  analysisSummary <- ScyllaCharacterization::addAnalysisDescription(analysisSummary, "analysisId", "analysisDescription")
   write.csv(analysisSummary, file.path(outputFolder, "analysisSummary.csv"), row.names = FALSE)
 
   ParallelLogger::logInfo("Computing covariate balance")
@@ -201,7 +201,7 @@ computeCovariateBalance <- function(row, cmOutputFolder, balanceFolder) {
     cohortMethodData <- CohortMethod::loadCohortMethodData(cohortMethodDataFile)
     strataFile <- file.path(cmOutputFolder, row$strataFile)
     strata <- readRDS(strataFile)
-     if (nrow(strata) > 0) {
+    if (nrow(strata) > 0) {
       balance <- CohortMethod::computeCovariateBalance(population = strata,
                                                        cohortMethodData = cohortMethodData)
       saveRDS(balance, outputFileName)
@@ -237,27 +237,27 @@ createTcos <- function(outputFolder) {
   tcosOfInterest <- read.csv(pathToCsv, stringsAsFactors = FALSE)
   allControls <- getAllControls(outputFolder)
   tcs <- unique(rbind(tcosOfInterest[,
-                      c("targetId", "comparatorId")],
+                                     c("targetId", "comparatorId")],
                       allControls[,
-                      c("targetId", "comparatorId")]))
+                                  c("targetId", "comparatorId")]))
   createTco <- function(i) {
     targetId <- tcs$targetId[i]
     comparatorId <- tcs$comparatorId[i]
     outcomeIds <- as.character(tcosOfInterest$outcomeIds[tcosOfInterest$targetId == targetId & tcosOfInterest$comparatorId ==
-      comparatorId])
+                                                           comparatorId])
     outcomeIds <- as.numeric(strsplit(outcomeIds, split = ";")[[1]])
     outcomeIds <- c(outcomeIds,
                     allControls$outcomeId[allControls$targetId == targetId & allControls$comparatorId ==
-      comparatorId])
+                                            comparatorId])
     excludeConceptIds <- as.character(tcosOfInterest$excludedCovariateConceptIds[tcosOfInterest$targetId ==
-      targetId & tcosOfInterest$comparatorId == comparatorId])
+                                                                                   targetId & tcosOfInterest$comparatorId == comparatorId])
     if (length(excludeConceptIds) == 1 && is.na(excludeConceptIds)) {
       excludeConceptIds <- c()
     } else if (length(excludeConceptIds) > 0) {
       excludeConceptIds <- as.numeric(strsplit(excludeConceptIds, split = ";")[[1]])
     }
     includeConceptIds <- as.character(tcosOfInterest$includedCovariateConceptIds[tcosOfInterest$targetId ==
-      targetId & tcosOfInterest$comparatorId == comparatorId])
+                                                                                   targetId & tcosOfInterest$comparatorId == comparatorId])
     if (length(includeConceptIds) == 1 && is.na(includeConceptIds)) {
       includeConceptIds <- c()
     } else if (length(includeConceptIds) > 0) {

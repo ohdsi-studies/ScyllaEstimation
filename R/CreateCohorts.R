@@ -30,7 +30,7 @@ createCohorts <- function(connectionDetails,
                           cohortIdsToExcludeFromExecution = c(1100, 1101, 1102, 1103, 1104, 1105, 1106, # exposure classes (e.g. antivirals class)
                                                               2001, # subgroup where covid19+ before hosp w/o required 1y prior obs
                                                               2005, 2006), # subgroup where covid19+ after intensive services
-                          cohortGroups = getUserSelectableCohortGroups(),
+                          cohortGroups = ScyllaCharacterization::getUserSelectableCohortGroups(),
                           minCellCount = 0,
                           incremental = TRUE,
                           outputFolder,
@@ -63,11 +63,11 @@ createCohorts <- function(connectionDetails,
 
   # Instantiate cohorts --------------------------------------------------------
 
-  cohorts <- getCohortsToCreate()
+  cohorts <- ScyllaCharacterization::getCohortsToCreate()
   cohorts <- cohorts[!(cohorts$cohortId %in% cohortIdsToExcludeFromExecution), ] # Remove cohorts to be excluded
   targetCohortIds <- cohorts[cohorts$cohortType %in% cohortGroups, "cohortId"][[1]]
   subgroupCohortIds <- cohorts[cohorts$cohortType == "subgroup", "cohortId"][[1]]
-  featureCohorts <- readCsv("settings/OutcomeCohorts.csv", "ScyllaEstimation")
+  featureCohorts <- ScyllaCharacterization::readCsv("settings/OutcomeCohorts.csv", "ScyllaEstimation")
   featureCohortIds <- unique(featureCohorts$cohortId)
 
   # for dev ---
@@ -76,79 +76,75 @@ createCohorts <- function(connectionDetails,
 
   if (length(targetCohortIds) > 0) {
     ParallelLogger::logInfo(" ---- Creating target cohorts ---- ")
-    instantiateCohortSet(connectionDetails = connectionDetails,
-                         connection = connection,
-                         cdmDatabaseSchema = cdmDatabaseSchema,
-                         oracleTempSchema = oracleTempSchema,
-                         cohortDatabaseSchema = cohortDatabaseSchema,
-                         cohortTable = cohortTable,
-                         cohortIds = targetCohortIds,
-                         createCohortTable = TRUE,
-                         generateInclusionStats = FALSE,
-                         incremental = incremental,
-                         incrementalFolder = incrementalFolder,
-                         inclusionStatisticsFolder = outputFolder)
+    ScyllaCharacterization::instantiateCohortSet(connectionDetails = connectionDetails,
+                                                 connection = connection,
+                                                 cdmDatabaseSchema = cdmDatabaseSchema,
+                                                 oracleTempSchema = oracleTempSchema,
+                                                 cohortDatabaseSchema = cohortDatabaseSchema,
+                                                 cohortTable = cohortTable,
+                                                 cohortIds = targetCohortIds,
+                                                 createCohortTable = TRUE,
+                                                 generateInclusionStats = FALSE,
+                                                 incremental = incremental,
+                                                 incrementalFolder = incrementalFolder,
+                                                 inclusionStatisticsFolder = outputFolder)
   }
 
   if (length(subgroupCohortIds) > 0) {
     ParallelLogger::logInfo(" ---- Creating subgroup cohorts ---- ")
-    instantiateCohortSet(connectionDetails = connectionDetails,
-                         connection = connection,
-                         cdmDatabaseSchema = cdmDatabaseSchema,
-                         oracleTempSchema = oracleTempSchema,
-                         cohortDatabaseSchema = cohortDatabaseSchema,
-                         cohortTable = cohortTable,
-                         cohortIds = subgroupCohortIds,
-                         createCohortTable = FALSE,
-                         generateInclusionStats = FALSE,
-                         incremental = incremental,
-                         incrementalFolder = incrementalFolder,
-                         inclusionStatisticsFolder = outputFolder)
+    ScyllaCharacterization::instantiateCohortSet(connectionDetails = connectionDetails,
+                                                 connection = connection,
+                                                 cdmDatabaseSchema = cdmDatabaseSchema,
+                                                 oracleTempSchema = oracleTempSchema,
+                                                 cohortDatabaseSchema = cohortDatabaseSchema,
+                                                 cohortTable = cohortTable,
+                                                 cohortIds = subgroupCohortIds,
+                                                 createCohortTable = FALSE,
+                                                 generateInclusionStats = FALSE,
+                                                 incremental = incremental,
+                                                 incrementalFolder = incrementalFolder,
+                                                 inclusionStatisticsFolder = outputFolder)
   }
 
   if (length(featureCohortIds) > 0) {
     ParallelLogger::logInfo(" ---- Creating outcome cohorts ---- ")
-    instantiateCohortSet(connectionDetails = connectionDetails,
-                         connection = connection,
-                         cdmDatabaseSchema = cdmDatabaseSchema,
-                         oracleTempSchema = oracleTempSchema,
-                         cohortDatabaseSchema = cohortDatabaseSchema,
-                         cohortTable = cohortTable,
-                         cohortIds = featureCohortIds,
-                         createCohortTable = FALSE,
-                         generateInclusionStats = FALSE,
-                         incremental = incremental,
-                         incrementalFolder = incrementalFolder,
-                         inclusionStatisticsFolder = outputFolder)
+    ScyllaCharacterization::instantiateCohortSet(connectionDetails = connectionDetails,
+                                                 connection = connection,
+                                                 cdmDatabaseSchema = cdmDatabaseSchema,
+                                                 oracleTempSchema = oracleTempSchema,
+                                                 cohortDatabaseSchema = cohortDatabaseSchema,
+                                                 cohortTable = cohortTable,
+                                                 cohortIds = featureCohortIds,
+                                                 createCohortTable = FALSE,
+                                                 generateInclusionStats = FALSE,
+                                                 incremental = incremental,
+                                                 incrementalFolder = incrementalFolder,
+                                                 inclusionStatisticsFolder = outputFolder)
   }
 
   # Create the subgrouped cohorts
   ParallelLogger::logInfo(" ---- Creating subgrouped target cohorts ---- ")
-  createBulkSubgroupFromFile(connection = connection,
-                             cdmDatabaseSchema = cdmDatabaseSchema,
-                             cohortDatabaseSchema = cohortDatabaseSchema,
-                             cohortStagingTable = cohortTable,
-                             targetIds = targetCohortIds,
-                             oracleTempSchema = oracleTempSchema)
+  ScyllaCharacterization::createBulkSubgroupFromFile(connection = connection,
+                                                     cdmDatabaseSchema = cdmDatabaseSchema,
+                                                     cohortDatabaseSchema = cohortDatabaseSchema,
+                                                     cohortStagingTable = cohortTable,
+                                                     targetIds = targetCohortIds,
+                                                     oracleTempSchema = oracleTempSchema)
 
   # Cohort counts --------------------------------------------------------------
   ParallelLogger::logInfo("Counting cohorts")
-  counts <- getCohortCounts(connection = connection,
-                            cohortDatabaseSchema = cohortDatabaseSchema,
-                            cohortTable = cohortTable)
+  counts <- ScyllaCharacterization::getCohortCounts(connection = connection,
+                                                    cohortDatabaseSchema = cohortDatabaseSchema,
+                                                    cohortTable = cohortTable)
   if (nrow(counts) > 0) {
     counts <- enforceMinCellValue(counts, "cohortEntries", minCellCount)
     counts <- enforceMinCellValue(counts, "cohortSubjects", minCellCount)
   }
-  targetSubgroupXref <- getTargetSubgroupXref()
+  targetSubgroupXref <- ScyllaCharacterization::getTargetSubgroupXref()
   targetSubgroupCohortRef <- targetSubgroupXref[targetSubgroupXref$targetId %in% targetCohortIds & targetSubgroupXref$subgroupId %in% c(1, 2, 3, 2002), c("cohortId", "name")]
   featureCohortRef <- unique(featureCohorts[, c("cohortId", "name")])
   cohortRef <- rbind(targetSubgroupCohortRef, featureCohortRef)
   counts <- dplyr::left_join(x = cohortRef, y = counts, by = "cohortId")
   counts$databaseId <- databaseId
-  writeToCsv(counts, file.path(outputFolder, "cohort_count.csv"), incremental = incremental, cohortId = counts$cohortId)
+  ScyllaCharacterization::writeToCsv(counts, file.path(outputFolder, "cohort_count.csv"), incremental = incremental, cohortId = counts$cohortId)
 }
-
-
-
-

@@ -27,10 +27,10 @@ Imports:
     rlang,
     MethodEvaluation (>= 2.0.0),
     OhdsiSharing (>= 0.2.2),
-	  ParallelLogger (>= 2.0.0),
-	  survival,
-	  plyr,
-	  magrittr
+	ParallelLogger (>= 2.0.0),
+	survival,
+	plyr,
+	magrittr
 Suggests:
     knitr,
     rmarkdown,
@@ -38,7 +38,7 @@ Suggests:
     shiny,
     testthat
 Remotes:
-    ohdsi-studies/ScyllaCharacterization,
+    ohdsi-studies/ScyllaCharacterization@develop,
     ohdsi/FeatureExtraction,
     ohdsi/CohortMethod,
     ohdsi/MethodEvaluation,

@@ -11,7 +11,7 @@
   "Packages": {
     "Andromeda": {
       "Package": "Andromeda",
-      "Version": "0.3.2",
+      "Version": "0.4.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "c52d290446a4a35d69e7d447c810e39a"
@@ -25,16 +25,13 @@
     },
     "CohortDiagnostics": {
       "Package": "CohortDiagnostics",
-      "Version": "1.2.7",
+      "Version": "2.0.0",
       "Source": "GitHub",
-      "Remotes": "ohdsi/Eunomia, ohdsi/FeatureExtraction, ohdsi/ROhdsiWebApi,\nr-dbi/RSQLite",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "CohortDiagnostics",
       "RemoteUsername": "OHDSI",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "22172863cea05d9bde7cdf37d687febc33aa24cb",
-      "Hash": "e50536a40b91655b6b20ed094b3f8971"
+      "RemoteRef": "v2.0.0"
     },
     "CohortMethod": {
       "Package": "CohortMethod",
@@ -128,15 +125,13 @@
     },
     "OhdsiRTools": {
       "Package": "OhdsiRTools",
-      "Version": "1.9.0",
+      "Version": "1.9.1",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "OhdsiRTools",
       "RemoteUsername": "OHDSI",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "8d0811c1a782b1f127cff4b87567b688195550d2",
-      "Hash": "f412313765f863cbdb2cd023727ac125"
+      "RemoteRef": "v1.9.1"
     },
     "OhdsiSharing": {
       "Package": "OhdsiSharing",
@@ -152,10 +147,9 @@
     },
     "ParallelLogger": {
       "Package": "ParallelLogger",
-      "Version": "2.0.0",
+      "Version": "2.0.1",
       "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "b87d894ff62b4f71125c4efdb7aac31c"
+      "Repository": "CRAN"
     },
     "R.methodsS3": {
       "Package": "R.methodsS3",
@@ -213,10 +207,9 @@
     },
     "RSQLite": {
       "Package": "RSQLite",
-      "Version": "2.2.0",
+      "Version": "2.2.1",
       "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "2e813101e637bfd423f763d20350ed3d"
+      "Repository": "CRAN"
     },
     "Rcpp": {
       "Package": "Rcpp",
@@ -234,16 +227,13 @@
     },
     "ScyllaCharacterization": {
       "Package": "ScyllaCharacterization",
-      "Version": "0.0.3",
+      "Version": "1.0.1",
       "Source": "GitHub",
-      "Remotes": "OHDSI/CohortDiagnostics, OHDSI/FeatureExtraction,\nOHDSI/OhdsiSharing",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "ScyllaCharacterization",
       "RemoteUsername": "ohdsi-studies",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "bc7e51261179924b61d8b9c400b35fd82209cddc",
-      "Hash": "acaedb3968a98b82168007f9b485345a"
+      "RemoteRef": "develop"
     },
     "SqlRender": {
       "Package": "SqlRender",
@@ -821,10 +811,9 @@
     },
     "readr": {
       "Package": "readr",
-      "Version": "1.3.1",
+      "Version": "1.4.0",
       "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "af8ab99cd936773a148963905736907b"
+      "Repository": "CRAN"
     },
     "rematch2": {
       "Package": "rematch2",
