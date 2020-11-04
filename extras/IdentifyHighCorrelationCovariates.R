@@ -95,13 +95,17 @@ if (deriveFromCohortJson) {
 saveRDS(cohortConcepts, file.path(workingFolder, "cohortConcepts.rds"))
 
 # Expand cohort concept IDs to ancestors and descendants ------------------------------------------------------
+library(DatabaseConnector)
+library(dplyr)
 cohortConcepts <- readRDS(file.path(workingFolder, "cohortConcepts.rds"))
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "pdw",
                                                                 server = Sys.getenv("PDW_SERVER"),
                                                                 user = NULL,
                                                                 password = NULL,
                                                                 port = Sys.getenv("PDW_PORT"))
-cdmDatabaseSchema <- "CDM_Premier_COVID_V1260.dbo"
+# cdmDatabaseSchema <- "CDM_Premier_COVID_V1260.dbo"
+cdmDatabaseSchema <- "Vocabulary_20200320.dbo"
+
 connection <- connect(connectionDetails)
 sql <- "SELECT descendant_concept_id AS concept_id
 FROM @cdm_database_schema.concept_ancestor
@@ -124,7 +128,7 @@ getAncestorsAndDescendants <- function(cohortId) {
   ancestorsAndDescendants$cohortId <- rep(cohortId, nrow(ancestorsAndDescendants))
   return(ancestorsAndDescendants)
 }
-cohortConceptsWithAncestorsAndDescendants <- lapply(cohorts$cohortId, getDescendants)
+cohortConceptsWithAncestorsAndDescendants <- lapply(unique(cohortConcepts$cohortId), getAncestorsAndDescendants)
 cohortConceptsWithAncestorsAndDescendants <- bind_rows(cohortConceptsWithAncestorsAndDescendants)
 saveRDS(cohortConceptsWithAncestorsAndDescendants, file.path(workingFolder, "cohortConceptsWithAncestorsAndDescendants.rds"))
 disconnect(connection)
