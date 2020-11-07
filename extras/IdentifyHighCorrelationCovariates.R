@@ -1,10 +1,10 @@
 # Some code that is unfortunately non-reusable because custom temporal covariates were generated in Scylla characterization:
+library(DatabaseConnector)
+library(dplyr)
 
 workingFolder <- "d:/ScyllaEstimation"
 
 # Get high-correlation covariates from Scylla Characerization server ----------------------------
-library(DatabaseConnector)
-library(dplyr)
 connectionDetails <- createConnectionDetails(dbms = "postgresql",
                                              server = paste(keyring::key_get("scyllaServer"),
                                                             keyring::key_get("scyllaDatabase"), sep ="/"),
@@ -31,9 +31,15 @@ covariates <- covariates %>%
 saveRDS(covariates, file.path(workingFolder, "highCorrelationCovars.rds"))
 disconnect(connection)
 
-# Get concept IDs of target and comparator drugs -------------------------------------------------
-library(dplyr)
+# Filter by TCs of interest ------------------------------------------------------------------
+covariates <- readRDS(file.path(workingFolder, "highCorrelationCovars.rds"))
+tcos <- readr::read_csv("inst/settings/TcosOfInterest.csv")
+covariates <- covariates %>%
+  inner_join(distinct(tcos, tCohortId = .data$targetId, cCohortId = .data$comparatorId),
+             by = c("tCohortId", "cCohortId"))
+saveRDS(covariates, file.path(workingFolder, "highCorrelationCovarsFilterByTc.rds"))
 
+# Get concept IDs of target and comparator drugs -------------------------------------------------
 deriveFromCohortJson <- FALSE
 
 if (deriveFromCohortJson) {
@@ -95,8 +101,6 @@ if (deriveFromCohortJson) {
 saveRDS(cohortConcepts, file.path(workingFolder, "cohortConcepts.rds"))
 
 # Expand cohort concept IDs to ancestors and descendants ------------------------------------------------------
-library(DatabaseConnector)
-library(dplyr)
 cohortConcepts <- readRDS(file.path(workingFolder, "cohortConcepts.rds"))
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "pdw",
                                                                 server = Sys.getenv("PDW_SERVER"),
@@ -104,7 +108,8 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "pdw",
                                                                 password = NULL,
                                                                 port = Sys.getenv("PDW_PORT"))
 # cdmDatabaseSchema <- "CDM_Premier_COVID_V1260.dbo"
-cdmDatabaseSchema <- "Vocabulary_20200320.dbo"
+# cdmDatabaseSchema <- "Vocabulary_20200320.dbo"
+cdmDatabaseSchema <- "CDM_OPTUM_EHR_COVID_v1351.dbo"
 
 connection <- connect(connectionDetails)
 sql <- "SELECT descendant_concept_id AS concept_id
@@ -134,9 +139,8 @@ saveRDS(cohortConceptsWithAncestorsAndDescendants, file.path(workingFolder, "coh
 disconnect(connection)
 
 # Remove target and comparator concepts from high-correlation covariate lists -----------------------------
-library(dplyr)
 cohortConceptsWithAncestorsAndDescendants <- readRDS(file.path(workingFolder, "cohortConceptsWithAncestorsAndDescendants.rds"))
-highCorrCovariates <- readRDS(file.path(workingFolder, "highCorrelationCovars.rds"))
+highCorrCovariates <- readRDS(file.path(workingFolder, "highCorrelationCovarsFilterByTc.rds"))
 # subset <- split(highCorrCovariates, paste(highCorrCovariates$tCohortId, highCorrCovariates$cCohortId))[[1]]
 # subset <- highCorrCovariates[highCorrCovariates$tCohortId == 1007020011 & highCorrCovariates$cCohortId == 1009020011, ]
 removeDrugConcepts <- function(subset) {

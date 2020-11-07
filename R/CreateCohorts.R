@@ -71,8 +71,8 @@ createCohorts <- function(connectionDetails,
   featureCohortIds <- unique(featureCohorts$cohortId)
 
   # for dev ---
-  targetCohortIds <- targetCohortIds[1:13]
-  featureCohortIds <- featureCohortIds[1:13]
+  # targetCohortIds <- targetCohortIds[1:13]
+  # featureCohortIds <- featureCohortIds[1:13]
 
   if (length(targetCohortIds) > 0) {
     ParallelLogger::logInfo(" ---- Creating target cohorts ---- ")
