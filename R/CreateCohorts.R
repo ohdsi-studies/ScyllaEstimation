@@ -51,11 +51,6 @@ createCohorts <- function(connectionDetails,
     }
   }
 
-  if (!is.null(getOption("andromedaTempFolder")) && !file.exists(getOption("andromedaTempFolder"))) {
-    warning("andromedaTempFolder '", getOption("andromedaTempFolder"), "' not found. Attempting to create folder")
-    dir.create(getOption("andromedaTempFolder"), recursive = TRUE)
-  }
-
   if (is.null(connection)) {
     connection <- DatabaseConnector::connect(connectionDetails)
     on.exit(DatabaseConnector::disconnect(connection))
@@ -130,6 +125,18 @@ createCohorts <- function(connectionDetails,
                                                      cohortStagingTable = cohortTable,
                                                      targetIds = targetCohortIds,
                                                      oracleTempSchema = oracleTempSchema)
+
+  # Create negative control outcomes
+  ParallelLogger::logInfo(" ---- Creating negative control outcome cohorts ---- ")
+  negativeControls <- getNegativeControlOutcomes()
+  sql <- SqlRender::loadRenderTranslateSql("NegativeControlOutcomes.sql",
+                                           "ScyllaEstimation",
+                                           dbms = connectionDetails$dbms,
+                                           cdm_database_schema = cdmDatabaseSchema,
+                                           target_database_schema = cohortDatabaseSchema,
+                                           target_cohort_table = cohortTable,
+                                           outcome_ids = negativeControls$outcomeId)
+  DatabaseConnector::executeSql(connection, sql)
 
   # Cohort counts --------------------------------------------------------------
   ParallelLogger::logInfo("Counting cohorts")

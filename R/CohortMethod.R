@@ -294,11 +294,8 @@ createTcos <- function(outputFolder) {
                            "TcosOfInterest.csv",
                            package = "ScyllaEstimation")
   tcosOfInterest <- read.csv(pathToCsv, stringsAsFactors = FALSE)
-  allControls <- getAllControls(outputFolder)
-  tcs <- unique(rbind(tcosOfInterest[,
-                                     c("targetId", "comparatorId")],
-                      allControls[,
-                                  c("targetId", "comparatorId")]))
+  negativeControls <- getNegativeControlOutcomes()
+  tcs <- unique(tcosOfInterest[ ,c("targetId", "comparatorId")])
   createTco <- function(i) {
     targetId <- tcs$targetId[i]
     comparatorId <- tcs$comparatorId[i]
@@ -306,8 +303,7 @@ createTcos <- function(outputFolder) {
                                                            comparatorId])
     outcomeIds <- as.numeric(strsplit(outcomeIds, split = ";")[[1]])
     outcomeIds <- c(outcomeIds,
-                    allControls$outcomeId[allControls$targetId == targetId & allControls$comparatorId ==
-                                            comparatorId])
+                    negativeControls$outcomeId)
     excludeConceptIds <- as.character(tcosOfInterest$excludedCovariateConceptIds[tcosOfInterest$targetId ==
                                                                                    targetId & tcosOfInterest$comparatorId == comparatorId])
     if (length(excludeConceptIds) == 1 && is.na(excludeConceptIds)) {
@@ -344,19 +340,9 @@ getOutcomesOfInterest <- function() {
   return(outcomeIds)
 }
 
-getAllControls <- function(outputFolder) {
-  allControlsFile <- file.path(outputFolder, "AllControls.csv")
-  if (file.exists(allControlsFile)) {
-    # Positive controls must have been synthesized. Include both positive and negative controls.
-    allControls <- read.csv(allControlsFile)
-  } else {
-    # Include only negative controls
-    pathToCsv <- system.file("settings",
-                             "NegativeControls.csv",
-                             package = "ScyllaEstimation")
-    allControls <- read.csv(pathToCsv)
-    allControls$oldOutcomeId <- allControls$outcomeId
-    allControls$targetEffectSize <- rep(1, nrow(allControls))
-  }
-  return(allControls)
+getNegativeControlOutcomes <- function() {
+  pathToCsv <- system.file("settings",
+                           "NegativeControlConceptIds.csv",
+                           package = "ScyllaEstimation")
+  return(readr::read_csv(pathToCsv, col_types = readr::cols()))
 }

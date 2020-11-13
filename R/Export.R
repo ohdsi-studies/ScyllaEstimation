@@ -116,21 +116,20 @@ exportAnalyses <- function(outputFolder, exportFolder) {
   ParallelLogger::logInfo("- covariate_analysis table")
   reference <- readRDS(file.path(outputFolder, "cmOutput", "outcomeModelReference.rds"))
   getCovariateAnalyses <- function(cmAnalysis) {
-    print(cmAnalysis$analysisId)
-    cmDataFolder <- reference$cohortMethodDataFile[reference$analysisId == cmAnalysis$analysisId][1]
+    idx <- reference$analysisId == cmAnalysis$analysisId
+    if (!any(idx)) {
+      return(NULL)
+    }
+    cmDataFolder <- reference$cohortMethodDataFile[idx][1]
     cmData <- CohortMethod::loadCohortMethodData(file.path(outputFolder, "cmOutput", cmDataFolder))
-    if (!is.null(cmData$analysisRef)) {
     covariateAnalysis <- collect(cmData$analysisRef)
     covariateAnalysis <- covariateAnalysis[, c("analysisId", "analysisName")]
     colnames(covariateAnalysis) <- c("covariate_analysis_id", "covariate_analysis_name")
     covariateAnalysis$analysis_id <- cmAnalysis$analysisId
     return(covariateAnalysis)
-    } else {
-      return(data.frame(covariate_analysis_id = 1, covariate_analysis_name = "")[-1,])
-    }
   }
   covariateAnalysis <- lapply(cmAnalysisList, getCovariateAnalyses)
-  covariateAnalysis <- do.call("rbind", covariateAnalysis)
+  covariateAnalysis <- bind_rows(covariateAnalysis)
   fileName <- file.path(exportFolder, "covariate_analysis.csv")
   readr::write_csv(covariateAnalysis, fileName)
 }
@@ -140,20 +139,19 @@ exportExposures <- function(outputFolder, exportFolder) {
   ParallelLogger::logInfo("- exposure_of_interest table")
   pathToCsv <- system.file("settings", "TcosOfInterest.csv", package = "ScyllaEstimation")
   tcosOfInterest <- read.csv(pathToCsv, stringsAsFactors = FALSE)
-  pathToCsv <- system.file("settings", "CohortsToCreate.csv", package = "ScyllaEstimation")
-  cohortsToCreate <- read.csv(pathToCsv)
+  cohorts <- ScyllaCharacterization::getAllStudyCohorts()
+
   createExposureRow <- function(exposureId) {
-    atlasName <- as.character(cohortsToCreate$atlasName[cohortsToCreate$cohortId == exposureId])
-    name <- as.character(cohortsToCreate$name[cohortsToCreate$cohortId == exposureId])
-    cohortFileName <- system.file("cohorts", paste0(name, ".json"), package = "ScyllaEstimation")
-    definition <- readChar(cohortFileName, file.info(cohortFileName)$size)
+    atlasName <- as.character(cohorts$name[cohorts$cohortId == exposureId])
+    name <- atlasName
+    definition <- ""
     return(tibble::tibble(exposureId = exposureId,
                           exposureName = atlasName,
                           definition = definition))
   }
   exposuresOfInterest <- unique(c(tcosOfInterest$targetId, tcosOfInterest$comparatorId))
   exposureOfInterest <- lapply(exposuresOfInterest, createExposureRow)
-  exposureOfInterest <- do.call("rbind", exposureOfInterest)
+  exposureOfInterest <- bind_rows(exposureOfInterest)
   colnames(exposureOfInterest) <- SqlRender::camelCaseToSnakeCase(colnames(exposureOfInterest))
   fileName <- file.path(exportFolder, "exposure_of_interest.csv")
   readr::write_csv(exposureOfInterest, fileName)
@@ -162,13 +160,12 @@ exportExposures <- function(outputFolder, exportFolder) {
 exportOutcomes <- function(outputFolder, exportFolder) {
   ParallelLogger::logInfo("Exporting outcomes")
   ParallelLogger::logInfo("- outcome_of_interest table")
-  pathToCsv <- system.file("settings", "CohortsToCreate.csv", package = "ScyllaEstimation")
-  cohortsToCreate <- read.csv(pathToCsv)
+  cohorts <- ScyllaCharacterization::getAllStudyCohorts()
+
   createOutcomeRow <- function(outcomeId) {
-    atlasName <- as.character(cohortsToCreate$atlasName[cohortsToCreate$cohortId == outcomeId])
-    name <- as.character(cohortsToCreate$name[cohortsToCreate$cohortId == outcomeId])
-    cohortFileName <- system.file("cohorts", paste0(name, ".json"), package = "ScyllaEstimation")
-    definition <- readChar(cohortFileName, file.info(cohortFileName)$size)
+    atlasName <- as.character(cohorts$name[cohorts$cohortId == outcomeId])
+    name <- atlasName
+    definition <- ""
     return(tibble::tibble(outcomeId = outcomeId,
                           outcomeName = atlasName,
                           definition = definition))
@@ -182,39 +179,10 @@ exportOutcomes <- function(outputFolder, exportFolder) {
 
 
   ParallelLogger::logInfo("- negative_control_outcome table")
-  pathToCsv <- system.file("settings", "NegativeControls.csv", package = "ScyllaEstimation")
-  negativeControls <- read.csv(pathToCsv)
-  negativeControls <- negativeControls[tolower(negativeControls$type) == "outcome", ]
-  negativeControls <- negativeControls[, c("outcomeId", "outcomeName")]
+  negativeControls <- getNegativeControlOutcomes()
   colnames(negativeControls) <- SqlRender::camelCaseToSnakeCase(colnames(negativeControls))
   fileName <- file.path(exportFolder, "negative_control_outcome.csv")
   readr::write_csv(negativeControls, fileName)
-
-
-  synthesisSummaryFile <- file.path(outputFolder, "SynthesisSummary.csv")
-  if (file.exists(synthesisSummaryFile)) {
-    positiveControls <- read.csv(synthesisSummaryFile, stringsAsFactors = FALSE)
-    pathToCsv <- system.file("settings", "NegativeControls.csv", package = "ScyllaEstimation")
-    negativeControls <- read.csv(pathToCsv)
-    positiveControls <- merge(positiveControls,
-                              negativeControls[, c("outcomeId", "outcomeName")])
-    positiveControls$outcomeName <- paste0(positiveControls$outcomeName,
-                                           ", RR = ",
-                                           positiveControls$targetEffectSize)
-    positiveControls <- positiveControls[, c("newOutcomeId",
-                                             "outcomeName",
-                                             "exposureId",
-                                             "outcomeId",
-                                             "targetEffectSize")]
-    colnames(positiveControls) <- c("outcomeId",
-                                    "outcomeName",
-                                    "exposureId",
-                                    "negativeControlId",
-                                    "effectSize")
-    colnames(positiveControls) <- SqlRender::camelCaseToSnakeCase(colnames(positiveControls))
-    fileName <- file.path(exportFolder, "positive_control_outcome.csv")
-    readr::write_csv(positiveControls, fileName)
-  }
 }
 
 exportMetadata <- function(outputFolder,
@@ -351,14 +319,14 @@ exportMetadata <- function(outputFolder,
     if (nrow(covariateRef) > 0) {
     covariateRef <- covariateRef[, c("covariateId", "covariateName", "analysisId")]
     colnames(covariateRef) <- c("covariateId", "covariateName", "covariateAnalysisId")
-    covariateRef$analysisId <- analysisId
     return(covariateRef)
     } else {
-      return(data.frame(analysisId = analysisId, covariateId = 1, covariateName = "", covariateAnalysisId = 1)[-1])
+      return(tibble(covariateId = 1, covariateName = "", covariateAnalysisId = 1)[-1])
     }
   }
   covariates <- lapply(unique(reference$analysisId), getCovariates)
-  covariates <- do.call("rbind", covariates)
+  covariates <- bind_rows(covariates)
+  covariates <- unique(covariates)
   covariates$databaseId <- databaseId
   colnames(covariates) <- SqlRender::camelCaseToSnakeCase(colnames(covariates))
   fileName <- file.path(exportFolder, "covariate.csv")
@@ -406,7 +374,7 @@ exportMetadata <- function(outputFolder,
   reference <- readRDS(file.path(outputFolder, "cmOutput", "outcomeModelReference.rds"))
   reference <- reference[reference$outcomeId %in% outcomesOfInterest, ]
   results <- plyr::llply(1:nrow(reference), getResult, .progress = "text")
-  results <- do.call("rbind", results)
+  results <- bind_rows(results)
   results$database_id <- databaseId
   fileName <- file.path(exportFolder, "cm_follow_up_dist.csv")
   readr::write_csv(results, fileName)
@@ -443,8 +411,8 @@ exportMainResults <- function(outputFolder,
 
 
   ParallelLogger::logInfo("- cohort_method_result table")
-  analysesSum <- readr::read_csv(file.path(outputFolder, "analysisSummary.csv"), col_types = readr::cols())
-  allControls <- getAllControls(outputFolder)
+  analysesSum <- readr::read_csv(file.path(outputFolder, "analysisSummary.csv"), col_types = readr::cols(), guess_max = 1e6)
+  negativeControls <- getNegativeControlOutcomes()
   ParallelLogger::logInfo("  Performing empirical calibration on main effects")
   cluster <- ParallelLogger::makeCluster(min(4, maxCores))
   subsets <- split(analysesSum,

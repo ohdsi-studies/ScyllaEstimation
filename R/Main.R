@@ -91,6 +91,11 @@ execute <- function(connectionDetails,
   on.exit(ParallelLogger::unregisterLogger("DEFAULT_FILE_LOGGER", silent = TRUE))
   on.exit(ParallelLogger::unregisterLogger("DEFAULT_ERRORREPORT_LOGGER", silent = TRUE), add = TRUE)
 
+  if (!is.null(getOption("andromedaTempFolder")) && !file.exists(getOption("andromedaTempFolder"))) {
+    warning("andromedaTempFolder '", getOption("andromedaTempFolder"), "' not found. Attempting to create folder")
+    dir.create(getOption("andromedaTempFolder"), recursive = TRUE)
+  }
+
   if (createCohorts) {
     ParallelLogger::logInfo("Creating exposure and outcome cohorts")
     createCohorts(connectionDetails = connectionDetails,
