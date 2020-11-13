@@ -15,7 +15,6 @@ execute(
   databaseName = "Unknown",
   databaseDescription = "Unknown",
   createCohorts = TRUE,
-  synthesizePositiveControls = TRUE,
   runAnalyses = TRUE,
   packageResults = TRUE,
   maxCores = 4,
@@ -55,8 +54,6 @@ Synthetic Public Use Files (SynPUFs)').}
 \item{databaseDescription}{A short description (several sentences) of the database.}
 
 \item{createCohorts}{Create the cohortTable table with the exposure and outcome cohorts?}
-
-\item{synthesizePositiveControls}{Should positive controls be synthesized?}
 
 \item{runAnalyses}{Perform the cohort method analyses?}
 

@@ -36,21 +36,19 @@
     },
     "CohortMethod": {
       "Package": "CohortMethod",
-      "Version": "4.0.0",
+      "Version": "4.0.1",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "CohortMethod",
       "RemoteUsername": "ohdsi",
-      "RemoteRef": "v4.0.0",
-      "Hash": "21ed13d53de52702ea5baad1818a918e"
+      "RemoteRef": "develop"
     },
     "Cyclops": {
       "Package": "Cyclops",
-      "Version": "3.0.0",
+      "Version": "3.1.0",
       "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "230d909d27fe6c5193f4fc8c2e6babdc"
+      "Repository": "CRAN"
     },
     "DBI": {
       "Package": "DBI",

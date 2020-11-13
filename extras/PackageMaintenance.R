@@ -46,9 +46,7 @@ ROhdsiWebApi::insertCohortDefinitionSetInPackage(fileName = "CohortsToCreate.csv
                                                  packageName = "ScyllaEstimation")
 
 # Create analysis details -------------------------------------------------
-# remotes::install_github("ohdsi-studies/ScyllaCharacterization", ref = "develop")
 library(magrittr)
-library(ScyllaCharacterization)
 source("extras/CreateStudyAnalysisDetails.R")
 createAnalysesDetails("inst/settings/") # rebuild after executing
 createExposureConceptSet("inst/settings/") # rebuild after executing (note: readLines(cohortJsonFile) warnings: incomplete final line)

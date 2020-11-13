@@ -71,7 +71,14 @@ createAnalysesDetails <- function(workFolder) {
 
   fitOutcomeModelArgsCoxWithStrata <- fitScyllaOutcomeModelArgs(modelType = "cox", stratified = TRUE)
 
-  createPsArgs <- CohortMethod::createCreatePsArgs()
+  createPsArgs <- CohortMethod::createCreatePsArgs(stopOnError = FALSE,
+                                                   control = Cyclops::createControl(noiseLevel = "silent",
+                                                                                    cvType = "auto",
+                                                                                    seed = 1,
+                                                                                    tolerance = 2e-07,
+                                                                                    fold = 3,
+                                                                                    cvRepetitions = 10,
+                                                                                    startingVariance = 0.01))
 
   matchOnPsOneToOneArgs <- CohortMethod::createMatchOnPsArgs(maxRatio = 1)
 
@@ -240,7 +247,7 @@ createAnalysesDetails <- function(workFolder) {
 }
 
 createExposureConceptSet <- function(workFolder) {
-  exposureCohortRef <- readCsv("settings/CohortsToCreateTarget.csv", "ScyllaCharacterization")
+  exposureCohortRef <- ScyllaCharacterization::readCsv("settings/CohortsToCreateTarget.csv", "ScyllaCharacterization")
   rows <- split(exposureCohortRef, exposureCohortRef$cohortId)
 
   getExposureConcepts <- function(row) {
@@ -263,7 +270,7 @@ createExposureConceptSet <- function(workFolder) {
     dplyr::group_by(cohortId) %>%
     dplyr::summarise(conceptIds = paste(conceptId, collapse = ";"), .groups = "drop")
 
-  additionalExcludedCovariates <- readCsv("settings/AdditionalExcludedCovariateConceptIds.csv", "ScyllaEstimation")
+  additionalExcludedCovariates <- ScyllaCharacterization::readCsv("settings/AdditionalExcludedCovariateConceptIds.csv", "ScyllaEstimation")
   exposureConcepts <- dplyr::left_join(exposureConcepts, additionalExcludedCovariates, by = "cohortId")
   adds <- !is.na(exposureConcepts$additionalExcludedCovariateConceptIds)
   exposureConcepts$conceptIds[adds] <- paste(exposureConcepts$conceptIds[adds], exposureConcepts$additionalExcludedCovariateConceptIds[adds], sep = ";")
@@ -278,7 +285,7 @@ createTcoDetails <- function(workFolder,
                      targetCohortConceptIds = c("settings/TargetCohortConceptIds.csv", "ScyllaEstimation"),
                      targetSubgroupXref = c("settings/targetSubgroupXref.csv", "ScyllaCharacterization"),
                      outcomeCohorts = c("settings/OutcomeCohorts.csv", "ScyllaEstimation"))
-  dfs <- lapply(fileInputs, function(x) return(readCsv(x[1], x[2])))
+  dfs <- lapply(fileInputs, function(x) return(ScyllaCharacterization::readCsv(x[1], x[2])))
   list2env(dfs, envir = .GlobalEnv)
 
   targetCohortCategories$name <- NULL # note 2x azithromycin 1007 (classified as AB and AV)
@@ -313,7 +320,7 @@ createTcoDetails <- function(workFolder,
 createNegativeContolDetails <- function(workFolder) {
   fileInputs <- list(tcosOfInterest = c("settings/TcosOfInterest.csv", "ScyllaEstimation"),
                      netagtiveControlConceptIds = c("settings/NegativeControlConceptIds.csv", "ScyllaEstimation"))
-  dfs <- lapply(fileInputs, function(x) return(readCsv(x[1], x[2])))
+  dfs <- lapply(fileInputs, function(x) return(ScyllaCharacterization::readCsv(x[1], x[2])))
   list2env(dfs, envir = .GlobalEnv)
 
   tcs <- tcosOfInterest[, c("targetId", "comparatorId")]

@@ -116,6 +116,7 @@ exportAnalyses <- function(outputFolder, exportFolder) {
   ParallelLogger::logInfo("- covariate_analysis table")
   reference <- readRDS(file.path(outputFolder, "cmOutput", "outcomeModelReference.rds"))
   getCovariateAnalyses <- function(cmAnalysis) {
+    print(cmAnalysis$analysisId)
     cmDataFolder <- reference$cohortMethodDataFile[reference$analysisId == cmAnalysis$analysisId][1]
     cmData <- CohortMethod::loadCohortMethodData(file.path(outputFolder, "cmOutput", cmDataFolder))
     if (!is.null(cmData$analysisRef)) {
@@ -466,6 +467,42 @@ exportMainResults <- function(outputFolder,
   readr::write_csv(results, fileName)
   rm(results)  # Free up memory
 
+  ParallelLogger::logInfo("- likelihood_profile table")
+  reference <- readRDS(file.path(outputFolder, "cmOutput", "outcomeModelReference.rds"))
+  fileName <- file.path(exportFolder, "likelihood_profile.csv")
+  if (file.exists(fileName)) {
+    unlink(fileName)
+  }
+  first <- TRUE
+  pb <- txtProgressBar(style = 3)
+  for (i in 1:nrow(reference)) {
+    if (reference$outcomeModelFile[i] != "") {
+      outcomeModel <- readRDS(file.path(outputFolder, "cmOutput", reference$outcomeModelFile[i]))
+      profile <- outcomeModel$logLikelihoodProfile
+      if (!is.null(profile)) {
+        profile <- data.frame(targetId = reference$targetId[i],
+                              comparatorId = reference$comparatorId[i],
+                              outcomeId = reference$outcomeId[i],
+                              analysisId = reference$analysisId[i],
+                              logHazardRatio = as.numeric(names(profile)),
+                              logLikelihood = profile - max(profile))
+        colnames(profile) <- SqlRender::camelCaseToSnakeCase(colnames(profile))
+        write.table(x = profile,
+                    file = fileName,
+                    row.names = FALSE,
+                    col.names = first,
+                    sep = ",",
+                    dec = ".",
+                    qmethod = "double",
+                    append = !first)
+        first <- FALSE
+      }
+    }
+    setTxtProgressBar(pb, i/nrow(reference))
+  }
+  close(pb)
+
+
   ParallelLogger::logInfo("- cm_interaction_result table")
   reference <- readRDS(file.path(outputFolder, "cmOutput", "outcomeModelReference.rds"))
   loadInteractionsFromOutcomeModel <- function(i) {
@@ -645,62 +682,6 @@ calibrateInteractions <- function(subset, negativeControls) {
     subset$calibratedP <- rep(NA, nrow(subset))
   }
   return(subset)
-}
-
-exportProfiles <- function(outputFolder,
-                              exportFolder,
-                              databaseId,
-                              minCellCount,
-                              maxCores) {
-  ParallelLogger::logInfo("Exporting profiles")
-  fileName <- file.path(exportFolder, "outcome_profile.csv")
-  if (file.exists(fileName)) {
-    unlink(fileName)
-  }
-  first <- TRUE
-  profileFolder <- file.path(outputFolder, "profile")
-  files <- list.files(profileFolder, pattern = "prof_.*.rds", full.names = TRUE)
-  pb <- txtProgressBar(style = 3)
-  if (length(files) > 0) {
-    for (i in 1:length(files)) {
-      ids <- gsub("^.*prof_t", "", files[i])
-      targetId <- as.numeric(gsub("_c.*", "", ids))
-      ids <- gsub("^.*_c", "", ids)
-      comparatorId <- as.numeric(gsub("_[aso].*$", "", ids))
-      if (grepl("_s", ids)) {
-        subgroupId <- as.numeric(gsub("^.*_s", "", gsub("_a[0-9]*.rds", "", ids)))
-      } else {
-        subgroupId <- NA
-      }
-      if (grepl("_o", ids)) {
-        outcomeId <- as.numeric(gsub("^.*_o", "", gsub("_a[0-9]*.rds", "", ids)))
-      } else {
-        outcomeId <- NA
-      }
-      ids <- gsub("^.*_a", "", ids)
-      analysisId <- as.numeric(gsub(".rds", "", ids))
-
-      profile <- readRDS(files[i])
-      profile$targetId <- targetId
-      profile$comparatorId <- comparatorId
-      profile$outcomeId <- outcomeId
-      profile$analysisId <- analysisId
-      profile$databaseId <- databaseId
-
-      colnames(profile) <- SqlRender::camelCaseToSnakeCase(colnames(profile))
-      write.table(x = profile,
-                  file = fileName,
-                  row.names = FALSE,
-                  col.names = first,
-                  sep = ",",
-                  dec = ".",
-                  qmethod = "double",
-                  append = !first)
-      first <- FALSE
-      setTxtProgressBar(pb, i/length(files))
-    }
-  }
-  close(pb)
 }
 
 

@@ -2,12 +2,12 @@
 library(DatabaseConnector)
 library(dplyr)
 
-workingFolder <- "d:/ScyllaEstimation"
+workingFolder <- "s:/ScyllaEstimation"
 
 # Get high-correlation covariates from Scylla Characerization server ----------------------------
 connectionDetails <- createConnectionDetails(dbms = "postgresql",
                                              server = paste(keyring::key_get("scyllaServer"),
-                                                            keyring::key_get("scyllaDatabase"), sep ="/"),
+                                                            keyring::key_get("scyllaDatabase"), sep = "/"),
                                              user = keyring::key_get("scyllaUser"),
                                              password = keyring::key_get("scyllaPassword"))
 connection <- connect(connectionDetails)
@@ -182,3 +182,185 @@ renderTranslateQuerySql(connection = connection,
                         sql = sql,
                         cdm_database_schema = cdmDatabaseSchema,
                         snakeCaseToCamelCase = TRUE)
+
+
+# Find overlap in cohorts between Scylla Characterization and Estimation ----------------------------
+connectionDetails <- createConnectionDetails(dbms = "postgresql",
+                                             server = paste(keyring::key_get("scyllaServer"),
+                                                            keyring::key_get("scyllaDatabase"), sep = "/"),
+                                             user = keyring::key_get("scyllaUser"),
+                                             password = keyring::key_get("scyllaPassword"))
+connection <- connect(connectionDetails)
+cohortsChar <- querySql(connection = connection,
+                        sql = "SELECT cohort.*, cohort_entries, cohort_subjects, database_id FROM scylla.cohort INNER JOIN scylla.cohort_count ON cohort.cohort_id = cohort_count.cohort_id;",
+                        snakeCaseToCamelCase = TRUE)
+disconnect(connection)
+cohortsChar <- cohortsChar %>%
+  filter(.data$databaseId == "OptumEhr1351")
+cohortsEst <- read.csv(file.path(workingFolder, "OptumEhr", "cohort_count.csv"))
+
+cohortsChar %>%
+  filter(.data$targetId == 1046)
+
+sql <- "
+SELECT cohort.*,
+  covariate_value.covariate_id,
+  covariate_value.mean,
+  covariate_value.sd,
+  covariate_value.database_id,
+  covariate.covariate_name
+FROM scylla.cohort
+INNER JOIN scylla.covariate_value
+  ON cohort.cohort_id = covariate_value.cohort_id
+INNER JOIN scylla.covariate
+  ON covariate_value.covariate_id = covariate.covariate_id
+WHERE target_id IN (1045, 1046)
+  AND database_id = 'OptumEhr1351';"
+
+covs <- querySql(connection = connection,
+                 sql = sql,
+                 snakeCaseToCamelCase = TRUE) %>%
+  as_tibble()
+
+covs %>%
+  filter(grepl("cardiovascular disease", .data$covariateName)) %>%
+  filter(.data$subgroupId == 0) %>%
+  arrange(.data$covariateId, .data$targetId)
+
+
+library(CohortMethod)
+cmData <- loadCohortMethodData("s:/ScyllaEstimation/OptumEhr/cmOutput/CmData_l1_t1045000011_c1046000011.zip")
+cmData <- loadCohortMethodData("s:/ScyllaEstimation/OptumEhr/cmOutput/CmData_l1_t1071000011_c1072000011.zip")
+cmData <- loadCohortMethodData("s:/ScyllaEstimation/OptumEhr/cmOutput/CmData_l1_t1070000011_c1074000011.zip")
+
+studyPop <- createStudyPopulation(cohortMethodData = cmData,
+                                  firstExposureOnly = TRUE,
+                                  washoutPeriod = 365,
+                                  removeDuplicateSubjects = "keep first",
+                                  removeSubjectsWithPriorOutcome = TRUE,
+                                  riskWindowStart = 1,
+                                  startAnchor = "cohort start",
+                                  riskWindowEnd = 9999,
+                                  endAnchor = "cohort end",
+                                  censorAtNewRiskWindow = TRUE)
+getAttritionTable(studyPop)
+ps <- createPs(cohortMethodData = cmData,
+               stopOnError = FALSE,
+               population = studyPop)
+plotPs(ps)
+sum(studyPop$treatment == 1)
+sum(studyPop$treatment == 0)
+summary(cmData)
+getAttritionTable(cmData)
+cohortsEst %>%
+  filter(.data$cohort_id == 1045000011)
+cohortsChar %>%
+  filter(.data$targetId == 1046)
+
+
+# Find out why cohort counts are so low
+connection <- connect(connectionDetails)
+allEntries <- querySql(connection, "SELECT * FROM scratch.dbo.mschuemi_scylla_estimation_optum_ehr WHERE cohort_definition_id = 1045000011;")
+querySql(connection, "SELECT COUNT(*) FROM scratch.dbo.mschuemi_scylla_estimation_optum_ehr WHERE cohort_definition_id = 1045000011;")
+cmData <- getDbCohortMethodData(connectionDetails = connectionDetails,
+                                cdmDatabaseSchema = cdmDatabaseSchema,
+                                targetId = 1045000011,
+                                comparatorId = 1046000011,
+                                outcomeIds = 152,
+                                studyStartDate = "20200101",
+                                firstExposureOnly = TRUE,
+                                removeDuplicateSubjects = FALSE,
+                                restrictToCommonPeriod = TRUE,
+                                exposureDatabaseSchema = cohortDatabaseSchema,
+                                exposureTable = cohortTable,
+                                outcomeDatabaseSchema = cohortDatabaseSchema,
+                                outcomeTable = cohortTable,
+                                covariateSettings = FeatureExtraction::createCovariateSettings(useDemographicsGender = TRUE))
+getAttritionTable(cmData)
+
+# Find high-correlation covariates in 'large' cohorts -------------------------------------------------------------------
+# Requires CohortMethod to be executed using stopOnError = FALSE
+library(dplyr)
+folder <- "s:/ScyllaEstimation/OptumEhr/cmOutput"
+minCohortSize <- 100
+omr <- readRDS(file.path(folder, "outcomeModelReference.rds"))
+omrFiltered <- omr[!omr$sharedPsFile == "", ]
+omrFiltered <- omrFiltered[!duplicated(paste(omrFiltered$targetId, omrFiltered$comparatorId)), ]
+covs <- tibble::tibble()
+for (i in 1:nrow(omrFiltered)) {
+  ps <- readRDS(file.path(folder, omrFiltered$sharedPsFile[i]))
+  if (sum(ps$treatment == 1) >= minCohortSize && sum(ps$treatment == 0) >= minCohortSize) {
+    if (!is.null(attr(ps, "metaData")$psHighCorrelation)) {
+      x <- attr(ps, "metaData")$psHighCorrelation
+      x$targetId <- omrFiltered$targetId[i]
+      x$targetSize <- sum(ps$treatment == 1)
+      x$comparatorId <- omrFiltered$comparatorId[i]
+      x$comparatorSize <- sum(ps$treatment == 0)
+      cmData <- CohortMethod::loadCohortMethodData(file.path(folder, omrFiltered$cohortMethodDataFile[i]))
+      covariateIds <- x$covariateId
+      cohortCounts <- cmData$cohorts %>%
+        group_by(.data$treatment) %>%
+        summarise(cohortCount = n()) %>%
+        ungroup()
+      covProps <- cmData$covariates %>%
+        filter(.data$covariateId %in% covariateIds) %>%
+        inner_join(cmData$cohorts, by = "rowId") %>%
+        group_by(.data$treatment, .data$covariateId) %>%
+        summarise(featureCount = n()) %>%
+        ungroup() %>%
+        inner_join(cohortCounts, by = "treatment") %>%
+        mutate(proportion = featureCount / as.numeric(cohortCount)) %>%
+        collect()
+      x <- x %>%
+        left_join(select(filter(covProps, .data$treatment == 1),
+                         .data$covariateId,
+                         targetProportion = .data$proportion),
+                  by = "covariateId") %>%
+        left_join(select(filter(covProps, .data$treatment == 0),
+                         .data$covariateId,
+                         comparatorProportion = .data$proportion),
+                  by = "covariateId")
+      covs <- dplyr::bind_rows(covs, x)
+#
+#
+#       ps$propensityScore <- NULL
+#       ps$preferenceScore <- NULL
+#       ps2 <- CohortMethod::createPs(cohortMethodData = cmData,
+#                                     population = ps,
+#                                     errorOnHighCorrelation = TRUE)
+#       CohortMethod::plotPs(ps2)
+#
+#       highCorCov <- cmData$cohorts %>%
+#         left_join (cmData$covariates %>%
+#                      filter(.data$covariateId == 8532001),
+#                    by = "rowId") %>%
+#         mutate(value = case_when(is.na(.data$covariateValue) ~ 0, TRUE ~ .data$covariateValue)) %>%
+#         collect()
+#       cor(highCorCov$treatment, highCorCov$value)
+    }
+  }
+}
+covs <- covs %>%
+  mutate(covariateShortName = case_when(grepl("index month", .data$covariateName) ~ .data$covariateName,
+                                        TRUE ~gsub(".*: ", "", .data$covariateName)))
+pathToCsv <- file.path(outputFolder, "cohort_count.csv")
+cohorts <- readr::read_csv(pathToCsv, col_types = readr::cols())
+cohorts <- cohorts %>%
+  mutate(cohortShortName = gsub(" with.*", "", .data$name))
+
+forReview <- covs %>%
+  select(.data$targetId,
+         .data$comparatorId,
+         .data$targetSize,
+         .data$comparatorSize,
+         .data$covariateShortName,
+         .data$targetProportion,
+         .data$comparatorProportion) %>%
+  inner_join(select(cohorts, targetId = .data$cohort_id,
+                    targetName = .data$cohortShortName),
+             by = "targetId") %>%
+  inner_join(select(cohorts, comparatorId = .data$cohort_id,
+                    comparatorName = .data$cohortShortName),
+             by = "comparatorId")
+
+readr::write_csv(forReview, "s:/ScyllaEstimation/OptumEhr/HighCorrelationCovs.csv")

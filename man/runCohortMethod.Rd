@@ -10,6 +10,7 @@ runCohortMethod(
   cohortDatabaseSchema,
   cohortTable,
   oracleTempSchema,
+  minExposureCount = 100,
   outputFolder,
   maxCores
 )

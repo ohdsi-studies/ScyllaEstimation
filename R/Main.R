@@ -45,7 +45,6 @@
 #'                             Synthetic Public Use Files (SynPUFs)').
 #' @param databaseDescription  A short description (several sentences) of the database.
 #' @param createCohorts        Create the cohortTable table with the exposure and outcome cohorts?
-#' @param synthesizePositiveControls  Should positive controls be synthesized?
 #' @param runAnalyses          Perform the cohort method analyses?
 #' @param packageResults       Should results be packaged for later sharing?
 #' @param maxCores             How many parallel cores should be used? If more cores are made available
@@ -80,7 +79,6 @@ execute <- function(connectionDetails,
                     databaseName = "Unknown",
                     databaseDescription = "Unknown",
                     createCohorts = TRUE,
-                    synthesizePositiveControls = FALSE,
                     runAnalyses = TRUE,
                     packageResults = TRUE,
                     maxCores = 4,
@@ -101,20 +99,6 @@ execute <- function(connectionDetails,
                   cohortTable = cohortTable,
                   oracleTempSchema = oracleTempSchema,
                   outputFolder = outputFolder)
-  }
-
-  doPositiveControlSynthesis <- TRUE
-  if (doPositiveControlSynthesis) {
-    if (synthesizePositiveControls) {
-      ParallelLogger::logInfo("Synthesizing positive controls")
-      synthesizePositiveControls(connectionDetails = connectionDetails,
-                                 cdmDatabaseSchema = cdmDatabaseSchema,
-                                 cohortDatabaseSchema = cohortDatabaseSchema,
-                                 cohortTable = cohortTable,
-                                 oracleTempSchema = oracleTempSchema,
-                                 outputFolder = outputFolder,
-                                 maxCores = maxCores)
-    }
   }
 
   if (runAnalyses) {
