@@ -42,7 +42,7 @@
       "RemoteHost": "api.github.com",
       "RemoteRepo": "CohortMethod",
       "RemoteUsername": "ohdsi",
-      "RemoteRef": "develop"
+      "RemoteRef": "3466f2ec833572e5a2dea3bec652e33069ebe5b5"
     },
     "Cyclops": {
       "Package": "Cyclops",
@@ -85,6 +85,16 @@
       "Repository": "CRAN",
       "Hash": "c9a6f37caa3aa7f8ff34adac43d947a3"
     },
+   "EvidenceSynthesis": {
+      "Package": "EvidenceSynthesis",
+      "Version": "0.1.0",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "EvidenceSynthesis",
+      "RemoteUsername": "ohdsi",
+      "RemoteRef": "v0.1.0"
+    },
     "FeatureExtraction": {
       "Package": "FeatureExtraction",
       "Version": "3.1.0",
@@ -93,9 +103,7 @@
       "RemoteHost": "api.github.com",
       "RemoteRepo": "FeatureExtraction",
       "RemoteUsername": "ohdsi",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "da48fda9f27cb3c8fa34cc3f91ee741071dc51bb",
-      "Hash": "48b9cb852db342fdada841a552943cd2"
+      "RemoteRef": "v3.1.0"
     },
     "MASS": {
       "Package": "MASS",

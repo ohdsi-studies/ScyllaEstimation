@@ -18,6 +18,7 @@ Imports:
     EmpiricalCalibration (>= 2.0.2),
     Cyclops (>= 3.0.0),
     FeatureExtraction (>= 3.1.0),
+    EvidenceSynthesis,
     CohortMethod (>= 4.0.0),
     ggplot2,
     Andromeda (>= 0.3.2),
@@ -42,7 +43,8 @@ Remotes:
     ohdsi/FeatureExtraction,
     ohdsi/CohortMethod,
     ohdsi/MethodEvaluation,
-    ohdsi/OhdsiSharing
+    ohdsi/OhdsiSharing,
+    ohdsi/EvidenceSynthesis
 License: Apache License 2.0
 VignetteBuilder: knitr
 LazyData: TRUE

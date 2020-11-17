@@ -1,13 +1,13 @@
 # Copyright 2020 Observational Health Data Sciences and Informatics
 #
 # This file is part of ScyllaEstimation
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,23 +18,23 @@
 #'
 #' @param resultsZipFile  Path to a zip file containing results from a study executed by this package.
 #' @param dataFolder      A folder where the data files for the Evidence Explorer app will be stored.
-#' 
-#' @examples 
-#' 
+#'
+#' @examples
+#'
 #' \dontrun{
 #' # Add results from three databases to the Shiny app data folder:
 #' prepareForEvidenceExplorer("ResultsMDCD.zip", "/shinyData")
 #' prepareForEvidenceExplorer("ResultsMDCR.zip", "/shinyData")
 #' prepareForEvidenceExplorer("ResultsCCAE.zip", "/shinyData")
-#' 
+#'
 #' # Launch the Shiny app:
 #' launchEvidenceExplorer("/shinyData")
 #' }
 #'
 #' @export
 prepareForEvidenceExplorer <- function(resultsZipFile, dataFolder) {
-  # resultsZipFile <- "c:/temp/ResultsMDCD.zip"
-  # dataFolder <- "c:/temp/shinyData"
+  # resultsZipFile <- "S:/ScyllaEstimation/OptumEhr/export/export.zip"
+  # dataFolder <- "s:/temp/shinyData"
   if (!file.exists(dataFolder)) {
     dir.create(dataFolder, recursive = TRUE)
   }
@@ -47,22 +47,23 @@ prepareForEvidenceExplorer <- function(resultsZipFile, dataFolder) {
   }
   databaseId <- read.csv(databaseFileName, stringsAsFactors = FALSE)$database_id
   splittableTables <- c("covariate_balance", "preference_score_dist", "kaplan_meier_dist")
-  
+
   processSubet <- function(subset, tableName) {
     targetId <- subset$target_id[1]
     comparatorId <- subset$comparator_id[1]
     fileName <- sprintf("%s_t%s_c%s_%s.rds", tableName, targetId, comparatorId, databaseId)
     saveRDS(subset, file.path(dataFolder, fileName))
   }
-  
+
   processFile <- function(file) {
+    print(file)
     tableName <- gsub(".csv$", "", file)
-    table <- readr::read_csv(file.path(tempFolder, file), col_types = readr::cols())
+    table <- readr::read_csv(file.path(tempFolder, file), col_types = readr::cols(), guess_max = 1e6)
     if (tableName %in% splittableTables) {
       subsets <- split(table, list(table$target_id, table$comparator_id))
       plyr::l_ply(subsets, processSubet, tableName = tableName)
     } else {
-      saveRDS(table, file.path(dataFolder, sprintf("%s_%s.rds", tableName, databaseId)))  
+      saveRDS(table, file.path(dataFolder, sprintf("%s_%s.rds", tableName, databaseId)))
     }
   }
 
@@ -72,28 +73,28 @@ prepareForEvidenceExplorer <- function(resultsZipFile, dataFolder) {
 
 
 #' Launch the SqlRender Developer Shiny app
-#' 
+#'
 #' @param dataFolder   A folder where the data files for the Evidence Explorer app will be stored. Use the
 #'                     \code{\link{prepareForEvidenceExplorer}} to populate this folder.
 #' @param blind        Should the user be blinded to the main results?
 #' @param launch.browser    Should the app be launched in your default browser, or in a Shiny window.
 #'                          Note: copying to clipboard will not work in a Shiny window.
-#' 
-#' @details 
+#'
+#' @details
 #' Launches a Shiny app that allows the user to explore the evidence
-#' 
+#'
 #' @export
 launchEvidenceExplorer <- function(dataFolder, blind = TRUE, launch.browser = TRUE) {
   ensure_installed("DT")
   appDir <- system.file("shiny", "EvidenceExplorer", package = "ScyllaEstimation")
   .GlobalEnv$shinySettings <- list(dataFolder = dataFolder, blind = blind)
   on.exit(rm(shinySettings, envir=.GlobalEnv))
-  shiny::runApp(appDir) 
+  shiny::runApp(appDir)
 }
 
 # Borrowed from devtools: https://github.com/hadley/devtools/blob/ba7a5a4abd8258c52cb156e7b26bb4bf47a79f0b/R/utils.r#L44
 is_installed <- function (pkg, version = 0) {
-  installed_version <- tryCatch(utils::packageVersion(pkg), 
+  installed_version <- tryCatch(utils::packageVersion(pkg),
                                 error = function(e) NA)
   !is.na(installed_version) && installed_version >= version
 }

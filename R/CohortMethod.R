@@ -143,6 +143,10 @@ runCohortMethod <- function(connectionDetails,
                             function(x) if (file.exists(x)) readRDS(x))
   analysisSummary <- bind_rows(analysisSummary)
   cohorts <- ScyllaCharacterization::getAllStudyCohorts()
+  negativeControls <- getNegativeControlOutcomes()
+  cohorts <-bind_rows(cohorts,
+                      tibble(name = negativeControls$outcomeName,
+                             cohortId = negativeControls$outcomeId))
   analysisDescription <- lapply(cmAnalysisList, function(x) dplyr::tibble(analysisId = x$analysisId, description = x$description))
   analysisDescription <- bind_rows(analysisDescription)
 

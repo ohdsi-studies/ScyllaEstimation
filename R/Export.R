@@ -317,9 +317,9 @@ exportMetadata <- function(outputFolder,
     cmData <- CohortMethod::loadCohortMethodData(file.path(outputFolder, "cmOutput", cmDataFolder))
     covariateRef <- collect(cmData$covariateRef)
     if (nrow(covariateRef) > 0) {
-    covariateRef <- covariateRef[, c("covariateId", "covariateName", "analysisId")]
-    colnames(covariateRef) <- c("covariateId", "covariateName", "covariateAnalysisId")
-    return(covariateRef)
+      covariateRef <- covariateRef[, c("covariateId", "covariateName", "analysisId")]
+      colnames(covariateRef) <- c("covariateId", "covariateName", "covariateAnalysisId")
+      return(covariateRef)
     } else {
       return(tibble(covariateId = 1, covariateName = "", covariateAnalysisId = 1)[-1])
     }
@@ -374,7 +374,7 @@ exportMetadata <- function(outputFolder,
   reference <- readRDS(file.path(outputFolder, "cmOutput", "outcomeModelReference.rds"))
   reference <- reference[reference$outcomeId %in% outcomesOfInterest, ]
   results <- plyr::llply(1:nrow(reference), getResult, .progress = "text")
-  results <- bind_rows(results)
+  results <- do.call(rbind, results)
   results$database_id <- databaseId
   fileName <- file.path(exportFolder, "cm_follow_up_dist.csv")
   readr::write_csv(results, fileName)
@@ -421,7 +421,7 @@ exportMainResults <- function(outputFolder,
   results <- ParallelLogger::clusterApply(cluster,
                                           subsets,
                                           calibrate,
-                                          allControls = allControls)
+                                          negativeControls = negativeControls)
   ParallelLogger::stopCluster(cluster)
   rm(subsets)  # Free up memory
   results <- do.call("rbind", results)
@@ -448,13 +448,33 @@ exportMainResults <- function(outputFolder,
       outcomeModel <- readRDS(file.path(outputFolder, "cmOutput", reference$outcomeModelFile[i]))
       profile <- outcomeModel$logLikelihoodProfile
       if (!is.null(profile)) {
-        profile <- data.frame(targetId = reference$targetId[i],
-                              comparatorId = reference$comparatorId[i],
-                              outcomeId = reference$outcomeId[i],
-                              analysisId = reference$analysisId[i],
-                              logHazardRatio = as.numeric(names(profile)),
-                              logLikelihood = profile - max(profile))
-        colnames(profile) <- SqlRender::camelCaseToSnakeCase(colnames(profile))
+        # Custom approximation:
+        # fit <- EvidenceSynthesis:::fitLogLikelihoodFunction(beta = as.numeric(names(profile)),
+        #                                                     ll = profile)
+        # profile <- data.frame(targetId = reference$targetId[i],
+        #                       comparatorId = reference$comparatorId[i],
+        #                       outcomeId = reference$outcomeId[i],
+        #                       analysisId = reference$analysisId[i],
+        #                       mu = fit$mu,
+        #                       sigma = fit$sigma,
+        #                       gamma = fit$gamma)
+        # colnames(profile) <- SqlRender::camelCaseToSnakeCase(colnames(profile))
+
+        # Grid approximation using many columns:
+        profile <- as.data.frame(t(round(profile, 4)))
+        profile$target_id <- reference$targetId[i]
+        profile$comparator_id <- reference$comparatorId[i]
+        profile$outcome_id <- reference$outcomeId[i]
+        profile$analysis_id <- reference$analysisId[i]
+
+        # Grid approximation using many rows: (too inefficient)
+        # profile <- data.frame(targetId = reference$targetId[i],
+        #                       comparatorId = reference$comparatorId[i],
+        #                       outcomeId = reference$outcomeId[i],
+        #                       analysisId = reference$analysisId[i],
+        #                       logHazardRatio = round(as.numeric(names(profile)), 4),
+        #                       logLikelihood = round(profile - max(profile), 4))
+        # colnames(profile) <- SqlRender::camelCaseToSnakeCase(colnames(profile))
         write.table(x = profile,
                     file = fileName,
                     row.names = FALSE,
@@ -469,83 +489,11 @@ exportMainResults <- function(outputFolder,
     setTxtProgressBar(pb, i/nrow(reference))
   }
   close(pb)
-
-
-  ParallelLogger::logInfo("- cm_interaction_result table")
-  reference <- readRDS(file.path(outputFolder, "cmOutput", "outcomeModelReference.rds"))
-  loadInteractionsFromOutcomeModel <- function(i) {
-    outcomeModel <- readRDS(file.path(outputFolder,
-                                      "cmOutput",
-                                      reference$outcomeModelFile[i]))
-    if ("subgroupCounts" %in% names(outcomeModel)) {
-      rows <- tibble::tibble(targetId = reference$targetId[i],
-                             comparatorId = reference$comparatorId[i],
-                             outcomeId = reference$outcomeId[i],
-                             analysisId = reference$analysisId[i],
-                             interactionCovariateId = outcomeModel$subgroupCounts$subgroupCovariateId,
-                             rrr = NA,
-                             ci95Lb = NA,
-                             ci95Ub = NA,
-                             p = NA,
-                             i2 = NA,
-                             logRrr = NA,
-                             seLogRrr = NA,
-                             targetSubjects = outcomeModel$subgroupCounts$targetPersons,
-                             comparatorSubjects = outcomeModel$subgroupCounts$comparatorPersons,
-                             targetDays = outcomeModel$subgroupCounts$targetDays,
-                             comparatorDays = outcomeModel$subgroupCounts$comparatorDays,
-                             targetOutcomes = outcomeModel$subgroupCounts$targetOutcomes,
-                             comparatorOutcomes = outcomeModel$subgroupCounts$comparatorOutcomes)
-      if ("outcomeModelInteractionEstimates" %in% names(outcomeModel)) {
-        idx <- match(outcomeModel$outcomeModelInteractionEstimates$covariateId,
-                     rows$interactionCovariateId)
-        rows$rrr[idx] <- exp(outcomeModel$outcomeModelInteractionEstimates$logRr)
-        rows$ci95Lb[idx] <- exp(outcomeModel$outcomeModelInteractionEstimates$logLb95)
-        rows$ci95Ub[idx] <- exp(outcomeModel$outcomeModelInteractionEstimates$logUb95)
-        rows$logRrr[idx] <- outcomeModel$outcomeModelInteractionEstimates$logRr
-        rows$seLogRrr[idx] <- outcomeModel$outcomeModelInteractionEstimates$seLogRr
-        z <- rows$logRrr[idx]/rows$seLogRrr[idx]
-        rows$p[idx] <- 2 * pmin(pnorm(z), 1 - pnorm(z))
-      }
-      return(rows)
-    } else {
-      return(NULL)
-    }
-
-  }
-  interactions <- plyr::llply(1:nrow(reference),
-                              loadInteractionsFromOutcomeModel,
-                              .progress = "text")
-  interactions <- bind_rows(interactions)
-  if (nrow(interactions) > 0) {
-    ParallelLogger::logInfo("  Performing empirical calibration on interaction effects")
-    allControls <- getAllControls(outputFolder)
-    negativeControls <- allControls[allControls$targetEffectSize == 1, ]
-    cluster <- ParallelLogger::makeCluster(min(4, maxCores))
-    subsets <- split(interactions,
-                     paste(interactions$targetId, interactions$comparatorId, interactions$analysisId))
-    interactions <- ParallelLogger::clusterApply(cluster,
-                                                 subsets,
-                                                 calibrateInteractions,
-                                                 negativeControls = negativeControls)
-    ParallelLogger::stopCluster(cluster)
-    rm(subsets)  # Free up memory
-    interactions <- bind_rows(interactions)
-    interactions$databaseId <- databaseId
-
-    interactions <- enforceMinCellValue(interactions, "targetSubjects", minCellCount)
-    interactions <- enforceMinCellValue(interactions, "comparatorSubjects", minCellCount)
-    interactions <- enforceMinCellValue(interactions, "targetOutcomes", minCellCount)
-    interactions <- enforceMinCellValue(interactions, "comparatorOutcomes", minCellCount)
-    colnames(interactions) <- SqlRender::camelCaseToSnakeCase(colnames(interactions))
-    fileName <- file.path(exportFolder, "cm_interaction_result.csv")
-    readr::write_csv(interactions, fileName)
-    rm(interactions)  # Free up memory
-  }
 }
 
-calibrate <- function(subset, allControls) {
-  ncs <- subset[subset$outcomeId %in% allControls$outcomeId[allControls$targetEffectSize == 1], ]
+calibrate <- function(subset, negativeControls) {
+  # subset = subsets[[4023]]
+  ncs <- subset[subset$outcomeId %in% negativeControls$outcomeId, ]
   ncs <- ncs[!is.na(ncs$seLogRr), ]
   if (nrow(ncs) > 5) {
     null <- EmpiricalCalibration::fitMcmcNull(ncs$logRr, ncs$seLogRr)
@@ -569,23 +517,6 @@ calibrate <- function(subset, allControls) {
     subset$calibratedCi95Ub <- rep(NA, nrow(subset))
     subset$calibratedLogRr <- rep(NA, nrow(subset))
     subset$calibratedSeLogRr <- rep(NA, nrow(subset))
-  }
-  pcs <- subset[subset$outcomeId %in% allControls$outcomeId[allControls$targetEffectSize != 1], ]
-  pcs <- pcs[!is.na(pcs$seLogRr), ]
-  if (nrow(pcs) > 5) {
-    controls <- merge(subset, allControls[, c("targetId", "comparatorId", "outcomeId", "targetEffectSize")])
-    model <- EmpiricalCalibration::fitSystematicErrorModel(logRr = controls$logRr,
-                                                           seLogRr = controls$seLogRr,
-                                                           trueLogRr = log(controls$targetEffectSize),
-                                                           estimateCovarianceMatrix = FALSE)
-    calibratedCi <- EmpiricalCalibration::calibrateConfidenceInterval(logRr = subset$logRr,
-                                                                      seLogRr = subset$seLogRr,
-                                                                      model = model)
-    subset$calibratedRr <- exp(calibratedCi$logRr)
-    subset$calibratedCi95Lb <- exp(calibratedCi$logLb95Rr)
-    subset$calibratedCi95Ub <- exp(calibratedCi$logUb95Rr)
-    subset$calibratedLogRr <- calibratedCi$logRr
-    subset$calibratedSeLogRr <- calibratedCi$seLogRr
   }
   subset$i2 <- rep(NA, nrow(subset))
   subset <- subset[, c("targetId",
@@ -669,113 +600,113 @@ exportDiagnostics <- function(outputFolder,
   files <- list.files(balanceFolder, pattern = "bal_.*.rds", full.names = TRUE)
   pb <- txtProgressBar(style = 3)
   if (length(files) > 0) {
-  for (i in 1:length(files)) {
-    ids <- gsub("^.*bal_t", "", files[i])
-    targetId <- as.numeric(gsub("_c.*", "", ids))
-    ids <- gsub("^.*_c", "", ids)
-    comparatorId <- as.numeric(gsub("_[aso].*$", "", ids))
-    if (grepl("_s", ids)) {
-      subgroupId <- as.numeric(gsub("^.*_s", "", gsub("_a[0-9]*.rds", "", ids)))
-    } else {
-      subgroupId <- NA
+    for (i in 1:length(files)) {
+      ids <- gsub("^.*bal_t", "", files[i])
+      targetId <- as.numeric(gsub("_c.*", "", ids))
+      ids <- gsub("^.*_c", "", ids)
+      comparatorId <- as.numeric(gsub("_[aso].*$", "", ids))
+      if (grepl("_s", ids)) {
+        subgroupId <- as.numeric(gsub("^.*_s", "", gsub("_a[0-9]*.rds", "", ids)))
+      } else {
+        subgroupId <- NA
+      }
+      if (grepl("_o", ids)) {
+        outcomeId <- as.numeric(gsub("^.*_o", "", gsub("_a[0-9]*.rds", "", ids)))
+      } else {
+        outcomeId <- NA
+      }
+      ids <- gsub("^.*_a", "", ids)
+      analysisId <- as.numeric(gsub(".rds", "", ids))
+      balance <- readRDS(files[i])
+      inferredTargetBeforeSize <- mean(balance$beforeMatchingSumTarget/balance$beforeMatchingMeanTarget,
+                                       na.rm = TRUE)
+      inferredComparatorBeforeSize <- mean(balance$beforeMatchingSumComparator/balance$beforeMatchingMeanComparator,
+                                           na.rm = TRUE)
+      inferredTargetAfterSize <- mean(balance$afterMatchingSumTarget/balance$afterMatchingMeanTarget,
+                                      na.rm = TRUE)
+      inferredComparatorAfterSize <- mean(balance$afterMatchingSumComparator/balance$afterMatchingMeanComparator,
+                                          na.rm = TRUE)
+
+      balance$databaseId <- databaseId
+      balance$targetId <- targetId
+      balance$comparatorId <- comparatorId
+      balance$outcomeId <- outcomeId
+      balance$analysisId <- analysisId
+      balance$interactionCovariateId <- subgroupId
+      balance <- balance[, c("databaseId",
+                             "targetId",
+                             "comparatorId",
+                             "outcomeId",
+                             "analysisId",
+                             "interactionCovariateId",
+                             "covariateId",
+                             "beforeMatchingMeanTarget",
+                             "beforeMatchingMeanComparator",
+                             "beforeMatchingStdDiff",
+                             "afterMatchingMeanTarget",
+                             "afterMatchingMeanComparator",
+                             "afterMatchingStdDiff")]
+      colnames(balance) <- c("databaseId",
+                             "targetId",
+                             "comparatorId",
+                             "outcomeId",
+                             "analysisId",
+                             "interactionCovariateId",
+                             "covariateId",
+                             "targetMeanBefore",
+                             "comparatorMeanBefore",
+                             "stdDiffBefore",
+                             "targetMeanAfter",
+                             "comparatorMeanAfter",
+                             "stdDiffAfter")
+      balance$targetMeanBefore[is.na(balance$targetMeanBefore)] <- 0
+      balance$comparatorMeanBefore[is.na(balance$comparatorMeanBefore)] <- 0
+      balance$stdDiffBefore <- round(balance$stdDiffBefore, 3)
+      balance$targetMeanAfter[is.na(balance$targetMeanAfter)] <- 0
+      balance$comparatorMeanAfter[is.na(balance$comparatorMeanAfter)] <- 0
+      balance$stdDiffAfter <- round(balance$stdDiffAfter, 3)
+
+      balance <- balance[!(round(balance$targetMeanBefore, 3) == 0 &
+                             round(balance$comparatorMeanBefore, 3) == 0 &
+                             round(balance$targetMeanAfter, 3) == 0 &
+                             round(balance$comparatorMeanAfter, 3) == 0 &
+                             round(balance$stdDiffBefore, 3) == 0 &
+                             round(balance$stdDiffAfter, 3) == 0), ]
+
+      balance <- enforceMinCellValue(balance,
+                                     "targetMeanBefore",
+                                     minCellCount/inferredTargetBeforeSize,
+                                     TRUE)
+      balance <- enforceMinCellValue(balance,
+                                     "comparatorMeanBefore",
+                                     minCellCount/inferredComparatorBeforeSize,
+                                     TRUE)
+      balance <- enforceMinCellValue(balance,
+                                     "targetMeanAfter",
+                                     minCellCount/inferredTargetAfterSize,
+                                     TRUE)
+      balance <- enforceMinCellValue(balance,
+                                     "comparatorMeanAfter",
+                                     minCellCount/inferredComparatorAfterSize,
+                                     TRUE)
+      balance$targetMeanBefore <- round(balance$targetMeanBefore, 3)
+      balance$comparatorMeanBefore <- round(balance$comparatorMeanBefore, 3)
+      balance$targetMeanAfter <- round(balance$targetMeanAfter, 3)
+      balance$comparatorMeanAfter <- round(balance$comparatorMeanAfter, 3)
+
+      balance <- balance[!is.na(balance$targetId), ]
+      colnames(balance) <- SqlRender::camelCaseToSnakeCase(colnames(balance))
+      write.table(x = balance,
+                  file = fileName,
+                  row.names = FALSE,
+                  col.names = first,
+                  sep = ",",
+                  dec = ".",
+                  qmethod = "double",
+                  append = !first)
+      first <- FALSE
+      setTxtProgressBar(pb, i/length(files))
     }
-    if (grepl("_o", ids)) {
-      outcomeId <- as.numeric(gsub("^.*_o", "", gsub("_a[0-9]*.rds", "", ids)))
-    } else {
-      outcomeId <- NA
-    }
-    ids <- gsub("^.*_a", "", ids)
-    analysisId <- as.numeric(gsub(".rds", "", ids))
-    balance <- readRDS(files[i])
-    inferredTargetBeforeSize <- mean(balance$beforeMatchingSumTarget/balance$beforeMatchingMeanTarget,
-                                     na.rm = TRUE)
-    inferredComparatorBeforeSize <- mean(balance$beforeMatchingSumComparator/balance$beforeMatchingMeanComparator,
-                                         na.rm = TRUE)
-    inferredTargetAfterSize <- mean(balance$afterMatchingSumTarget/balance$afterMatchingMeanTarget,
-                                    na.rm = TRUE)
-    inferredComparatorAfterSize <- mean(balance$afterMatchingSumComparator/balance$afterMatchingMeanComparator,
-                                        na.rm = TRUE)
-
-    balance$databaseId <- databaseId
-    balance$targetId <- targetId
-    balance$comparatorId <- comparatorId
-    balance$outcomeId <- outcomeId
-    balance$analysisId <- analysisId
-    balance$interactionCovariateId <- subgroupId
-    balance <- balance[, c("databaseId",
-                           "targetId",
-                           "comparatorId",
-                           "outcomeId",
-                           "analysisId",
-                           "interactionCovariateId",
-                           "covariateId",
-                           "beforeMatchingMeanTarget",
-                           "beforeMatchingMeanComparator",
-                           "beforeMatchingStdDiff",
-                           "afterMatchingMeanTarget",
-                           "afterMatchingMeanComparator",
-                           "afterMatchingStdDiff")]
-    colnames(balance) <- c("databaseId",
-                           "targetId",
-                           "comparatorId",
-                           "outcomeId",
-                           "analysisId",
-                           "interactionCovariateId",
-                           "covariateId",
-                           "targetMeanBefore",
-                           "comparatorMeanBefore",
-                           "stdDiffBefore",
-                           "targetMeanAfter",
-                           "comparatorMeanAfter",
-                           "stdDiffAfter")
-    balance$targetMeanBefore[is.na(balance$targetMeanBefore)] <- 0
-    balance$comparatorMeanBefore[is.na(balance$comparatorMeanBefore)] <- 0
-    balance$stdDiffBefore <- round(balance$stdDiffBefore, 3)
-    balance$targetMeanAfter[is.na(balance$targetMeanAfter)] <- 0
-    balance$comparatorMeanAfter[is.na(balance$comparatorMeanAfter)] <- 0
-    balance$stdDiffAfter <- round(balance$stdDiffAfter, 3)
-
-    balance <- balance[!(round(balance$targetMeanBefore, 3) == 0 &
-                           round(balance$comparatorMeanBefore, 3) == 0 &
-                           round(balance$targetMeanAfter, 3) == 0 &
-                           round(balance$comparatorMeanAfter, 3) == 0 &
-                           round(balance$stdDiffBefore, 3) == 0 &
-                           round(balance$stdDiffAfter, 3) == 0), ]
-
-    balance <- enforceMinCellValue(balance,
-                                   "targetMeanBefore",
-                                   minCellCount/inferredTargetBeforeSize,
-                                   TRUE)
-    balance <- enforceMinCellValue(balance,
-                                   "comparatorMeanBefore",
-                                   minCellCount/inferredComparatorBeforeSize,
-                                   TRUE)
-    balance <- enforceMinCellValue(balance,
-                                   "targetMeanAfter",
-                                   minCellCount/inferredTargetAfterSize,
-                                   TRUE)
-    balance <- enforceMinCellValue(balance,
-                                   "comparatorMeanAfter",
-                                   minCellCount/inferredComparatorAfterSize,
-                                   TRUE)
-    balance$targetMeanBefore <- round(balance$targetMeanBefore, 3)
-    balance$comparatorMeanBefore <- round(balance$comparatorMeanBefore, 3)
-    balance$targetMeanAfter <- round(balance$targetMeanAfter, 3)
-    balance$comparatorMeanAfter <- round(balance$comparatorMeanAfter, 3)
-
-    balance <- balance[!is.na(balance$targetId), ]
-    colnames(balance) <- SqlRender::camelCaseToSnakeCase(colnames(balance))
-    write.table(x = balance,
-                file = fileName,
-                row.names = FALSE,
-                col.names = first,
-                sep = ",",
-                dec = ".",
-                qmethod = "double",
-                append = !first)
-    first <- FALSE
-    setTxtProgressBar(pb, i/length(files))
-  }
   }
   close(pb)
 
@@ -916,10 +847,10 @@ exportDiagnostics <- function(outputFolder,
   outputFile <- file.path(exportFolder, "kaplan_meier_dist.csv")
   files <- list.files(tempFolder, "km_.*.rds", full.names = TRUE)
   if (length(files) > 0) {
-  saveKmToCsv(files[1], first = TRUE, outputFile = outputFile)
-  if (length(files) > 1) {
-    plyr::l_ply(files[2:length(files)], saveKmToCsv, first = FALSE, outputFile = outputFile, .progress = "text")
-  }
+    saveKmToCsv(files[1], first = TRUE, outputFile = outputFile)
+    if (length(files) > 1) {
+      plyr::l_ply(files[2:length(files)], saveKmToCsv, first = FALSE, outputFile = outputFile, .progress = "text")
+    }
   }
   unlink(tempFolder, recursive = TRUE)
 }
@@ -956,7 +887,7 @@ prepareKm <- function(task,
     # Can happen when matching and treatment is predictable
     return(NULL)
   }
-  data <- prepareKaplanMeier(population)
+  data <- ScyllaEstimation:::prepareKaplanMeier(population)
   if (is.null(data)) {
     # No shared strata
     return(NULL)
@@ -966,8 +897,8 @@ prepareKm <- function(task,
   data$outcomeId <- task$outcomeId
   data$analysisId <- task$analysisId
   data$databaseId <- databaseId
-  data <- enforceMinCellValue(data, "targetAtRisk", minCellCount)
-  data <- enforceMinCellValue(data, "comparatorAtRisk", minCellCount)
+  data <- ScyllaEstimation:::enforceMinCellValue(data, "targetAtRisk", minCellCount)
+  data <- ScyllaEstimation:::enforceMinCellValue(data, "comparatorAtRisk", minCellCount)
   saveRDS(data, outputFileName)
 }
 
