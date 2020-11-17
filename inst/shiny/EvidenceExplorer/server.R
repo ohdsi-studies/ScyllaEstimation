@@ -313,7 +313,6 @@ shinyServer(function(input, output, session) {
                                   analysisId = row$analysisId)
 
       table <- preparePropensityModelTable(model)
-      print(nrow(table))
       options <- list(columnDefs = list(list(className = "dt-right", targets = 0)),
                       pageLength = 15,
                       searching = FALSE,
@@ -435,14 +434,10 @@ shinyServer(function(input, output, session) {
           wellPanel(style = style, p(HTML(paste0("<b> Covariate: </b>",
                                                  point$covariateName,
                                                  "<br/>",
-                                                 "<b> Std. diff before ",
-                                                 tolower(row$psStrategy),
-                                                 ": </b>",
+                                                 "<b> Std. diff before PS adjustment: </b>",
                                                  beforeMatchingStdDiff,
                                                  "<br/>",
-                                                 "<b> Std. diff after ",
-                                                 tolower(row$psStrategy),
-                                                 ": </b>",
+                                                 "<b> Std. diff after  PS adjustment: </b>",
                                                  afterMatchingStdDiff)))))
     }
   })

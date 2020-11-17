@@ -274,13 +274,15 @@ getCovariateBalance <- function(connection,
                                 databaseId,
                                 analysisId,
                                 outcomeId = NULL) {
-  file <- sprintf("covariate_balance_t%s_c%s_%s.rds", targetId, comparatorId, databaseId)
+  file <- sprintf("covariate_balance_t%d_c%d_%s.rds", targetId, comparatorId, databaseId)
   print(file)
   balance <- readRDS(file.path(dataFolder, file))
   colnames(balance) <- SqlRender::snakeCaseToCamelCase(colnames(balance))
-  balance <- balance[balance$analysisId == analysisId & balance$outcomeId == outcomeId, ]
-  balance <- merge(balance, covariate[covariate$databaseId == databaseId & covariate$analysisId ==
-    analysisId, c("covariateId", "covariateAnalysisId", "covariateName")])
+  # balance <- balance[balance$analysisId == analysisId & balance$outcomeId == outcomeId, ]
+  # balance <- merge(balance, covariate[covariate$databaseId == databaseId & covariate$analysisId ==
+  #   analysisId, c("covariateId", "covariateAnalysisId", "covariateName")])
+  balance <- balance[balance$analysisId == analysisId, ]
+  balance <- merge(balance, covariate[covariate$databaseId == databaseId, c("covariateId", "covariateAnalysisId", "covariateName")])
   balance <- balance[c("covariateId",
                        "covariateName",
                        "covariateAnalysisId",
@@ -355,7 +357,7 @@ getStudyPeriod <- function(connection, targetId, comparatorId, databaseId) {
 getPropensityModel <- function(connection, targetId, comparatorId, analysisId, databaseId) {
   model <- propensityModel[propensityModel$targetId == targetId & propensityModel$comparatorId == comparatorId &
     propensityModel$analysisId == analysisId & propensityModel$databaseId == databaseId, ]
-  covariateSubset <- covariate[covariate$databaseId == databaseId & covariate$analysisId == analysisId, c("covariateId",
+  covariateSubset <- covariate[covariate$databaseId == databaseId, c("covariateId",
                                                                                                           "covariateName")]
   covariateSubset <- rbind(covariateSubset,
                            data.frame(covariateId = 0, covariateName = "Intercept"))
