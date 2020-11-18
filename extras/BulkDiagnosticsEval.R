@@ -85,7 +85,5 @@ readr::write_csv(analysesSum, file.path(outputFolder, "NegativeControlsOverview.
 
 
 x <- analysesSum[analysesSum$nNegativeControls == max(analysesSum$nNegativeControls), ]
-sprintf("targetId = %d; comparatorId = %d; analysisId = %d", x$targetId, x$comparatorId, x$analysisId
-as.integer(x$targetId)
-as.integer(x$comparatorId)
+sprintf("targetId = %d; comparatorId = %d; analysisId = %d", x$targetId, x$comparatorId, x$analysisId)
 
