@@ -33,6 +33,12 @@ shinyServer(function(input, output, session) {
 
   observe({
     targetId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$target]
+    comparators <- exposureOfInterest$exposureName[exposureOfInterest$exposureId %in% tcos$comparatorId[tcos$targetId == targetId]]
+    updateSelectInput(session = session, inputId = "comparator", choices = comparators)
+  })
+  
+  observe({
+    targetId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$target]
     comparatorId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$comparator]
     tcoSubset <- tcos[tcos$targetId == targetId & tcos$comparatorId == comparatorId, ]
     outcomes <- outcomeOfInterest$outcomeName[outcomeOfInterest$outcomeId %in% tcoSubset$outcomeId]
