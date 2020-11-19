@@ -61,7 +61,7 @@ cohortMethodAnalysis <- lapply(cmAnalysisList, cmAnalysisToRow)
 cohortMethodAnalysis <- do.call("rbind", cohortMethodAnalysis)
 cohortMethodAnalysis <- unique(cohortMethodAnalysis)
 stats <- inner_join(stats, cohortMethodAnalysis, by = "analysisId")
-readr::write_csv(stats, file.path(outputFolder, "BalanceOverview.csv"))
+readr::write_csv(stats, file.path(outputFolder, sprintf("BalanceOverview_%s.csv", databaseId)))
 x <- stats[stats$maxSd < 0.1, ]
 x$targetName
 
@@ -81,7 +81,7 @@ analysesSum <- analysesSum %>%
             medianSe = median(.data$seLogRr)) %>%
   ungroup()
 
-readr::write_csv(analysesSum, file.path(outputFolder, "NegativeControlsOverview.csv"))
+readr::write_csv(analysesSum, file.path(outputFolder, sprintf("NegativeControlsOverview_%s.csv", databaseId)))
 
 
 x <- analysesSum[analysesSum$nNegativeControls == max(analysesSum$nNegativeControls), ]

@@ -69,14 +69,6 @@ exportResults <- function(outputFolder,
                     minCellCount = minCellCount,
                     maxCores = maxCores)
 
-  exportProfiles(outputFolder = outputFolder,
-                 exportFolder = exportFolder,
-                 databaseId = databaseId,
-                 minCellCount = minCellCount,
-                 maxCores = maxCores)
-
-
-
   # Add all to zip file -------------------------------------------------------------------------------
   ParallelLogger::logInfo("Adding results to zip file")
   zipName <- file.path(exportFolder, sprintf("Results_%s.zip", databaseId))
