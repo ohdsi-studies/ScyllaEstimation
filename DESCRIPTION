@@ -2,10 +2,10 @@ Package: ScyllaEstimation
 Type: Package
 Title: Comparative effectiveness of emerging drug therapies in the treatment of COVID-19
 Version: 0.0.1
-Author: Marc A. Suchard [aut, cre], James Weaver [aut, cre]
-Maintainer: James Weaver <jweave17@its.jnj.com>
+Author: Marc A. Suchard [aut, cre], James Weaver [aut, cre], Martijn J. Schuemie [aut, cre]
+Maintainer: Marc A. Suchard <msuchard@ucla.edu>
 Description:  This OHDSI network study assesses the comparative effectiveness and safety
-    among treatments administered during hospitalization and prior to intensive services. 
+    among treatments administered during hospitalization and prior to intensive services.
     It also assesses the comparative effectiveness and safety among treatments administered
     after COVID-19 positive testing or diagnosis in the outpatient setting without prior
     hospitalization.
