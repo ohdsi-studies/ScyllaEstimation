@@ -5,8 +5,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -52,7 +51,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -62,8 +61,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -111,7 +110,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -124,8 +122,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -171,7 +168,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -181,8 +178,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -230,7 +227,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -243,8 +239,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -290,7 +285,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -299,9 +294,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -349,7 +344,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -362,8 +356,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -409,7 +402,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -419,8 +412,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -468,7 +461,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -481,8 +473,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -528,7 +519,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -538,8 +529,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -587,7 +578,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -600,8 +590,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -647,7 +636,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -656,9 +645,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -706,7 +695,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -719,8 +707,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -766,7 +753,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -776,8 +763,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -872,7 +859,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -885,8 +871,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -932,7 +917,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -942,8 +927,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -1038,7 +1023,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -1051,8 +1035,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -1098,7 +1081,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -1107,9 +1090,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -1204,7 +1187,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -1217,8 +1199,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -1264,7 +1245,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -1274,8 +1255,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -1370,7 +1351,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -1383,8 +1363,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -1430,7 +1409,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -1440,8 +1419,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -1536,7 +1515,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -1549,8 +1527,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -1596,7 +1573,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -1605,9 +1582,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -1702,7 +1679,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -1715,8 +1691,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -1762,7 +1737,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -1772,8 +1747,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -1868,7 +1843,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -1881,8 +1855,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -1928,7 +1901,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -1938,8 +1911,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -2034,7 +2007,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -2047,8 +2019,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -2094,7 +2065,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -2103,9 +2074,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -2200,7 +2171,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -2213,8 +2183,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -2260,7 +2229,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -2270,8 +2239,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -2366,7 +2335,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -2379,8 +2347,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -2426,7 +2393,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -2436,8 +2403,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -2532,7 +2499,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -2545,8 +2511,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -2592,7 +2557,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -2601,9 +2566,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -2698,7 +2663,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -2711,8 +2675,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -2758,7 +2721,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -2768,8 +2731,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -2862,7 +2825,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -2875,8 +2837,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -2922,7 +2883,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -2932,8 +2893,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -3026,7 +2987,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -3039,8 +2999,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -3086,7 +3045,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -3095,9 +3054,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -3190,7 +3149,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -3203,8 +3161,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -3250,7 +3207,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -3260,8 +3217,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -3354,7 +3311,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -3367,8 +3323,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -3414,7 +3369,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -3424,8 +3379,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -3518,7 +3473,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -3531,8 +3485,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -3578,7 +3531,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -3587,9 +3540,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -3682,7 +3635,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -3695,8 +3647,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -3742,7 +3693,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -3752,8 +3703,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -3801,7 +3752,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -3814,8 +3764,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -3861,7 +3810,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -3871,8 +3820,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -3920,7 +3869,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -3933,8 +3881,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -3980,7 +3927,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -3989,9 +3936,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -4039,7 +3986,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -4052,8 +3998,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -4099,7 +4044,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -4109,8 +4054,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -4158,7 +4103,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -4171,8 +4115,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -4218,7 +4161,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -4228,8 +4171,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -4277,7 +4220,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -4290,8 +4232,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -4337,7 +4278,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -4346,9 +4287,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -4396,7 +4337,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -4409,8 +4349,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -4456,7 +4395,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -4466,8 +4405,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -4562,7 +4501,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -4575,8 +4513,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -4622,7 +4559,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -4632,8 +4569,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -4728,7 +4665,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -4741,8 +4677,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -4788,7 +4723,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -4797,9 +4732,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -4894,7 +4829,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -4907,8 +4841,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -4954,7 +4887,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -4964,8 +4897,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -5060,7 +4993,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -5073,8 +5005,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -5120,7 +5051,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -5130,8 +5061,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -5226,7 +5157,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -5239,8 +5169,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -5286,7 +5215,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -5295,9 +5224,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -5392,7 +5321,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -5405,8 +5333,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -5452,7 +5379,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -5462,8 +5389,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -5558,7 +5485,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -5571,8 +5497,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -5618,7 +5543,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -5628,8 +5553,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -5724,7 +5649,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -5737,8 +5661,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -5784,7 +5707,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -5793,9 +5716,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -5890,7 +5813,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -5903,8 +5825,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -5950,7 +5871,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -5960,8 +5881,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -6056,7 +5977,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -6069,8 +5989,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -6116,7 +6035,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -6126,8 +6045,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -6222,7 +6141,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -6235,8 +6153,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -6282,7 +6199,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -6291,9 +6208,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -6388,7 +6305,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -6401,8 +6317,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -6448,7 +6363,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -6458,8 +6373,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -6552,7 +6467,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -6565,8 +6479,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -6612,7 +6525,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -6622,8 +6535,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -6716,7 +6629,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -6729,8 +6641,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -6776,7 +6687,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -6785,9 +6696,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -6880,7 +6791,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -6893,8 +6803,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -6940,7 +6849,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -6950,8 +6859,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -7044,7 +6953,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -7057,8 +6965,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -7104,7 +7011,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -7114,8 +7021,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -7208,7 +7115,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -7221,8 +7127,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -7268,7 +7173,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": "keep first",
@@ -7277,9 +7182,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -7372,7 +7277,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -7385,8 +7289,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -7432,7 +7335,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -7442,8 +7345,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -7491,7 +7394,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -7504,8 +7406,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -7551,7 +7452,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -7561,8 +7462,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -7610,7 +7511,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -7623,8 +7523,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -7670,7 +7569,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -7679,9 +7578,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -7729,7 +7628,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -7742,8 +7640,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -7789,7 +7686,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -7799,8 +7696,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -7848,7 +7745,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -7861,8 +7757,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -7908,7 +7803,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -7918,8 +7813,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -7967,7 +7862,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -7980,8 +7874,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -8027,7 +7920,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -8036,9 +7929,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -8086,7 +7979,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -8099,8 +7991,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -8146,7 +8037,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -8156,8 +8047,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -8252,7 +8143,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -8265,8 +8155,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -8312,7 +8201,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -8322,8 +8211,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -8418,7 +8307,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -8431,8 +8319,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -8478,7 +8365,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -8487,9 +8374,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -8584,7 +8471,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -8597,8 +8483,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -8644,7 +8529,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -8654,8 +8539,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -8750,7 +8635,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -8763,8 +8647,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -8810,7 +8693,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -8820,8 +8703,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -8916,7 +8799,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -8929,8 +8811,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -8976,7 +8857,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -8985,9 +8866,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -9082,7 +8963,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -9095,8 +8975,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -9142,7 +9021,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -9152,8 +9031,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -9248,7 +9127,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -9261,8 +9139,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -9308,7 +9185,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -9318,8 +9195,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -9414,7 +9291,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -9427,8 +9303,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -9474,7 +9349,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -9483,9 +9358,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -9580,7 +9455,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -9593,8 +9467,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -9640,7 +9513,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -9650,8 +9523,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -9746,7 +9619,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -9759,8 +9631,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -9806,7 +9677,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -9816,8 +9687,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -9912,7 +9783,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -9925,8 +9795,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -9972,7 +9841,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -9981,9 +9850,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -10078,7 +9947,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -10091,8 +9959,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -10138,7 +10005,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -10148,8 +10015,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -10242,7 +10109,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -10255,8 +10121,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -10302,7 +10167,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -10312,8 +10177,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -10406,7 +10271,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -10419,8 +10283,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -10466,7 +10329,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -10475,9 +10338,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -10570,7 +10433,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -10583,8 +10445,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -10630,7 +10491,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -10640,8 +10501,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -10734,7 +10595,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -10747,8 +10607,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -10794,7 +10653,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -10804,8 +10663,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -10898,7 +10757,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -10911,8 +10769,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -10958,7 +10815,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -10967,9 +10824,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -11062,7 +10919,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -11075,8 +10931,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -11122,7 +10977,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -11132,8 +10987,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -11181,7 +11036,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -11194,8 +11048,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -11241,7 +11094,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -11251,8 +11104,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -11300,7 +11153,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -11313,8 +11165,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -11360,7 +11211,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -11369,9 +11220,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -11419,7 +11270,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -11432,8 +11282,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -11479,7 +11328,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -11489,8 +11338,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -11538,7 +11387,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -11551,8 +11399,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -11598,7 +11445,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -11608,8 +11455,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -11657,7 +11504,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -11670,8 +11516,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -11717,7 +11562,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -11726,9 +11571,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": false,
@@ -11776,7 +11621,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -11789,8 +11633,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -11836,7 +11679,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -11846,8 +11689,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -11942,7 +11785,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -11955,8 +11797,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -12002,7 +11843,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -12012,8 +11853,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -12108,7 +11949,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -12121,8 +11961,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -12168,7 +12007,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -12177,9 +12016,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -12274,7 +12113,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -12287,8 +12125,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -12334,7 +12171,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -12344,8 +12181,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -12440,7 +12277,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -12453,8 +12289,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -12500,7 +12335,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -12510,8 +12345,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -12606,7 +12441,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -12619,8 +12453,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -12666,7 +12499,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -12675,9 +12508,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -12772,7 +12605,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -12785,8 +12617,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -12832,7 +12663,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -12842,8 +12673,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -12938,7 +12769,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -12951,8 +12781,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -12998,7 +12827,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -13008,8 +12837,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -13104,7 +12933,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -13117,8 +12945,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -13164,7 +12991,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -13173,9 +13000,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -13270,7 +13097,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -13283,8 +13109,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -13330,7 +13155,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -13340,8 +13165,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -13436,7 +13261,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -13449,8 +13273,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -13496,7 +13319,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -13506,8 +13329,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -13602,7 +13425,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -13615,8 +13437,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -13662,7 +13483,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -13671,9 +13492,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -13768,7 +13589,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -13781,8 +13601,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -13828,7 +13647,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -13838,8 +13657,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -13932,7 +13751,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -13945,8 +13763,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -13992,7 +13809,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -14002,8 +13819,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -14096,7 +13913,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -14109,8 +13925,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -14156,7 +13971,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -14165,9 +13980,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -14260,7 +14075,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -14273,8 +14087,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -14320,7 +14133,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -14330,8 +14143,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 7,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -14424,7 +14237,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -14437,8 +14249,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -14484,7 +14295,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -14494,8 +14305,8 @@
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
       "riskWindowEnd": 30,
-      "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "endAnchor": "cohort start",
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -14588,7 +14399,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
@@ -14601,8 +14411,7 @@
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "20200101",
       "studyEndDate": "",
-      "excludeDrugsFromCovariates": true,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": false,
       "restrictToCommonPeriod": true,
       "washoutPeriod": 0,
@@ -14648,7 +14457,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
       "removeDuplicateSubjects": "keep first",
@@ -14657,9 +14466,9 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
       "startAnchor": "cohort start",
-      "riskWindowEnd": 9999,
+      "riskWindowEnd": 0,
       "endAnchor": "cohort end",
-      "censorAtNewRiskWindow": true,
+      "censorAtNewRiskWindow": false,
       "attr_class": "args"
     },
     "createPs": true,
@@ -14752,7 +14561,6 @@
         "initialBound": 2,
         "maxBoundCount": 5,
         "algorithm": "ccd",
-        "profileLogLikelihood": true,
         "attr_class": "cyclopsControl"
       },
       "attr_class": "args"
