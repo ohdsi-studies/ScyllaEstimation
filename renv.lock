@@ -104,13 +104,8 @@
     "EvidenceSynthesis": {
       "Package": "EvidenceSynthesis",
       "Version": "0.2.0",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "EvidenceSynthesis",
-      "RemoteUsername": "ohdsi",
-      "RemoteRef": "develop",
-      "Hash": "39193983b25dd6fe2736cc7a7399e5cf"
+      "Source": "Repository",
+      "Repository": "CRAN"
     },
     "FeatureExtraction": {
       "Package": "FeatureExtraction",
