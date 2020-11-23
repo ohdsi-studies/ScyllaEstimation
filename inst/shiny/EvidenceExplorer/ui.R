@@ -23,11 +23,16 @@ shinyUI(
                              tags$div("Procesing...",id = "loadmessage")),
             fluidRow(
               column(3,
-                     selectInput("target", "Target", unique(exposureOfInterest$exposureName)),
-                     selectInput("comparator", "Comparator", unique(exposureOfInterest$exposureName), selected = unique(exposureOfInterest$exposureName)[2]),
+                     selectInput("model", "Design", designs$label, selected = designs$label[1]),
+                     selectInput("target", "Target", unique(exposureOfInterest$shortName)),
+                     selectInput("comparator", "Comparator", unique(exposureOfInterest$shortName), selected = unique(exposureOfInterest$shortName)[2]),
                      selectInput("outcome", "Outcome", unique(outcomeOfInterest$outcomeName)),
                      checkboxGroupInput("database", "Data source", database$databaseId, selected = database$databaseId),
-                     checkboxGroupInput("analysis", "Analysis", cohortMethodAnalysis$description,  selected = cohortMethodAnalysis$description)
+                     checkboxGroupInput("match", "Matching", c("Crude", "1-to-1 matched", "1-to-many matched", "Stratified"), selected = c("Crude", "1-to-1 matched", "1-to-many matched", "Stratified")),
+                     checkboxGroupInput("tar", "Time-at-risk", c("7 days", "30 days", "on treatment"), selected = c("7 days", "30 days", "on treatment")),
+                     checkboxGroupInput("om", "Model", c("logistic", "cox"), selected =  c("logistic", "cox"))
+                     # ,
+                     # checkboxGroupInput("analysis", "Analysis", cohortMethodAnalysis$description,  selected = cohortMethodAnalysis$description)
               ),
               column(9,
                      dataTableOutput("mainTable"),
@@ -92,11 +97,11 @@ shinyUI(
                                                            uiOutput("subgroupTableCaption"),
                                                            dataTableOutput("subgroupTable")
                                                   )
-                                                  
+
                                       )
                      )
               )
-              
+
             )
   )
 )

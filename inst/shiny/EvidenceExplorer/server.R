@@ -32,24 +32,46 @@ shinyServer(function(input, output, session) {
   }
 
   observe({
-    targetId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$target]
-    comparators <- exposureOfInterest$exposureName[exposureOfInterest$exposureId %in% tcos$comparatorId[tcos$targetId == targetId]]
-    updateSelectInput(session = session, inputId = "comparator", choices = comparators)
+    mask <- designs$idMask[designs$label == input$model]
+    targets <- exposureOfInterest$shortName[exposureOfInterest$design == mask]
+    updateSelectInput(session = session, inputId = "target", choices = targets)
   })
-  
+
   observe({
-    targetId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$target]
-    comparatorId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$comparator]
+    mask <- designs$idMask[designs$label == input$model]
+    targetId <- exposureOfInterest$exposureId[
+      exposureOfInterest$shortName == input$target & exposureOfInterest$design == mask
+    ]
+    comparators <- exposureOfInterest$shortName[
+      exposureOfInterest$exposureId %in% tcos$comparatorId[tcos$targetId == targetId] & exposureOfInterest$design == mask
+    ]
+    updateSelectInput(session = session, inputId = "comparator", choices = comparators)
+
+  })
+
+  # TODO Put back in
+  observe({
+    mask <- designs$idMask[designs$label == input$model]
+    targetId <- exposureOfInterest$exposureId[exposureOfInterest$shortName == input$target & exposureOfInterest$design == mask]
+    comparatorId <- exposureOfInterest$exposureId[exposureOfInterest$shortName == input$comparator & exposureOfInterest$design == mask]
     tcoSubset <- tcos[tcos$targetId == targetId & tcos$comparatorId == comparatorId, ]
     outcomes <- outcomeOfInterest$outcomeName[outcomeOfInterest$outcomeId %in% tcoSubset$outcomeId]
     updateSelectInput(session = session, inputId = "outcome", choices = outcomes)
   })
 
   resultSubset <- reactive({
-    targetId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$target]
-    comparatorId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$comparator]
+    mask <- designs$idMask[designs$label == input$model]
+    targetId <- exposureOfInterest$exposureId[exposureOfInterest$shortName == input$target & exposureOfInterest$design == mask]
+    comparatorId <- exposureOfInterest$exposureId[exposureOfInterest$shortName == input$comparator & exposureOfInterest$design == mask]
     outcomeId <- outcomeOfInterest$outcomeId[outcomeOfInterest$outcomeName == input$outcome]
-    analysisIds <- cohortMethodAnalysis$analysisId[cohortMethodAnalysis$description %in% input$analysis]
+
+    designDescription <- designs$description[designs$label == input$model]
+    tmp1 <- paste0(designDescription, input$match)
+    tmp2 <- paste0(tmp1, "; ", rep(input$tar, length(tmp1)))
+    tmp3 <- paste0(tmp2, "; ", rep(input$om, length(tmp2)))
+    allDescriptions <- tmp3
+
+    analysisIds <- cohortMethodAnalysis$analysisId[cohortMethodAnalysis$description %in% allDescriptions]
     databaseIds <- input$database
     if (length(analysisIds) == 0) {
       analysisIds <- -1
