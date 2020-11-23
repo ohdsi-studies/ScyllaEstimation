@@ -32,34 +32,28 @@ createAnalysesDetails <- function(workFolder) {
   getDbCmDataArgsZeroDays <-
     CohortMethod::createGetDbCohortMethodDataArgs(studyStartDate = "20200101",
                                                   studyEndDate = "",
-                                                  excludeDrugsFromCovariates = TRUE,
-                                                  firstExposureOnly = TRUE,
                                                   restrictToCommonPeriod = TRUE,
                                                   covariateSettings = createScyllaCovariateSettings(endDays = 0))
 
   getDbCmDataArgsMinusOneDays <-
     CohortMethod::createGetDbCohortMethodDataArgs(studyStartDate = "20200101",
                                                   studyEndDate = "",
-                                                  excludeDrugsFromCovariates = TRUE,
-                                                  firstExposureOnly = TRUE,
                                                   restrictToCommonPeriod = TRUE,
                                                   covariateSettings = createScyllaCovariateSettings(endDays = -1))
 
-  createScyllaStudyPopulation <- function(washoutPeriod, riskWindowEnd) {
+  createScyllaStudyPopulation <- function(washoutPeriod, riskWindowEnd, endAnchor) {
     CohortMethod::createCreateStudyPopulationArgs(washoutPeriod = washoutPeriod,
                                                   removeDuplicateSubjects = "keep first",
                                                   removeSubjectsWithPriorOutcome = TRUE,
-                                                  firstExposureOnly = TRUE,
                                                   minDaysAtRisk = 1,
                                                   riskWindowStart = 1,
-                                                  riskWindowEnd = riskWindowEnd,
-                                                  censorAtNewRiskWindow = TRUE)
+                                                  endAnchor = endAnchor,
+                                                  riskWindowEnd = riskWindowEnd)
   }
 
   fitScyllaOutcomeModelArgs <- function(modelType, stratified) {
     args <- CohortMethod::createFitOutcomeModelArgs(modelType = modelType,
                                                     stratified = stratified)
-    args$control$profileLogLikelihood <- TRUE
     return(args)
   }
 
@@ -82,8 +76,8 @@ createAnalysesDetails <- function(workFolder) {
 
   matchOnPsOneToOneArgs <- CohortMethod::createMatchOnPsArgs(maxRatio = 1)
 
-  matchOnPsOneToManyArgs <- CohortMethod::createMatchOnPsArgs(maxRatio = 100)
-  matchOnPsOneToManyArgs$allowReverseMatch <- TRUE
+  matchOnPsOneToManyArgs <- CohortMethod::createMatchOnPsArgs(maxRatio = 100,
+                                                              allowReverseMatch = TRUE)
 
   stratifyByPsArgs <- CohortMethod::createStratifyByPsArgs(numberOfStrata = 5)
 
@@ -145,6 +139,7 @@ createAnalysesDetails <- function(workFolder) {
               description = paste(descriptionStub, "7 days; logistic"),
               getDbCohortMethodDataArgs = getDbCmDataArgs,
               createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = washoutPeriod,
+                                                               endAnchor = "cohort start",
                                                                riskWindowEnd = 7),
               fitOutcomeModelArgs = fitLogisticOutcomeModelArgs),
 
@@ -152,6 +147,7 @@ createAnalysesDetails <- function(workFolder) {
               description = paste(descriptionStub, "30 days; logistic"),
               getDbCohortMethodDataArgs = getDbCmDataArgs,
               createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = washoutPeriod,
+                                                               endAnchor = "cohort start",
                                                                riskWindowEnd = 30),
               fitOutcomeModelArgs = fitLogisticOutcomeModelArgs),
 
@@ -159,13 +155,15 @@ createAnalysesDetails <- function(workFolder) {
               description = paste(descriptionStub, "on treatment; logistic"),
               getDbCohortMethodDataArgs = getDbCmDataArgs,
               createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = washoutPeriod,
-                                                               riskWindowEnd = 9999),
+                                                               endAnchor = "cohort end",
+                                                               riskWindowEnd = 0),
               fitOutcomeModelArgs = fitLogisticOutcomeModelArgs),
 
       functor(analysisId = startId + 3,
               description = paste(descriptionStub, "7 days; cox"),
               getDbCohortMethodDataArgs = getDbCmDataArgs,
               createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = washoutPeriod,
+                                                               endAnchor = "cohort start",
                                                                riskWindowEnd = 7),
               fitOutcomeModelArgs = fitCoxOutcomeModelArgs),
 
@@ -173,6 +171,7 @@ createAnalysesDetails <- function(workFolder) {
               description = paste(descriptionStub, "30 days; cox"),
               getDbCohortMethodDataArgs = getDbCmDataArgs,
               createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = washoutPeriod,
+                                                               endAnchor = "cohort start",
                                                                riskWindowEnd = 30),
               fitOutcomeModelArgs = fitCoxOutcomeModelArgs),
 
@@ -180,7 +179,8 @@ createAnalysesDetails <- function(workFolder) {
               description = paste(descriptionStub, "on treatment; cox"),
               getDbCohortMethodDataArgs = getDbCmDataArgs,
               createStudyPopArgs = createScyllaStudyPopulation(washoutPeriod = washoutPeriod,
-                                                               riskWindowEnd = 9999),
+                                                               endAnchor = "cohort end",
+                                                               riskWindowEnd = 0),
               fitOutcomeModelArgs = fitCoxOutcomeModelArgs)
     )
   }
