@@ -6,6 +6,8 @@
 \usage{
 exportResults(
   outputFolder,
+  connectionDetails,
+  cdmDatabaseSchema,
   databaseId,
   databaseName,
   databaseDescription,

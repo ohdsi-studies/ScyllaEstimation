@@ -120,6 +120,8 @@ execute <- function(connectionDetails,
   if (packageResults) {
     ParallelLogger::logInfo("Packaging results")
     exportResults(outputFolder = outputFolder,
+                  connectionDetails = connectionDetails,
+                  cdmDatabaseSchema = cdmDatabaseSchema,
                   databaseId = databaseId,
                   databaseName = databaseName,
                   databaseDescription = databaseDescription,

@@ -20,5 +20,5 @@ Upload results to OHDSI server
 }
 \details{
 This function uploads the 'Results_<databaseId>.zip' to the OHDSI SFTP server. Before sending, you can inspect the zip file,
-wich contains (zipped) CSV files. You can send the zip file from a different computer than the one on which is was created.
+which contains (zipped) CSV files. You can send the zip file from a different computer than the one on which is was created.
 }

@@ -31,6 +31,8 @@
 #'
 #' @export
 exportResults <- function(outputFolder,
+                          connectionDetails,
+                          cdmDatabaseSchema,
                           databaseId,
                           databaseName,
                           databaseDescription,
@@ -52,6 +54,8 @@ exportResults <- function(outputFolder,
 
   exportMetadata(outputFolder = outputFolder,
                  exportFolder = exportFolder,
+                 connectionDetails = connectionDetails,
+                 cdmDatabaseSchema = cdmDatabaseSchema,
                  databaseId = databaseId,
                  databaseName = databaseName,
                  databaseDescription = databaseDescription,
@@ -179,6 +183,8 @@ exportOutcomes <- function(outputFolder, exportFolder) {
 
 exportMetadata <- function(outputFolder,
                            exportFolder,
+                           connectionDetails,
+                           cdmDatabaseSchema,
                            databaseId,
                            databaseName,
                            databaseDescription,
@@ -211,9 +217,19 @@ exportMetadata <- function(outputFolder,
   info <- bind_rows(info)
 
   ParallelLogger::logInfo("- database table")
+  connection <- DatabaseConnector::connect(connectionDetails)
+  on.exit(DatabaseConnector::disconnect(connection))
+  observationPeriodRange <- getObservationPeriodDateRange(connection = connection,
+                                                          cdmDatabaseSchema = cdmDatabaseSchema)
+  vocabularyVersion <- getVocabularyVersion(connection = connection,
+                                            cdmDatabaseSchema = cdmDatabaseSchema)
+
   database <- tibble::tibble(database_id = databaseId,
                              database_name = databaseName,
                              description = databaseDescription,
+                             vocabularyVersion = vocabularyVersion,
+                             minObsPeriodDate = observationPeriodRange$minDate,
+                             maxObsPeriodDate = observationPeriodRange$maxDate,
                              is_meta_analysis = 0)
   fileName <- file.path(exportFolder, "database.csv")
   readr::write_csv(database, fileName)
@@ -371,6 +387,24 @@ exportMetadata <- function(outputFolder,
   fileName <- file.path(exportFolder, "cm_follow_up_dist.csv")
   readr::write_csv(results, fileName)
   rm(results)  # Free up memory
+}
+
+getVocabularyVersion <- function(connection, cdmDatabaseSchema) {
+  sql <- "SELECT vocabulary_version FROM @cdm_database_schema.vocabulary WHERE vocabulary_id = 'None';"
+  vocabularyVersion <- DatabaseConnector::renderTranslateQuerySql(connection = connection,
+                                                                  sql = sql,
+                                                                  cdm_database_schema = cdmDatabaseSchema,
+                                                                  snakeCaseToCamelCase = TRUE)[1, 1]
+  return(vocabularyVersion)
+}
+
+getObservationPeriodDateRange <- function(connection, cdmDatabaseSchema) {
+  sql <- "SELECT MIN(observation_period_start_date) min_date, MAX(observation_period_end_date) max_date FROM @cdm_database_schema.observation_period;"
+  observationPeriodDateRange <- DatabaseConnector::renderTranslateQuerySql(connection = connection,
+                                                                           sql = sql,
+                                                                           cdm_database_schema = cdmDatabaseSchema,
+                                                                           snakeCaseToCamelCase = TRUE)
+  return(observationPeriodDateRange)
 }
 
 enforceMinCellValue <- function(data, fieldName, minValues, silent = FALSE) {

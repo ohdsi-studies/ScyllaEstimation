@@ -15,28 +15,28 @@
 # limitations under the License.
 
 #' Upload results to OHDSI server
-#' 
-#' @details 
+#'
+#' @details
 #' This function uploads the 'Results_<databaseId>.zip' to the OHDSI SFTP server. Before sending, you can inspect the zip file,
-#' wich contains (zipped) CSV files. You can send the zip file from a different computer than the one on which is was created.
-#' 
+#' which contains (zipped) CSV files. You can send the zip file from a different computer than the one on which is was created.
+#'
 #' @param privateKeyFileName   A character string denoting the path to the RSA private key provided by the study coordinator.
 #' @param userName             A character string containing the user name provided by the study coordinator.
 #' @param outputFolder         Name of local folder where the results were generated; make sure to use forward slashes
 #'                             (/). Do not use a folder on a network drive since this greatly impacts
-#'                             performance.                             
+#'                             performance.
 #' @export
 uploadResults <- function(outputFolder, privateKeyFileName, userName) {
-  fileName <- list.files(outputFolder, "^Results_.*.zip$", full.names = TRUE)
+  fileName <- list.files(file.path(outputFolder, "export"), "^Results_.*.zip$", full.names = TRUE)
   if (length(fileName) == 0) {
-    stop("Could find results file in folder. Did you run (and complete) execute?") 
+    stop("Could find results file in folder. Did you run (and complete) execute?")
   }
-  if (length(fileName) == 0) {
-    stop("Multiple results files found. Don't know which one to upload") 
+  if (length(fileName) > 1) {
+    stop("Multiple results files found. Don't know which one to upload")
   }
-  OhdsiSharing::sftpUploadFile(privateKeyFileName = privateKeyFileName, 
+  OhdsiSharing::sftpUploadFile(privateKeyFileName = privateKeyFileName,
                                userName = userName,
-                               remoteFolder = "cohortEvaluation",
+                               remoteFolder = "estimation",
                                fileName = fileName)
   ParallelLogger::logInfo("Finished uploading")
 }

@@ -7,7 +7,7 @@
 \title{ScyllaEstimation: Comparative effectiveness of emerging drug therapies in the treatment of COVID-19}
 \description{
 This OHDSI network study assesses the comparative effectiveness and safety
-    among treatments administered during hospitalization and prior to intensive services. 
+    among treatments administered during hospitalization and prior to intensive services.
     It also assesses the comparative effectiveness and safety among treatments administered
     after COVID-19 positive testing or diagnosis in the outpatient setting without prior
     hospitalization.
