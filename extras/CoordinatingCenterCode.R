@@ -2,7 +2,7 @@
 
 library(OhdsiSharing)
 
-localFolder <- "s:/ScyllaEstimation"
+localFolder <- "s:/ScyllaEstimation/AllDbs"
 # dir.create(localFolder)
 
 # Download files from SFTP server -----------------------------------------------------------------
@@ -24,6 +24,10 @@ sftpDisconnect(connection)
 
 
 # Test results locally -----------------------------------------------------------------------------------
+
+
+# Synthesize results across databases --------------------------------------------------------------------
+synthesizeResults(allDbsFolder = localFolder)
 
 # Upload results to database -----------------------------------------------------------------------
 # library(DatabaseConnector)

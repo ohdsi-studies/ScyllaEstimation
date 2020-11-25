@@ -46,6 +46,7 @@
 #' @param databaseDescription  A short description (several sentences) of the database.
 #' @param createCohorts        Create the cohortTable table with the exposure and outcome cohorts?
 #' @param runAnalyses          Perform the cohort method analyses?
+#' @param computeBalance       Compute covariate balance?
 #' @param packageResults       Should results be packaged for later sharing?
 #' @param maxCores             How many parallel cores should be used? If more cores are made available
 #'                             this can speed up the analyses.
@@ -80,6 +81,7 @@ execute <- function(connectionDetails,
                     databaseDescription = "Unknown",
                     createCohorts = TRUE,
                     runAnalyses = TRUE,
+                    computeBalance = TRUE,
                     packageResults = TRUE,
                     maxCores = 4,
                     minCellCount= 5) {
@@ -117,6 +119,11 @@ execute <- function(connectionDetails,
                     maxCores = maxCores)
   }
 
+  if (computeBalance) {
+    ParallelLogger::logInfo("Computing covariate balance")
+    computeCovariateBalance(outputFolder = outputFolder,
+                            maxCores = maxCores)
+  }
   if (packageResults) {
     ParallelLogger::logInfo("Packaging results")
     exportResults(outputFolder = outputFolder,

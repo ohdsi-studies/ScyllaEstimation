@@ -158,83 +158,11 @@ runCohortMethod <- function(connectionDetails,
 
   readr::write_csv(analysisSummary, file.path(outputFolder, "analysisSummary.csv"))
 
-  ParallelLogger::logInfo("Computing covariate balance")
-  balanceFolder <- file.path(outputFolder, "balance")
-  if (!file.exists(balanceFolder)) {
-    dir.create(balanceFolder)
-  }
   outcomeModelReference <- lapply(file.path(cmOutputFolder, sprintf("outcomeModelReference_%s.rds", c(100, 200, 300, 400))),
                                   function(x) if (file.exists(x)) readRDS(x))
   outcomeModelReference <- bind_rows(outcomeModelReference)
   saveRDS(outcomeModelReference, file.path(cmOutputFolder, "outcomeModelReference.rds"))
-  subset <- outcomeModelReference %>%
-    filter(.data$sharedPsFile != "") %>%
-    distinct(.data$analysisId,
-           .data$targetId,
-           .data$comparatorId,
-           .data$cohortMethodDataFile,
-           .data$sharedPsFile)
-  if (nrow(subset) > 0) {
-    subset <- split(subset, seq(nrow(subset)))
-    cluster <- ParallelLogger::makeCluster(min(3, maxCores))
-    invisible(ParallelLogger::clusterApply(cluster,
-                                           subset,
-                                           computeCovariateBalance,
-                                           cmOutputFolder = cmOutputFolder,
-                                           balanceFolder = balanceFolder,
-                                           cmAnalysisList = cmAnalysisList))
-
-    ParallelLogger::stopCluster(cluster)
-  }
-
-  # ParallelLogger::logInfo("Extract log-likelihood profiles")
-  # profileFolder <- file.path(outputFolder, "profile")
-  # if (!file.exists(profileFolder)) {
-  #   dir.create(profileFolder)
-  # }
-  # subset <- results[results$outcomeId %in% outcomesOfInterest, ] # TODO Do we want negative controls?
-  # subset <- subset[subset$outcomeModelFile != "", ]
-  # if (nrow(subset) > 0) {
-  #   subset <- split(subset, seq(nrow(subset)))
-  #   cluster <- ParallelLogger::makeCluster(min(3, maxCores))
-  #   ParallelLogger::clusterApply(cluster, subset, extractProfile,
-  #                                cmOutputFolder = cmOutputFolder,
-  #                                profileFolder = profileFolder)
-  #   ParallelLogger::stopCluster(cluster)
-  # }
 }
-
-# extractProfile <- function(row, cmOutputFolder, profileFolder) {
-#   outputFileName <- file.path(profileFolder,
-#                               sprintf("prof_t%s_c%s_o%s_a%s.rds",
-#                                       row$targetId, row$comparatorId, row$outcomeId,
-#                                       row$analysisId))
-#   outcomeFile <- file.path(cmOutputFolder, row$outcomeModelFile)
-#   outcome <- readRDS(outcomeFile)
-#   if (!is.null(outcome$logLikelihoodProfile)) {
-#     saveRDS(outcome$logLikelihoodProfile, outputFileName)
-#   }
-# }
-
-# computeCovariateBalance <- function(row, cmOutputFolder, balanceFolder) {
-#   outputFileName <- file.path(balanceFolder, sprintf("bal_t%s_c%s_o%s_a%s.rds",
-#                                                      row$targetId,
-#                                                      row$comparatorId,
-#                                                      row$outcomeId,
-#                                                      row$analysisId))
-#   if (!file.exists(outputFileName)) {
-#     ParallelLogger::logTrace("Creating covariate balance file ", outputFileName)
-#     cohortMethodDataFile <- file.path(cmOutputFolder, row$cohortMethodDataFile)
-#     cohortMethodData <- CohortMethod::loadCohortMethodData(cohortMethodDataFile)
-#     strataFile <- file.path(cmOutputFolder, row$strataFile)
-#     strata <- readRDS(strataFile)
-#     if (nrow(strata) > 0) {
-#       balance <- CohortMethod::computeCovariateBalance(population = strata,
-#                                                        cohortMethodData = cohortMethodData)
-#       saveRDS(balance, outputFileName)
-#     }
-#   }
-# }
 
 # 1. subgroup (with 365d prior obs) where cohort start date = target cohort start date (protocol figure 1) => 100
 # 2. subgroup (no prior obs required) where cohort start date = target cohort start date (protocol figure 2) => 200
@@ -258,41 +186,6 @@ getDesign <- function(targetId) {
   }
 }
 
-computeCovariateBalance <- function(row, cmOutputFolder, balanceFolder, cmAnalysisList) {
-  # row = subset[[1]]
-  outputFileName <- file.path(balanceFolder, sprintf("bal_t%s_c%s_a%s.rds",
-                                                     row$targetId,
-                                                     row$comparatorId,
-                                                     row$analysisId))
-  if (!file.exists(outputFileName)) {
-    ParallelLogger::logTrace("Creating covariate balance file ", outputFileName)
-    cohortMethodDataFile <- file.path(cmOutputFolder, row$cohortMethodDataFile)
-    cohortMethodData <- CohortMethod::loadCohortMethodData(cohortMethodDataFile)
-    psFile <- file.path(cmOutputFolder, row$sharedPsFile)
-    ps <- readRDS(psFile)
-    for (cmAnalysis in cmAnalysisList) {
-      if (cmAnalysis$analysisId == row$analysisId)
-        break
-    }
-    if (cmAnalysis$stratifyByPs) {
-      args <- cmAnalysis$stratifyByPsArgs
-      args$population <- ps
-      strataPop <- do.call(CohortMethod::stratifyByPs, args)
-    } else if (cmAnalysis$matchOnPs) {
-      args <- cmAnalysis$matchOnPsArgs
-      args$population <- ps
-      strataPop <- do.call(CohortMethod::matchOnPs, args)
-    } else {
-      strataPop <- ps
-      strataPop$stratumId <- 0
-    }
-    if (nrow(strataPop) > 0) {
-      balance <- CohortMethod::computeCovariateBalance(population = strataPop,
-                                                       cohortMethodData = cohortMethodData)
-      saveRDS(balance, outputFileName)
-    }
-  }
-}
 
 addAnalysisDescription <- function(data,
                                    IdColumnName = "analysisId",

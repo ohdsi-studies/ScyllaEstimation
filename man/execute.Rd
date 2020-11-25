@@ -16,6 +16,7 @@ execute(
   databaseDescription = "Unknown",
   createCohorts = TRUE,
   runAnalyses = TRUE,
+  computeBalance = TRUE,
   packageResults = TRUE,
   maxCores = 4,
   minCellCount = 5
@@ -56,6 +57,8 @@ Synthetic Public Use Files (SynPUFs)').}
 \item{createCohorts}{Create the cohortTable table with the exposure and outcome cohorts?}
 
 \item{runAnalyses}{Perform the cohort method analyses?}
+
+\item{computeBalance}{Compute covariate balance?}
 
 \item{packageResults}{Should results be packaged for later sharing?}
 

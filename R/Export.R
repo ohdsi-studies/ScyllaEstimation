@@ -492,6 +492,7 @@ exportMainResults <- function(outputFolder,
         profile$comparator_id <- reference$comparatorId[i]
         profile$outcome_id <- reference$outcomeId[i]
         profile$analysis_id <- reference$analysisId[i]
+        profile$database_id <- databaseId
 
         # Grid approximation using many rows: (too inefficient)
         # profile <- data.frame(targetId = reference$targetId[i],
