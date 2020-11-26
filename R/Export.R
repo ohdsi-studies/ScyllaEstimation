@@ -631,7 +631,7 @@ exportDiagnostics <- function(outputFolder,
       ids <- gsub("^.*bal_t", "", files[i])
       targetId <- as.numeric(gsub("_c.*", "", ids))
       ids <- gsub("^.*_c", "", ids)
-      comparatorId <- as.numeric(gsub("_[aso].*$", "", ids))
+      comparatorId <- as.numeric(gsub("_+[aso].*$", "", ids))
       if (grepl("_s", ids)) {
         subgroupId <- as.numeric(gsub("^.*_s", "", gsub("_a[0-9]*.rds", "", ids)))
       } else {

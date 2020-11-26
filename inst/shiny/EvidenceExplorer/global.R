@@ -1,7 +1,8 @@
+library(dplyr)
 source("DataPulls.R")
 source("PlotsAndTables.R")
 
-shinySettings <- list(dataFolder = "/Users/msuchard/Dropbox/Projects/tmp/results/", blind = TRUE)
+# shinySettings <- list(dataFolder = "d:/ScyllaEstimation/Premier/shinyData", blind = TRUE)
 
 designs <- data.frame(
   description = c("Admission to intensive services; washout; -1 end days; ",
@@ -63,15 +64,28 @@ for (removePart in removeParts) {
 
 tcos <- unique(cohortMethodResult[, c("targetId", "comparatorId", "outcomeId")])
 tcos <- tcos[tcos$outcomeId %in% outcomeOfInterest$outcomeId, ]
+validExposureIds <- unique(c(tcos$targetId, tcos$comparatorId))
 
 vecDesign <- Vectorize(ScyllaEstimation:::getDesign)
 
 exposureOfInterest$design <- vecDesign(exposureOfInterest$exposureId)
 
-exposureOfInterest <- exposureOfInterest %>% inner_join(designs %>% select(idMask, remove), by = c("design" = "idMask")) %>%
-    rowwise() %>% mutate(shortName = sub(pattern = remove, replacement = "", x = exposureName))
+exposureOfInterest <- exposureOfInterest %>% 
+  inner_join(designs %>% 
+               select(idMask, remove), by = c("design" = "idMask")) %>%
+    rowwise() %>% 
+  mutate(shortName = sub(pattern = remove, replacement = "", x = exposureName)) %>%
+  filter(exposureId %in% validExposureIds)
 
-cohortMethodAnalysis <- cohortMethodAnalysis %>% mutate(design = floor(analysisId / 100) * 100) %>%
-  inner_join(designs %>% select(idMask, description) %>% rename(remove = description), by = c("design" = "idMask")) %>%
-  rowwise() %>% mutate(shortDescription = sub(pattern = remove, replacement = "", x = description))
+designs <- designs %>%
+  filter(idMask %in% unique(exposureOfInterest$design))
+
+cohortMethodAnalysis <- cohortMethodAnalysis %>% 
+  mutate(design = floor(analysisId / 100) * 100) %>%
+  inner_join(designs %>% 
+               select(idMask, description) %>% 
+               rename(remove = description), 
+             by = c("design" = "idMask")) %>%
+  rowwise() %>% 
+  mutate(shortDescription = sub(pattern = remove, replacement = "", x = description))
 

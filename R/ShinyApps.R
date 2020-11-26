@@ -56,11 +56,10 @@ prepareForEvidenceExplorer <- function(resultsZipFile, dataFolder) {
   }
 
   processFile <- function(file) {
-    print(file)
     tableName <- gsub(".csv$", "", file)
     table <- readr::read_csv(file.path(tempFolder, file), col_types = readr::cols(), guess_max = 1e6)
     if (tableName %in% splittableTables) {
-      subsets <- split(table, list(table$target_id, table$comparator_id))
+      subsets <- split(table, paste(table$target_id, table$comparator_id))
       plyr::l_ply(subsets, processSubset, tableName = tableName)
     } else {
       saveRDS(table, file.path(dataFolder, sprintf("%s_%s.rds", tableName, databaseId)))

@@ -275,13 +275,14 @@ getCovariateBalance <- function(connection,
                                 analysisId,
                                 outcomeId = NULL) {
   file <- sprintf("covariate_balance_t%d_c%d_%s.rds", targetId, comparatorId, databaseId)
-  print(file)
   balance <- readRDS(file.path(dataFolder, file))
   colnames(balance) <- SqlRender::snakeCaseToCamelCase(colnames(balance))
-  # balance <- balance[balance$analysisId == analysisId & balance$outcomeId == outcomeId, ]
-  # balance <- merge(balance, covariate[covariate$databaseId == databaseId & covariate$analysisId ==
-  #   analysisId, c("covariateId", "covariateAnalysisId", "covariateName")])
   balance <- balance[balance$analysisId == analysisId, ]
+  if (is.null(outcomeId)) {
+    balance <- balance[is.na(balance$outcomeId), ]
+  } else {
+    balance <- balance[balance$outcomeId == outcomeId, ]
+  }
   balance <- merge(balance, covariate[covariate$databaseId == databaseId, c("covariateId", "covariateAnalysisId", "covariateName")])
   balance <- balance[c("covariateId",
                        "covariateName",

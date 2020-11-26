@@ -33,38 +33,43 @@ shinyServer(function(input, output, session) {
 
   observe({
     mask <- designs$idMask[designs$label == input$model]
-    targets <- exposureOfInterest$shortName[exposureOfInterest$design == mask]
+    targets <- exposureOfInterest$shortName[exposureOfInterest$exposureId %in% tcos$targetId &
+                                              exposureOfInterest$design == mask]
     updateSelectInput(session = session, inputId = "target", choices = targets)
+  })
+  
+  targetId <- reactive({
+    mask <- designs$idMask[designs$label == input$model]
+    return(exposureOfInterest$exposureId[exposureOfInterest$shortName == input$target & 
+                                           exposureOfInterest$design == mask])
   })
 
   observe({
     mask <- designs$idMask[designs$label == input$model]
-    targetId <- exposureOfInterest$exposureId[
-      exposureOfInterest$shortName == input$target & exposureOfInterest$design == mask
-    ]
     comparators <- exposureOfInterest$shortName[
-      exposureOfInterest$exposureId %in% tcos$comparatorId[tcos$targetId == targetId] & exposureOfInterest$design == mask
+      exposureOfInterest$exposureId %in% tcos$comparatorId[tcos$targetId == targetId()] & exposureOfInterest$design == mask
     ]
     updateSelectInput(session = session, inputId = "comparator", choices = comparators)
-
+  })
+  
+  comparatorId <- reactive({
+    mask <- designs$idMask[designs$label == input$model]
+    return(exposureOfInterest$exposureId[exposureOfInterest$shortName == input$comparator & 
+                                           exposureOfInterest$design == mask])
   })
 
   # TODO Put back in
   observe({
-    mask <- designs$idMask[designs$label == input$model]
-    targetId <- exposureOfInterest$exposureId[exposureOfInterest$shortName == input$target & exposureOfInterest$design == mask]
-    comparatorId <- exposureOfInterest$exposureId[exposureOfInterest$shortName == input$comparator & exposureOfInterest$design == mask]
-    tcoSubset <- tcos[tcos$targetId == targetId & tcos$comparatorId == comparatorId, ]
+    tcoSubset <- tcos[tcos$targetId == targetId() & tcos$comparatorId == comparatorId(), ]
     outcomes <- outcomeOfInterest$outcomeName[outcomeOfInterest$outcomeId %in% tcoSubset$outcomeId]
     updateSelectInput(session = session, inputId = "outcome", choices = outcomes)
   })
+  
+  outcomeId <- reactive({
+    return(outcomeOfInterest$outcomeId[outcomeOfInterest$outcomeName == input$outcome])
+  })
 
   resultSubset <- reactive({
-    mask <- designs$idMask[designs$label == input$model]
-    targetId <- exposureOfInterest$exposureId[exposureOfInterest$shortName == input$target & exposureOfInterest$design == mask]
-    comparatorId <- exposureOfInterest$exposureId[exposureOfInterest$shortName == input$comparator & exposureOfInterest$design == mask]
-    outcomeId <- outcomeOfInterest$outcomeId[outcomeOfInterest$outcomeName == input$outcome]
-
     designDescription <- designs$description[designs$label == input$model]
     tmp1 <- paste0(designDescription, input$match)
     tmp2 <- paste0(tmp1, "; ", rep(input$tar, length(tmp1)))
@@ -80,9 +85,9 @@ shinyServer(function(input, output, session) {
       databaseIds <- "none"
     }
     results <- getMainResults(connection = connection,
-                              targetIds = targetId,
-                              comparatorIds = comparatorId,
-                              outcomeIds = outcomeId,
+                              targetIds = targetId(),
+                              comparatorIds = comparatorId(),
+                              outcomeIds = outcomeId(),
                               databaseIds = databaseIds,
                               analysisIds = analysisIds)
     results <- results[order(results$analysisId), ]
@@ -127,15 +132,12 @@ shinyServer(function(input, output, session) {
     if (is.null(row)) {
       return(NULL)
     } else {
-      targetId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$target]
-      comparatorId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$comparator]
-      outcomeId <- outcomeOfInterest$outcomeId[outcomeOfInterest$outcomeName == input$outcome]
+      # No outcome ID specified: overall balance for TCA:
       balance <- getCovariateBalance(connection = connection,
-                                     targetId = targetId,
-                                     comparatorId = comparatorId,
+                                     targetId = targetId(),
+                                     comparatorId = comparatorId(),
                                      databaseId = row$databaseId,
-                                     analysisId = row$analysisId,
-                                     outcomeId = outcomeId)
+                                     analysisId = row$analysisId)
       return(balance)
     }
   })
@@ -222,13 +224,10 @@ shinyServer(function(input, output, session) {
     if (is.null(row)) {
       return(NULL)
     } else {
-      targetId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$target]
-      comparatorId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$comparator]
-      outcomeId <- outcomeOfInterest$outcomeId[outcomeOfInterest$outcomeName == input$outcome]
       followUpDist <- getCmFollowUpDist(connection = connection,
-                                        targetId = targetId,
-                                        comparatorId = comparatorId,
-                                        outcomeId = outcomeId,
+                                        targetId = targetId(),
+                                        comparatorId = comparatorId(),
+                                        outcomeId = outcomeId(),
                                         databaseId = row$databaseId,
                                         analysisId = row$analysisId)
       table <- prepareFollowUpDistTable(followUpDist)
@@ -241,13 +240,10 @@ shinyServer(function(input, output, session) {
     if (is.null(row)) {
       return(NULL)
     } else {
-      targetId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$target]
-      comparatorId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$comparator]
-      outcomeId <- outcomeOfInterest$outcomeId[outcomeOfInterest$outcomeName == input$outcome]
       attrition <- getAttrition(connection = connection,
-                                targetId = targetId,
-                                comparatorId = comparatorId,
-                                outcomeId = outcomeId,
+                                targetId = targetId(),
+                                comparatorId = comparatorId(),
+                                outcomeId = outcomeId(),
                                 databaseId = row$databaseId,
                                 analysisId = row$analysisId)
       plot <- drawAttritionDiagram(attrition)
@@ -299,7 +295,13 @@ shinyServer(function(input, output, session) {
     if (is.null(row)) {
       return(NULL)
     } else {
-      bal <- balance()
+      # Get covariates for TCOA: these are limited to those used in this table
+      bal <- getCovariateBalance(connection = connection,
+                                 targetId = targetId(),
+                                 comparatorId = comparatorId(),
+                                 databaseId = row$databaseId,
+                                 analysisId = row$analysisId,
+                                 outcomeId = outcomeId())
       if (nrow(bal) == 0) {
         return(NULL)
       }
@@ -332,11 +334,9 @@ shinyServer(function(input, output, session) {
     if (is.null(row)) {
       return(NULL)
     } else {
-      targetId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$target]
-      comparatorId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$comparator]
       model <- getPropensityModel(connection = connection,
-                                  targetId = targetId,
-                                  comparatorId = comparatorId,
+                                  targetId = targetId(),
+                                  comparatorId = comparatorId(),
                                   databaseId = row$databaseId,
                                   analysisId = row$analysisId)
 
@@ -363,12 +363,9 @@ shinyServer(function(input, output, session) {
     if (is.null(row)) {
       return(NULL)
     } else {
-      targetId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$target]
-      comparatorId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$comparator]
-      outcomeId <- outcomeOfInterest$outcomeId[outcomeOfInterest$outcomeName == input$outcome]
       ps <- getPs(connection = connection,
-                  targetIds = targetId,
-                  comparatorIds = comparatorId,
+                  targetIds = targetId(),
+                  comparatorIds = comparatorId(),
                   analysisId = row$analysisId,
                   databaseId = row$databaseId)
       plot <- plotPs(ps, input$target, input$comparator)
@@ -475,11 +472,9 @@ shinyServer(function(input, output, session) {
     if (is.null(row)) {
       return(NULL)
     } else {
-      targetId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$target]
-      comparatorId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$comparator]
       controlResults <- getControlResults(connection = connection,
-                                          targetId = targetId,
-                                          comparatorId = comparatorId,
+                                          targetId = targetId(),
+                                          comparatorId = comparatorId(),
                                           analysisId = row$analysisId,
                                           databaseId = row$databaseId)
 
@@ -509,13 +504,10 @@ shinyServer(function(input, output, session) {
     if (is.null(row)) {
       return(NULL)
     } else {
-      targetId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$target]
-      comparatorId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$comparator]
-      outcomeId <- outcomeOfInterest$outcomeId[outcomeOfInterest$outcomeName == input$outcome]
       km <- getKaplanMeier(connection = connection,
-                           targetId = targetId,
-                           comparatorId = comparatorId,
-                           outcomeId = outcomeId,
+                           targetId = targetId(),
+                           comparatorId = comparatorId(),
+                           outcomeId = outcomeId(),
                            databaseId = row$databaseId,
                            analysisId = row$analysisId)
       plot <- plotKaplanMeier(kaplanMeier = km,
@@ -552,76 +544,6 @@ shinyServer(function(input, output, session) {
   would look like had the target cohort been exposed to the comparator instead. The shaded area denotes
   the 95 percent confidence interval."
       return(HTML(sprintf(text, input$target, input$comparator)))
-    }
-  })
-
-  interactionEffects <- reactive({
-    row <- selectedRow()
-    if (is.null(row)) {
-      return(NULL)
-    } else {
-      targetId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$target]
-      comparatorId <- exposureOfInterest$exposureId[exposureOfInterest$exposureName == input$comparator]
-      outcomeId <- outcomeOfInterest$outcomeId[outcomeOfInterest$outcomeName == input$outcome]
-      subgroupResults <- getSubgroupResults(connection = connection,
-                                            targetIds = targetId,
-                                            comparatorIds = comparatorId,
-                                            outcomeIds = outcomeId,
-                                            databaseIds = row$databaseId,
-                                            analysisIds = row$analysisId)
-      if (nrow(subgroupResults) == 0) {
-        return(NULL)
-      } else {
-        if (blind) {
-          subgroupResults$rrr <- rep(NA, nrow(subgroupResults))
-          subgroupResults$ci95Lb <- rep(NA, nrow(subgroupResults))
-          subgroupResults$ci95Ub <- rep(NA, nrow(subgroupResults))
-          subgroupResults$logRrr <- rep(NA, nrow(subgroupResults))
-          subgroupResults$seLogRrr <- rep(NA, nrow(subgroupResults))
-          subgroupResults$p <- rep(NA, nrow(subgroupResults))
-          subgroupResults$calibratedP <- rep(NA, nrow(subgroupResults))
-        }
-        return(subgroupResults)
-      }
-    }
-  })
-
-  output$subgroupTableCaption <- renderUI({
-    row <- selectedRow()
-    if (is.null(row)) {
-      return(NULL)
-    } else {
-      text <- "<strong>Table 4.</strong> Subgroup interactions. For each subgroup, the number of subject within the subroup
-  in the target (<em>%s</em>) and comparator (<em>%s</em>) cohorts are provided, as well as the hazard ratio ratio (HRR)
-  with 95 percent confidence interval and p-value (uncalibrated and calibrated) for interaction of the main effect with
-  the subgroup."
-      return(HTML(sprintf(text, input$target, input$comparator)))
-    }
-  })
-
-  output$subgroupTable <- renderDataTable({
-    row <- selectedRow()
-    if (is.null(row)) {
-      return(NULL)
-    } else {
-      subgroupResults <- interactionEffects()
-      if (is.null(subgroupResults)) {
-        return(NULL)
-      }
-      subgroupTable <- prepareSubgroupTable(subgroupResults, output = "html")
-      colnames(subgroupTable) <- c("Subgroup",
-                                   "Target subjects",
-                                   "Comparator subjects",
-                                   "HRR",
-                                   "P",
-                                   "Cal.P")
-      options <- list(searching = FALSE, ordering = FALSE, paging = FALSE, bInfo = FALSE)
-      subgroupTable <- datatable(subgroupTable,
-                                 options = options,
-                                 rownames = FALSE,
-                                 escape = FALSE,
-                                 class = "stripe nowrap compact")
-      return(subgroupTable)
     }
   })
 })

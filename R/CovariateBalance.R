@@ -105,7 +105,7 @@ computeTCACovariateBalance <- function(rows, cmOutputFolder, balanceFolder, cmAn
 
   # Per TCOA: compute balance only for select covariates ---------------------------------------------
   hois <- rows[rows$outcomeId %in% getOutcomesOfInterest(), ]
-  hois$outputFileName <- file.path(balanceFolder, sprintf("bal_t%d_c%d__o%d_a%d.rds",
+  hois$outputFileName <- file.path(balanceFolder, sprintf("bal_t%d_c%d_o%d_a%d.rds",
                                                           hois$targetId,
                                                           hois$comparatorId,
                                                           hois$outcomeId,
