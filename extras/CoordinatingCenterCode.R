@@ -30,32 +30,31 @@ sftpDisconnect(connection)
 synthesizeResults(allDbsFolder = localFolder)
 
 # Upload results to database -----------------------------------------------------------------------
-# library(DatabaseConnector)
-# connectionDetails <- createConnectionDetails(dbms = "postgresql",
-#                                              server = paste(Sys.getenv("phenotypeLibraryDbServer"),
-#                                                             Sys.getenv("phenotypeLibraryDbDatabase"),
-#                                                             sep = "/"),
-#                                              port = Sys.getenv("phenotypeLibraryDbPort"),
-#                                              user = Sys.getenv("phenotypeLibraryDbUser"),
-#                                              password = Sys.getenv("phenotypeLibraryDbPassword"))
-# resultsSchema <- Sys.getenv("phenotypeLibraryDbResultsSchema")
+library(DatabaseConnector)
+connectionDetails <- createConnectionDetails(dbms = "postgresql",
+                                             server = paste(keyring::key_get("scyllaServer"),
+                                                            keyring::key_get("scyllaDatabase"),
+                                                            sep = "/"),
+                                             user = keyring::key_get("scyllaUser"),
+                                             password = keyring::key_get("scyllaPassword"))
+resultsSchema <- "scylla_estimation"
+createTables <- FALSE
+
+allDbsFolder <- "d:/ScyllaEstimation/Premier/export"
 
 # Only the first time:
-# CohortDiagnostics::createResultsDataModel(connectionDetails = connectionDetails, schema = resultsSchema)
+createTables <- TRUE
 
-# uploadedFolder <- file.path(localFolder, "uploaded")
-# if (!file.exists(uploadedFolder)) {
-#   dir.create(uploadedFolder)
-# }
-# zipFilesToUpload <- list.files(path = localFolder,
-#                                pattern = ".zip",
-#                                recursive = FALSE)
-#
-# for (i in (1:length(zipFilesToUpload))) {
-#   CohortDiagnostics:: uploadResults(connectionDetails = connectionDetails,
-#                                     schema = resultsSchema,
-#                                     zipFileName = file.path(localFolder, zipFilesToUpload[i]))
-#   # Move to uploaded folder:
-#   file.rename(file.path(localFolder, zipFilesToUpload[i]), file.path(uploadedFolder, zipFilesToUpload[i]))
-# }
+zipFilesToUpload <- list.files(path = allDbsFolder,
+                               pattern = ".zip",
+                               recursive = FALSE)
+
+for (i in (1:length(zipFilesToUpload))) {
+  ScyllaEstimation::uploadResultsToDatabase(connectionDetails = connectionDetails,
+                                            schema = resultsSchema,
+                                            createTables = createTables,
+                                            zipFileName = file.path(allDbsFolder, zipFilesToUpload[i]))
+  # Move to uploaded folder:
+  file.rename(file.path(localFolder, zipFilesToUpload[i]), file.path(uploadedFolder, zipFilesToUpload[i]))
+}
 
