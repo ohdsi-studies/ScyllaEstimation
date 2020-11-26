@@ -116,7 +116,7 @@ computeTCACovariateBalance <- function(rows, cmOutputFolder, balanceFolder, cmAn
       cohortMethodDataFile <- file.path(cmOutputFolder, rows$cohortMethodDataFile[1])
       cohortMethodData <- CohortMethod::loadCohortMethodData(cohortMethodDataFile[1])
     }
-    table1Specs <- FeatureExtraction::getDefaultTable1Specifications()
+    table1Specs <- CohortMethod::getDefaultCmTable1Specifications()
     covariateAnalysisIds <- table1Specs$analysisId[is.na(table1Specs$covariateIds)]
     covariateIds <- cohortMethodData$covariateRef %>%
       filter(.data$analysisId %in% covariateAnalysisIds) %>%
