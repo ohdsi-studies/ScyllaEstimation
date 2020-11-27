@@ -39,23 +39,20 @@ connectionDetails <- createConnectionDetails(dbms = "postgresql",
                                              password = keyring::key_get("scyllaPassword"))
 schema <- "scylla_estimation"
 
-# Do this only once ---------------------------------------
+# Do this only once!
 createResultsDataModel(connectionDetails, schema)
 
-allDbsFolder <- "d:/ScyllaEstimation/Premier/export"
-
-# Only the first time:
-createTables <- TRUE
+# Upload data
+allDbsFolder <- "s:/ScyllaEstimation/OptumEhr/export"
 
 zipFilesToUpload <- list.files(path = allDbsFolder,
                                pattern = ".zip",
                                recursive = FALSE)
 
 for (i in (1:length(zipFilesToUpload))) {
-  ScyllaEstimation::uploadResultsToDatabase(connectionDetails = connectionDetails,
-                                            schema = resultsSchema,
-                                            createTables = createTables,
-                                            zipFileName = file.path(allDbsFolder, zipFilesToUpload[i]))
+  uploadResultsToDatabase(connectionDetails = connectionDetails,
+                          schema = schema,
+                          zipFileName = file.path(allDbsFolder, zipFilesToUpload[i]))
   # Move to uploaded folder:
   file.rename(file.path(localFolder, zipFilesToUpload[i]), file.path(uploadedFolder, zipFilesToUpload[i]))
 }

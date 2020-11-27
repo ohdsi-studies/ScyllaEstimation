@@ -121,11 +121,12 @@ exportAnalyses <- function(outputFolder, exportFolder) {
     covariateAnalysis <- collect(cmData$analysisRef)
     covariateAnalysis <- covariateAnalysis[, c("analysisId", "analysisName")]
     colnames(covariateAnalysis) <- c("covariate_analysis_id", "covariate_analysis_name")
-    covariateAnalysis$analysis_id <- cmAnalysis$analysisId
+    # covariateAnalysis$analysis_id <- cmAnalysis$analysisId
     return(covariateAnalysis)
   }
   covariateAnalysis <- lapply(cmAnalysisList, getCovariateAnalyses)
   covariateAnalysis <- bind_rows(covariateAnalysis)
+  covariateAnalysis <- unique(covariateAnalysis)
   fileName <- file.path(exportFolder, "covariate_analysis.csv")
   readr::write_csv(covariateAnalysis, fileName)
 }
@@ -659,7 +660,7 @@ exportDiagnostics <- function(outputFolder,
       balance$comparatorId <- comparatorId
       balance$outcomeId <- outcomeId
       balance$analysisId <- analysisId
-      balance$interactionCovariateId <- subgroupId
+      # balance$interactionCovariateId <- subgroupId
       balance <- balance[, c("databaseId",
                              "targetId",
                              "comparatorId",
