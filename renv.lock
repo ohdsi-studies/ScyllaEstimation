@@ -49,7 +49,7 @@
       "RemoteHost": "api.github.com",
       "RemoteRepo": "CohortMethod",
       "RemoteUsername": "ohdsi",
-      "RemoteRef": "c33fc50bd47fb0365345d3908621472525edb360"
+      "RemoteRef": "v4.0.1"
     },
     "CompQuadForm": {
       "Package": "CompQuadForm",
