@@ -16,13 +16,13 @@
 
 # Unfinished. Unable to test due to change in grid between runs
 synthesizeResults <- function(allDbsFolder, maxCores) {
-
+  # library(dplyr)
   zipFiles <- list.files(allDbsFolder, "*zip")
   mainResults <- lapply(zipFiles, loadMainResults, allDbsFolder = allDbsFolder)
-  mainResults <- bind_rows(mainResults)
+  mainResults <- do.call(rbind, mainResults)
   mainResults <- split(mainResults, paste(mainResults$targetId, mainResults$comparatorId, mainResults$analysisId))
   profiles <- lapply(zipFiles, loadLikelihoodProfiles, allDbsFolder = allDbsFolder)
-  profiles <- bind_rows(profiles)
+  profiles <- do.call(rbind, profiles)
   profiles <- split(profiles, paste(profiles$targetId, profiles$comparatorId, profiles$analysisId))
 
   combined <- lapply(names(mainResults), function(name) list(mainResults = mainResults[[name]], profiles = profiles[[name]]))
@@ -33,7 +33,6 @@ synthesizeResults <- function(allDbsFolder, maxCores) {
   results <- ParallelLogger::clusterApply(cluster, combined, computeGroupMetaAnalysis)
   ParallelLogger::stopCluster(cluster)
   results <- do.call(rbind, results)
-
   results$trueEffectSize <- NULL
 
   colnames(results) <- SqlRender::camelCaseToSnakeCase(colnames(results))
@@ -51,7 +50,7 @@ loadMainResults <- function(zipFile, allDbsFolder) {
                files = c("cohort_method_result.csv",
                          "negative_control_outcome.csv"),
                exdir = tempFolder)
-  results <- readr::read_csv(file.path(tempFolder, "cohort_method_result.csv"), col_types = readr::cols(), guess_max = 1e4)
+  results <- readr::read_csv(file.path(tempFolder, "cohort_method_result.csv"), col_types = readr::cols(), guess_max = 1e5)
   colnames(results) <- SqlRender::snakeCaseToCamelCase(colnames(results))
   ncs <- readr::read_csv(file.path(tempFolder, "negative_control_outcome.csv"), col_types = readr::cols(), guess_max = 1e5)
   colnames(ncs) <- SqlRender::snakeCaseToCamelCase(colnames(ncs))
@@ -75,9 +74,18 @@ loadLikelihoodProfiles <- function(zipFile, allDbsFolder) {
 }
 
 computeGroupMetaAnalysis <- function(group) {
-  # group = combined[[3000]]
+  # Find an example where more than one DB has data:
+  # for (i in 1:length(combined)) {
+  #   group = combined[[i]]
+  #   profiles <- group$profiles
+  #   dbsPerOutcome <- aggregate(databaseId ~ outcomeId, profiles, length)
+  #   if (any(dbsPerOutcome$databaseId > 1)) {
+  #     print(paste("i:", i, ", outcomeIds:", paste(dbsPerOutcome$outcomeId[dbsPerOutcome$databaseId > 1], collapse = ", ")))
+  #     break
+  #   }
+  # }
+  # group = combined[[145]]
   mainResults <- group$mainResults
-  # unique(mainResults$databaseId)
   if (nrow(mainResults) == 0) {
     return(NULL)
   }
@@ -88,6 +96,7 @@ computeGroupMetaAnalysis <- function(group) {
   outcomeIds <- unique(mainResults$outcomeId)
   outcomeGroupResults <- lapply(outcomeIds, computeSingleMetaAnalysis, group)
   groupResults <- do.call(rbind, outcomeGroupResults)
+  # View(groupResults[, c("logRr", "seLogRr", "traditionalLogRr", "traditionalSeLogRr")])
   ncs <- groupResults[groupResults$trueEffectSize == 1, ]
   validNcs <- ncs[!is.na(ncs$seLogRr), ]
   if (nrow(validNcs) >= 5) {
@@ -96,17 +105,8 @@ computeGroupMetaAnalysis <- function(group) {
                                                     logRr = groupResults$logRr,
                                                     seLogRr = groupResults$seLogRr)
     groupResults$calibratedP <- calibratedP$p
-  } else {
-    groupResults$calibratedP <- NA
-  }
 
-  if (nrow(validPcs) > 5) {
-    model <- EmpiricalCalibration::fitSystematicErrorModel(logRr = c(validNcs$logRr, validPcs$logRr),
-                                                           seLogRr = c(validNcs$seLogRr,
-                                                                       validPcs$seLogRr),
-                                                           trueLogRr = c(rep(0, nrow(validNcs)),
-                                                                         log(validPcs$trueEffectSize)),
-                                                           estimateCovarianceMatrix = FALSE)
+    model <- EmpiricalCalibration::convertNullToErrorModel(null)
     calibratedCi <- EmpiricalCalibration::calibrateConfidenceInterval(logRr = groupResults$logRr,
                                                                       seLogRr = groupResults$seLogRr,
                                                                       model = model)
@@ -116,13 +116,13 @@ computeGroupMetaAnalysis <- function(group) {
     groupResults$calibratedLogRr <- calibratedCi$logRr
     groupResults$calibratedSeLogRr <- calibratedCi$seLogRr
   } else {
-    groupResults$calibratedRr <- rep(NA, nrow(groupResults))
+    groupResults$calibratedP <- rep(NA, nrow(groupResults))
     groupResults$calibratedCi95Lb <- rep(NA, nrow(groupResults))
     groupResults$calibratedCi95Ub <- rep(NA, nrow(groupResults))
     groupResults$calibratedLogRr <- rep(NA, nrow(groupResults))
     groupResults$calibratedSeLogRr <- rep(NA, nrow(groupResults))
   }
-return(groupResults)
+  return(groupResults)
 }
 
 sumMinCellCount <- function(counts) {
@@ -134,7 +134,7 @@ sumMinCellCount <- function(counts) {
 }
 
 computeSingleMetaAnalysis <- function(outcomeId, group) {
-  # outcomeId <- group$mainResults$outcomeId[1]
+  # outcomeId <- 152
   rows <- group$mainResults[group$mainResults$outcomeId == outcomeId, ]
   profileDbs <- if (is.null(group$profiles)) c() else group$profiles$databaseId[group$profiles$outcomeId == outcomeId]
 
@@ -146,9 +146,14 @@ computeSingleMetaAnalysis <- function(outcomeId, group) {
   maRow$comparatorDays <- sum(rows$comparatorDays)
   maRow$targetOutcomes <- sumMinCellCount(rows$targetOutcomes)
   maRow$comparatorOutcomes <- sumMinCellCount(rows$comparatorOutcomes)
+  maRow$i2 <- NULL
 
-  if (length(profileDbs) == 1) {
-    idx <- (rows$databaseId == profileDbs)
+  if (length(profileDbs) <= 1) {
+    if (length(profileDbs) == 1) {
+      idx <- (rows$databaseId == profileDbs)
+    } else {
+      idx <- 1
+    }
     maRow$rr <- rows$rr[idx]
     maRow$ci95Lb <- rows$ci95Lb[idx]
     maRow$ci95Ub <- rows$ci95Ub[idx]
@@ -156,7 +161,9 @@ computeSingleMetaAnalysis <- function(outcomeId, group) {
     maRow$logRr <- rows$logRr[idx]
     maRow$seLogRr <- rows$seLogRr[idx]
     maRow$tau <- 0
-  } else if (length(profileDbs) > 1) {
+    maRow$traditionalLogRr <- rows$logRr[idx]
+    maRow$traditionalSeLogRr <- rows$seLogRr[idx]
+  } else {
     profiles <- group$profiles[group$profiles$outcomeId == outcomeId, ]
     profiles$databaseId <- NULL
     profiles$targetId <- NULL
@@ -164,49 +171,26 @@ computeSingleMetaAnalysis <- function(outcomeId, group) {
     profiles$outcomeId <- NULL
     profiles$analysisId <- NULL
     estimate <- EvidenceSynthesis::computeBayesianMetaAnalysis(profiles)
-    # plot(as.numeric(names(profiles)), profiles)
-  }
+    # EvidenceSynthesis::plotPosterior(estimate)
+    maRow$rr <- exp(estimate$mu)
+    maRow$ci95Lb <- exp(estimate$mu95Lb)
+    maRow$ci95Ub <- exp(estimate$mu95Ub)
+    # TODO: some p-value calibration that does not assume normality?
+    maRow$p <- EmpiricalCalibration::computeTraditionalP(estimate$logRr, estimate$seLogRr)
+    maRow$logRr <- estimate$logRr
+    maRow$seLogRr <- estimate$seLogRr
+    maRow$tau <- estimate$tau
 
-
-  outcomeGroup <- outcomeGroup[!is.na(outcomeGroup$seLogRr), ]
-  if (nrow(outcomeGroup) == 0) {
-    maRow$targetSubjects <- 0
-    maRow$comparatorSubjects <- 0
-    maRow$targetDays <- 0
-    maRow$comparatorDays <- 0
-    maRow$targetOutcomes <- 0
-    maRow$comparatorOutcomes <- 0
-    maRow$rr <- NA
-    maRow$ci95Lb <- NA
-    maRow$ci95Ub <- NA
-    maRow$p <- NA
-    maRow$logRr <- NA
-    maRow$seLogRr <- NA
-    maRow$i2 <- NA
-  } else if (nrow(outcomeGroup) == 1) {
-    maRow <- outcomeGroup[1, ]
-    maRow$i2 <- 0
-  } else {
-    maRow$targetSubjects <- sumMinCellCount(outcomeGroup$targetSubjects)
-    maRow$comparatorSubjects <- sumMinCellCount(outcomeGroup$comparatorSubjects)
-    maRow$targetDays <- sum(outcomeGroup$targetDays)
-    maRow$comparatorDays <- sum(outcomeGroup$comparatorDays)
-    maRow$targetOutcomes <- sumMinCellCount(outcomeGroup$targetOutcomes)
-    maRow$comparatorOutcomes <- sumMinCellCount(outcomeGroup$comparatorOutcomes)
-    meta <- meta::metagen(TE = outcomeGroup$logRr,
-                          seTE = outcomeGroup$seLogRr,
+    # Adding traditional meta-analytic estimate for comparison:
+    meta <- meta::metagen(TE = rows$logRr,
+                          seTE = rows$seLogRr,
                           sm = "RR",
                           hakn = FALSE)
     s <- summary(meta)
-    maRow$i2 <- s$I2$TE
     rnd <- s$random
-    maRow$rr <- exp(rnd$TE)
-    maRow$ci95Lb <- exp(rnd$lower)
-    maRow$ci95Ub <- exp(rnd$upper)
-    maRow$p <- rnd$p
-    maRow$logRr <- rnd$TE
-    maRow$seLogRr <- rnd$seTE
+    maRow$traditionalLogRr <- rnd$TE
+    maRow$traditionalSeLogRr <- rnd$seTE
   }
-  maRow$databaseId <-
-    return(maRow)
+
+  return(maRow)
 }

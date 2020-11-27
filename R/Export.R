@@ -545,7 +545,7 @@ calibrate <- function(subset, negativeControls) {
     subset$calibratedLogRr <- rep(NA, nrow(subset))
     subset$calibratedSeLogRr <- rep(NA, nrow(subset))
   }
-  subset$i2 <- rep(NA, nrow(subset))
+  subset$tau <- rep(NA, nrow(subset))
   subset <- subset[, c("targetId",
                        "comparatorId",
                        "outcomeId",
