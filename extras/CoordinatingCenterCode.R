@@ -37,8 +37,10 @@ connectionDetails <- createConnectionDetails(dbms = "postgresql",
                                                             sep = "/"),
                                              user = keyring::key_get("scyllaUser"),
                                              password = keyring::key_get("scyllaPassword"))
-resultsSchema <- "scylla_estimation"
-createTables <- FALSE
+schema <- "scylla_estimation"
+
+# Do this only once ---------------------------------------
+createResultsDataModel(connectionDetails, schema)
 
 allDbsFolder <- "d:/ScyllaEstimation/Premier/export"
 

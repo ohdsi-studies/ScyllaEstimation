@@ -14,6 +14,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+#' Create the results data model tables on a database server.
+#'
+#' @details
+#' Only PostgreSQL servers are supported.
+#'
+#' @param connectionDetails   An object of type \code{connectionDetails} as created using the
+#'                            \code{\link[DatabaseConnector]{createConnectionDetails}} function in the
+#'                            DatabaseConnector package.
+#' @param schema         The schema on the postgres server where the tables will be created.
+#'
+#' @export
+createResultsDataModel <- function(connectionDetails, schema) {
+  connection <- DatabaseConnector::connect(connectionDetails)
+  on.exit(DatabaseConnector::disconnect(connection))
+  schemas <- unlist(DatabaseConnector::querySql(connection,
+                                                "SELECT schema_name FROM information_schema.schemata;",
+                                                snakeCaseToCamelCase = TRUE)[, 1])
+  if (!tolower(schema) %in% tolower(schemas)) {
+    stop("Schema '", schema, "' not found on database. Only found these schemas: '", paste(schemas, collapse = "', '"), "'")
+  }
+  DatabaseConnector::executeSql(connection, sprintf("SET search_path TO %s;", schema), progressBar = FALSE, reportOverallTime = FALSE)
+  pathToSql <- system.file("sql", "postgresql", "CreateResultsTables.sql", package = "ScyllaEstimation")
+  # pathToSql <- file.path("inst", "sql", "postgresql", "CreateResultsTables.sql")
+  sql <- SqlRender::readSql(pathToSql)
+  DatabaseConnector::executeSql(connection, sql)
+}
+
+
 #' Upload results to the database server.
 #'
 #' @description
@@ -25,7 +54,6 @@
 #'                            DatabaseConnector package.
 #' @param schema         The schema on the postgres server where the tables will be created.
 #' @param zipFileName    The name of the zip file.
-#' @param createTables   Create the tables on the server? If TRUE and the tables already exist they will be overwritten!
 #' @param forceOverWriteOfSpecifications  If TRUE, specifications of the phenotypes, cohort definitions, and analysis
 #'                       will be overwritten if they already exist on the database. Only use this if these specifications
 #'                       have changed since the last upload.
@@ -40,13 +68,9 @@
 uploadResultsToDatabase <- function(connectionDetails = NULL,
                                     schema,
                                     zipFileName,
-                                    createTables = FALSE,
                                     forceOverWriteOfSpecifications = FALSE,
                                     purgeSiteDataBeforeUploading = TRUE,
                                     tempFolder = tempdir()) {
-  if (createTables) {
-    purgeSiteDataBeforeUploading <- FALSE
-  }
   start <- Sys.time()
   connection <- DatabaseConnector::connect(connectionDetails)
   on.exit(DatabaseConnector::disconnect(connection))
@@ -82,7 +106,6 @@ uploadResultsToDatabase <- function(connectionDetails = NULL,
                        connectionDetails = connectionDetails,
                        schema = schema,
                        tableName = tableName,
-                       createTable = (createTables & pos == 1),
                        data = chunk)
     }
 
@@ -152,28 +175,18 @@ insertDataIntoDb <- function(connection,
                              connectionDetails,
                              schema,
                              tableName,
-                             createTable,
                              data) {
   if (nrow(data) < 1e4 || is.null(Sys.getenv("POSTGRES_PATH"))) {
     ParallelLogger::logInfo("- Inserting ", nrow(data), " rows into database")
     DatabaseConnector::insertTable(connection = connection,
                                    tableName = paste(schema, tableName, sep = "."),
                                    data = as.data.frame(data),
-                                   dropTableIfExists = createTable,
-                                   createTable = createTable,
+                                   dropTableIfExists = FALSE,
+                                   createTable = FALSE,
                                    tempTable = FALSE,
                                    progressBar = TRUE)
   } else {
     ParallelLogger::logInfo("- Inserting ", nrow(data), " rows into database using bulk import")
-    if (createTable) {
-      DatabaseConnector::insertTable(connection = connection,
-                                     tableName = paste(schema, tableName, sep = "."),
-                                     data = as.data.frame(data)[FALSE, ],
-                                     dropTableIfExists = TRUE,
-                                     createTable = TRUE,
-                                     tempTable = FALSE,
-                                     progressBar = FALSE)
-    }
     DatabaseConnector::executeSql(connection, "COMMIT;", progressBar = FALSE, reportOverallTime = FALSE)
     bulkUploadTable(connection = connection,
                     connectionDetails = connectionDetails,
