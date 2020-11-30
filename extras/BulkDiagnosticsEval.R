@@ -139,3 +139,29 @@ stats$targetShortName <- gsub(" with.*", "", stats$targetName)
 stats$comparatorShortName <- gsub(" with.*", "", stats$comparatorName)
 readr::write_csv(stats, file.path(outputFolder, sprintf("ImbalancedCovariates_%s.csv", databaseId)))
 sum(abs(stats$beforeMatchingStdDiff  > 0.2))
+
+# Balance from exported zip file ------------------------------------------------------------
+library(dplyr)
+zipFile <-  "s:/ScyllaEstimation/AllDbs/Results_SIDIAP.zip"
+unzipFolder <- tempfile()
+dir.create(unzipFolder)
+unzip(zipFile, exdir = unzipFolder)
+list.files(unzipFolder)
+balance <- readr::read_csv(file.path(unzipFolder, "covariate_balance.csv"))
+colnames(balance) <- SqlRender::snakeCaseToCamelCase(colnames(balance))
+balance <- balance[!is.na(balance$stdDiffAfter) & is.na(balance$outcomeId), ]
+balance <- aggregate(abs(stdDiffAfter) ~ targetId + comparatorId + analysisId, balance, max)
+balance[balance$`abs(stdDiffAfter)` < 0.1, ]
+
+exposures <- readr::read_csv(file.path(unzipFolder, "exposure_of_interest.csv"))
+balance <- inner_join(balance,
+                    tibble(targetId = exposures$exposure_id,
+                           targetName = exposures$exposure_name),
+                    by = "targetId")
+balance <- inner_join(balance,
+                    tibble(comparatorId = exposures$exposure_id,
+                           comparatorName = exposures$exposure_name),
+                    by = "comparatorId")
+
+readr::write_csv(balance, "s:/ScyllaEstimation/AllDbs/BalanceOverview_SIDIAP.csv")
+unlink(unzipFolder, recursive = TRUE)
