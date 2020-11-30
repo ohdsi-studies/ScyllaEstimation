@@ -231,6 +231,7 @@ exportMetadata <- function(outputFolder,
                              vocabularyVersion = vocabularyVersion,
                              minObsPeriodDate = observationPeriodRange$minDate,
                              maxObsPeriodDate = observationPeriodRange$maxDate,
+                             studyPackageVersion = utils::packageVersion("ScyllaEstimation"),
                              is_meta_analysis = 0)
   fileName <- file.path(exportFolder, "database.csv")
   readr::write_csv(database, fileName)
@@ -489,6 +490,7 @@ exportMainResults <- function(outputFolder,
 
         # Grid approximation using many columns:
         profile <- as.data.frame(t(round(profile, 4)))
+        colnames(profile) <- paste0("x_", gsub("\\.", "_", gsub("-", "min", sprintf("%0.6f", as.numeric(colnames(profile))))))
         profile$target_id <- reference$targetId[i]
         profile$comparator_id <- reference$comparatorId[i]
         profile$outcome_id <- reference$outcomeId[i]

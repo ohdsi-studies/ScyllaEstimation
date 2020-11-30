@@ -261,6 +261,7 @@ uploadResultsToDatabase <- function(connectionDetails = NULL,
 
     uploadChunk <- function(chunk, pos) {
       ParallelLogger::logInfo("- Uploading rows ", pos, " through ", pos + nrow(chunk) - 1)
+      # Handling some versioning issues in this study package:
       if (tableName == "cohort_method_result" && "i_2" %in% colnames(chunk)) {
         chunk$i_2 <- NULL
         chunk$tau <- NA
@@ -271,8 +272,12 @@ uploadResultsToDatabase <- function(connectionDetails = NULL,
       if (tableName == "covariate_balance" && "interaction_covariate_id" %in% colnames(chunk)) {
         chunk$interaction_covariate_id <- NULL
       }
-      if (tableName == "likelihood_profile") {
-        colnames(chunk) <-  gsub("\\.", "_", gsub("-", "min", colnames(chunk)))
+      if (tableName == "likelihood_profile" && grepl("^-", names(chunk)[1])) {
+        idx <- !grepl("_id$", colnames(chunk))
+        colnames(chunk)[idx] <-  paste0("x_", gsub("\\.", "_", gsub("-", "min", sprintf("%0.6f", as.numeric(colnames(chunk)[idx])))))
+      }
+      if (tableName == "database" && !"studyPackageVersion" %in% colnames(chunk)) {
+        chunk$studyPackageVersion <- "0.0.1"
       }
       checkColumnNames(table = chunk,
                        tableName = env$tableName,
