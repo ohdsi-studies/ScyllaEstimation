@@ -44,6 +44,7 @@ createResultsDataModel(connectionDetails, schema)
 
 # Upload data
 allDbsFolder <- "s:/ScyllaEstimation/OptumEhr/export"
+allDbsFolder <- "s:/ScyllaEstimation/AllDbs"
 
 zipFilesToUpload <- list.files(path = allDbsFolder,
                                pattern = ".zip",

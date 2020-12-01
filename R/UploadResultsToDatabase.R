@@ -274,7 +274,9 @@ uploadResultsToDatabase <- function(connectionDetails = NULL,
       }
       if (tableName == "likelihood_profile" && grepl("^-", names(chunk)[1])) {
         idx <- !grepl("_id$", colnames(chunk))
-        colnames(chunk)[idx] <-  paste0("x_", gsub("\\.", "_", gsub("-", "min", sprintf("%0.6f", as.numeric(colnames(chunk)[idx])))))
+        profile <- apply(chunk[, idx], 1, paste, collapse = ";")
+        chunk[idx] <- NULL
+        chunk$profile <- profile
       }
       if (tableName == "database" && !"studyPackageVersion" %in% colnames(chunk)) {
         chunk$studyPackageVersion <- "0.0.1"

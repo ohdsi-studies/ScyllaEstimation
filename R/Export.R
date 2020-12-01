@@ -488,9 +488,14 @@ exportMainResults <- function(outputFolder,
         #                       gamma = fit$gamma)
         # colnames(profile) <- SqlRender::camelCaseToSnakeCase(colnames(profile))
 
-        # Grid approximation using many columns:
-        profile <- as.data.frame(t(round(profile, 4)))
-        colnames(profile) <- paste0("x_", gsub("\\.", "_", gsub("-", "min", sprintf("%0.6f", as.numeric(colnames(profile))))))
+        # Grid approximation using many columns (Postgres doesn't like this):
+        # profile <- as.data.frame(t(round(profile, 4)))
+        # colnames(profile) <- paste0("x_", gsub("\\.", "_", gsub("-", "min", sprintf("%0.6f", as.numeric(colnames(profile))))))
+
+
+        # Grid approximation using one free-text column:
+        profile <- data.frame(profile = paste(round(profile, 4), collapse = ";"))
+
         profile$target_id <- reference$targetId[i]
         profile$comparator_id <- reference$comparatorId[i]
         profile$outcome_id <- reference$outcomeId[i]
