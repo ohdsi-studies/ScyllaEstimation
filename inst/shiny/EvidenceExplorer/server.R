@@ -127,6 +127,24 @@ shinyServer(function(input, output, session) {
   })
   outputOptions(output, "rowIsSelected", suspendWhenHidden = FALSE)
   
+  output$isCrude <- reactive({
+    row <- selectedRow()
+    isCrude <- (!is.null(row) && grepl("Crude", cohortMethodAnalysis$shortDescription[cohortMethodAnalysis$analysisId == row$analysisId]))
+    if (isCrude) {
+      hideTab("detailsTabsetPanel", "Population characteristics")
+      hideTab("detailsTabsetPanel", "Propensity scores")
+      hideTab("detailsTabsetPanel", "Propensity model")
+      hideTab("detailsTabsetPanel", "Covariate balance")
+    } else {
+      showTab("detailsTabsetPanel", "Population characteristics")
+      showTab("detailsTabsetPanel", "Propensity scores")
+      showTab("detailsTabsetPanel", "Propensity model")
+      showTab("detailsTabsetPanel", "Covariate balance")
+    }
+    return(isCrude)
+  })
+  outputOptions(output, "isCrude", suspendWhenHidden = FALSE)
+  
   balance <- reactive({
     row <- selectedRow()
     if (is.null(row)) {
