@@ -527,7 +527,7 @@ exportMainResults <- function(outputFolder,
 }
 
 calibrate <- function(subset, negativeControls) {
-  # subset = subsets[[4023]]
+  # subset = subsets[[200]]
   ncs <- subset[subset$outcomeId %in% negativeControls$outcomeId, ]
   ncs <- ncs[!is.na(ncs$seLogRr), ]
   if (nrow(ncs) > 5) {
@@ -562,7 +562,7 @@ calibrate <- function(subset, negativeControls) {
                        "ci95lb",
                        "ci95ub",
                        "p",
-                       "i2",
+                       "tau",
                        "logRr",
                        "seLogRr",
                        "target",
@@ -585,7 +585,7 @@ calibrate <- function(subset, negativeControls) {
                         "ci95Lb",
                         "ci95Ub",
                         "p",
-                        "i2",
+                        "tau",
                         "logRr",
                         "seLogRr",
                         "targetSubjects",
@@ -602,22 +602,6 @@ calibrate <- function(subset, negativeControls) {
                         "calibratedSeLogRr")
   return(subset)
 }
-
-calibrateInteractions <- function(subset, negativeControls) {
-  ncs <- subset[subset$outcomeId %in% negativeControls$outcomeId, ]
-  ncs <- ncs[!is.na(pull(ncs, .data$seLogRrr)), ]
-  if (nrow(ncs) > 5) {
-    null <- EmpiricalCalibration::fitMcmcNull(ncs$logRrr, ncs$seLogRrr)
-    calibratedP <- EmpiricalCalibration::calibrateP(null = null,
-                                                    logRr = subset$logRrr,
-                                                    seLogRr = subset$seLogRrr)
-    subset$calibratedP <- calibratedP$p
-  } else {
-    subset$calibratedP <- rep(NA, nrow(subset))
-  }
-  return(subset)
-}
-
 
 exportDiagnostics <- function(outputFolder,
                               exportFolder,
@@ -667,13 +651,11 @@ exportDiagnostics <- function(outputFolder,
       balance$comparatorId <- comparatorId
       balance$outcomeId <- outcomeId
       balance$analysisId <- analysisId
-      # balance$interactionCovariateId <- subgroupId
       balance <- balance[, c("databaseId",
                              "targetId",
                              "comparatorId",
                              "outcomeId",
                              "analysisId",
-                             "interactionCovariateId",
                              "covariateId",
                              "beforeMatchingMeanTarget",
                              "beforeMatchingMeanComparator",
@@ -686,7 +668,6 @@ exportDiagnostics <- function(outputFolder,
                              "comparatorId",
                              "outcomeId",
                              "analysisId",
-                             "interactionCovariateId",
                              "covariateId",
                              "targetMeanBefore",
                              "comparatorMeanBefore",
