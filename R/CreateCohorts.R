@@ -126,6 +126,12 @@ createCohorts <- function(connectionDetails,
                                                      targetIds = targetCohortIds,
                                                      oracleTempSchema = oracleTempSchema)
 
+  ScyllaCharacterization::createBulkSubgroupFromCohorts(connection = connection,
+                                                        cohortDatabaseSchema = cohortDatabaseSchema,
+                                                        cohortStagingTable = cohortTable,
+                                                        targetIds = targetCohortIds,
+                                                        oracleTempSchema = oracleTempSchema)
+
   # Create negative control outcomes
   ParallelLogger::logInfo(" ---- Creating negative control outcome cohorts ---- ")
   negativeControls <- getNegativeControlOutcomes()
