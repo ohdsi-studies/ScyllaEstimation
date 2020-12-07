@@ -241,7 +241,7 @@
       "RemoteHost": "api.github.com",
       "RemoteRepo": "ScyllaEstimation",
       "RemoteUsername": "ohdsi-studies",
-      "RemoteRef": "develop"
+      "RemoteRef": "v1.0.0"
     },
     "SqlRender": {
       "Package": "SqlRender",
