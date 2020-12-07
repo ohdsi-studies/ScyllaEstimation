@@ -14,9 +14,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Unfinished. Unable to test due to change in grid between runs
-synthesizeResults <- function(allDbsFolder, maxCores) {
+
+#' Title
+#'
+#' @param allDbsFolder   Folder on the local file system containing the results zip files of all data sites.
+#' @param maExportFolder A local folder where the meta-anlysis results will be written.
+#' @param maxCores       Maximum number of CPU cores to be used when computing the meta-analyses.
+#'
+#' @return
+#' Does not return a value, but creates a new zip file in the \code{maExportFolder} for the meta-analyses.
+#'
+#' @export
+synthesizeResults <- function(allDbsFolder, maExportFolder, maxCores) {
   # library(dplyr)
+  if (file.exists(maExportFolder)) {
+    dir.create(maExportFolder, recursive = TRUE)
+  }
+
   zipFiles <- list.files(allDbsFolder, "*zip")
   mainResults <- lapply(zipFiles, loadMainResults, allDbsFolder = allDbsFolder)
   mainResults <- do.call(rbind, mainResults)
@@ -29,6 +43,7 @@ synthesizeResults <- function(allDbsFolder, maxCores) {
 
   rm(mainResults)
   rm(profiles)
+  ParallelLogger::logInfo("Performing cross-database evidence synthesis")
   cluster <- ParallelLogger::makeCluster(min(maxCores, 10))
   results <- ParallelLogger::clusterApply(cluster, combined, computeGroupMetaAnalysis)
   ParallelLogger::stopCluster(cluster)
@@ -36,9 +51,31 @@ synthesizeResults <- function(allDbsFolder, maxCores) {
   results$trueEffectSize <- NULL
 
   colnames(results) <- SqlRender::camelCaseToSnakeCase(colnames(results))
-  fileName <-  file.path(allDbsFolder, paste0("cohort_method_result.csv"))
+  fileName <-  file.path(maExportFolder, paste0("cohort_method_result.csv"))
   write.csv(results, fileName, row.names = FALSE)
 
+  ParallelLogger::logInfo("Creating database table")
+  databases <- lapply(zipFiles, loadDatabase, allDbsFolder = allDbsFolder)
+  databases <- do.call(rbind, databases)
+  database <- data.frame(database_id = "Meta-analysis",
+                         database_name = "Random effects meta-analysis",
+                         description = "Random effects meta-analysis using non-normal likelihood approximation to avoid bias due to small and zero counts.",
+                         vocabularyVersion = "",
+                         minObsPeriodDate = min(databases$minobsperioddate),
+                         maxObsPeriodDate = max(databases$maxobsperioddate),
+                         studyPackageVersion = utils::packageVersion("ScyllaEstimation"),
+                         is_meta_analysis = 1)
+  fileName <- file.path(maExportFolder, "database.csv")
+  write.csv(database, fileName, row.names = FALSE)
+
+  # Add all to zip file -------------------------------------------------------------------------------
+  ParallelLogger::logInfo("Adding results to zip file")
+  zipName <- file.path(maExportFolder, sprintf("Results_%s.zip", "MetaAnalysis"))
+  files <- list.files(maExportFolder, pattern = ".*\\.csv$")
+  oldWd <- setwd(maExportFolder)
+  on.exit(setwd(oldWd))
+  DatabaseConnector::createZipFile(zipFile = zipName, files = files)
+  ParallelLogger::logInfo("Results are ready for sharing at:", zipName)
 }
 
 loadMainResults <- function(zipFile, allDbsFolder) {
@@ -69,6 +106,19 @@ loadLikelihoodProfiles <- function(zipFile, allDbsFolder) {
                files = c("likelihood_profile.csv"),
                exdir = tempFolder)
   profiles <- readr::read_csv(file.path(tempFolder, "likelihood_profile.csv"), col_types = readr::cols(), guess_max = 1e3)
+  colnames(profiles) <- SqlRender::snakeCaseToCamelCase(colnames(profiles))
+  return(profiles)
+}
+
+loadDatabase <- function(zipFile, allDbsFolder) {
+  ParallelLogger::logInfo("Loading database information from ", zipFile)
+  tempFolder <- tempfile()
+  dir.create(tempFolder)
+  on.exit(unlink(tempFolder, recursive = TRUE, force = TRUE))
+  utils::unzip(zipfile = file.path(allDbsFolder, zipFile),
+               files = c("database.csv"),
+               exdir = tempFolder)
+  profiles <- readr::read_csv(file.path(tempFolder, "database.csv"), col_types = readr::cols(), guess_max = 1e3)
   colnames(profiles) <- SqlRender::snakeCaseToCamelCase(colnames(profiles))
   return(profiles)
 }
@@ -164,12 +214,10 @@ computeSingleMetaAnalysis <- function(outcomeId, group) {
     maRow$traditionalLogRr <- rows$logRr[idx]
     maRow$traditionalSeLogRr <- rows$seLogRr[idx]
   } else {
-    profiles <- group$profiles[group$profiles$outcomeId == outcomeId, ]
-    profiles$databaseId <- NULL
-    profiles$targetId <- NULL
-    profiles$comparatorId <- NULL
-    profiles$outcomeId <- NULL
-    profiles$analysisId <- NULL
+    profiles <- group$profiles$profile[group$profiles$outcomeId == outcomeId]
+    profiles <- strsplit(profiles, ";")
+    profiles <- as.data.frame(t(sapply(profiles, as.numeric)))
+    colnames(profiles) <- seq(log(0.1), log(10), length.out = 1000)
     estimate <- EvidenceSynthesis::computeBayesianMetaAnalysis(profiles)
     # EvidenceSynthesis::plotPosterior(estimate)
     maRow$rr <- exp(estimate$mu)

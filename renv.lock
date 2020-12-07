@@ -138,17 +138,6 @@
       "Repository": "CRAN",
       "Hash": "08588806cba69f04797dab50627428ed"
     },
-    "MethodEvaluation": {
-      "Package": "MethodEvaluation",
-      "Version": "2.0.0",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "MethodEvaluation",
-      "RemoteUsername": "ohdsi",
-      "RemoteRef": "v2.0.0",
-      "Hash": "24a2bd74ebaad83c27cde646d0ed042b"
-    },
     "OhdsiRTools": {
       "Package": "OhdsiRTools",
       "Version": "1.9.1",
@@ -243,6 +232,16 @@
       "RemoteUsername": "ohdsi-studies",
       "RemoteRef": "develop",
       "Hash": "a727edcf5c4fcae908545c6db4f300d0"
+    },
+	"ScyllaEstimation": {
+      "Package": "ScyllaEstimation",
+      "Version": "1.0.0",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "ScyllaCharacterization",
+      "RemoteUsername": "ohdsi-studies",
+      "RemoteRef": "develop"
     },
     "SqlRender": {
       "Package": "SqlRender",
@@ -775,13 +774,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "406db947a3721d059635aaa04e6d051a"
-    },
-    "pROC": {
-      "Package": "pROC",
-      "Version": "1.16.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "285ca01e793958ac6f2c264c84dbb16b"
     },
     "pillar": {
       "Package": "pillar",

@@ -1,7 +1,7 @@
 Package: ScyllaEstimation
 Type: Package
 Title: Comparative effectiveness of emerging drug therapies in the treatment of COVID-19
-Version: 0.0.1
+Version: 1.0.0
 Author: Marc A. Suchard [aut, cre], James Weaver [aut, cre], Martijn J. Schuemie [aut, cre]
 Maintainer: Marc A. Suchard <msuchard@ucla.edu>
 Description:  This OHDSI network study assesses the comparative effectiveness and safety
@@ -10,25 +10,24 @@ Description:  This OHDSI network study assesses the comparative effectiveness an
     after COVID-19 positive testing or diagnosis in the outpatient setting without prior
     hospitalization.
 Depends:
-    R (>= 4.0.0),
+    R (>= 3.6.0),
     DatabaseConnector (>= 3.0.0)
 Imports:
     ScyllaCharacterization (>= 0.0.3),
     SqlRender (>= 1.6.8),
     EmpiricalCalibration (>= 2.0.2),
-    Cyclops (>= 3.0.0),
+    Cyclops (>= 3.1.0),
     FeatureExtraction (>= 3.1.0),
     EvidenceSynthesis,
-    CohortMethod (>= 4.0.0),
+    CohortMethod (>= 4.0.1),
     ggplot2,
     Andromeda (>= 0.3.2),
     dplyr,
     tibble,
     readr,
     rlang,
-    MethodEvaluation (>= 2.0.0),
     OhdsiSharing (>= 0.2.2),
-	ParallelLogger (>= 2.0.0),
+	ParallelLogger (>= 2.0.1),
 	survival,
 	plyr,
 	magrittr
@@ -42,7 +41,6 @@ Remotes:
     ohdsi-studies/ScyllaCharacterization@develop,
     ohdsi/FeatureExtraction,
     ohdsi/CohortMethod,
-    ohdsi/MethodEvaluation,
     ohdsi/OhdsiSharing,
     ohdsi/EvidenceSynthesis
 License: Apache License 2.0

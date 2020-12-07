@@ -266,6 +266,10 @@ uploadResultsToDatabase <- function(connectionDetails = NULL,
         chunk$i_2 <- NULL
         chunk$tau <- NA
       }
+      if (tableName == "cohort_method_result" && "traditional_log_rr" %in% colnames(chunk)) {
+        chunk$traditional_log_rr <- NULL
+        chunk$traditional_se_log_rr <- NULL
+      }
       if (tableName == "covariate_analysis" && "analysis_id" %in% colnames(chunk)) {
         chunk$analysis_id <- NULL
       }
