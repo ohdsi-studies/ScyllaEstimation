@@ -30,13 +30,15 @@ Imports:
 	ParallelLogger (>= 2.0.1),
 	survival,
 	plyr,
-	magrittr
+	magrittr,
+    zip
 Suggests:
     knitr,
     rmarkdown,
     DT,
     shiny,
-    testthat
+    testthat,
+    meta
 Remotes:
     ohdsi-studies/ScyllaCharacterization@develop,
     ohdsi/FeatureExtraction,

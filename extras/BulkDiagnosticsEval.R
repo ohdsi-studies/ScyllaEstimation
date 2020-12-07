@@ -165,3 +165,60 @@ balance <- inner_join(balance,
 
 readr::write_csv(balance, "s:/ScyllaEstimation/AllDbs/BalanceOverview_SIDIAP.csv")
 unlink(unzipFolder, recursive = TRUE)
+
+# Balance from results database -----------------------------------------------------------
+library(DatabaseConnector)
+connectionDetails <- createConnectionDetails(dbms = "postgresql",
+                                             server = paste(keyring::key_get("scyllaServer"),
+                                                            keyring::key_get("scyllaDatabase"),
+                                                            sep = "/"),
+                                             user = keyring::key_get("scyllaUser"),
+                                             password = keyring::key_get("scyllaPassword"))
+schema <- "scylla_estimation"
+connection <- connect(connectionDetails)
+sql <- "SELECT max_sd,
+  database_id,
+  target_id,
+  target.exposure_name AS target_name,
+  comparator_id,
+  comparator.exposure_name AS comparator_name,
+  tmp.analysis_id,
+  description AS analysis_description
+FROM (
+  SELECT MAX(ABS(std_diff_after)) AS max_sd,
+    database_id,
+    target_id,
+    comparator_id,
+    analysis_id
+  FROM @schema.covariate_balance
+  WHERE outcome_id = -1
+    AND std_diff_after IS NOT NULL
+    AND std_diff_after != 0
+  GROUP BY database_id,
+    target_id,
+    comparator_id,
+    analysis_id) tmp
+INNER JOIN @schema.exposure_of_interest target
+  ON target_id = target.exposure_id
+INNER JOIN @schema.exposure_of_interest comparator
+  ON comparator_id = comparator.exposure_id
+INNER JOIN @schema.cohort_method_analysis
+  ON tmp.analysis_id = cohort_method_analysis.analysis_id;"
+
+results <- renderTranslateQuerySql(connection, sql, schema = schema, snakeCaseToCamelCase = TRUE)
+disconnect(connection)
+results <- results[order(results$maxSd), ]
+readr::write_csv(results, "s:/ScyllaEstimation/AllDbs/BalanceOverview_AllDbs.csv")
+
+
+
+
+sql <- "SELECT *
+FROM @schema.covariate_balance
+WHERE outcome_id = -1
+ AND database_id = 'HealthVerity'
+ AND target_id = 1001020021
+ AND comparator_id = 1002020021
+ AND  analysis_id = 419;"
+
+x <- renderTranslateQuerySql(connection, sql, schema = schema, snakeCaseToCamelCase = TRUE)

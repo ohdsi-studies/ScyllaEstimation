@@ -153,7 +153,7 @@ CREATE TABLE database (
 			database_id VARCHAR(255) NOT NULL,
 			database_name VARCHAR(255) NOT NULL,
 			description VARCHAR(255) NOT NULL,
-			vocabularyVersion VARCHAR(255) NOT NULL,
+			vocabularyVersion VARCHAR(255),
 			minObsPeriodDate DATE NOT NULL,
 			maxObsPeriodDate DATE NOT NULL,
 			studyPackageVersion VARCHAR(10) NOT NULL,
