@@ -27,9 +27,9 @@ Specifically, the study has the following objectives:
 
 The following will guide you through the package setup and execution process:
 
-- [Study package setup](STUDY-PACKAGE-SETUP.md): Guides you through the steps to install the study package.
-- [Study execution](STUDY-EXECUTION.md): Guides you through the steps to execute the study package.
+- [Study package setup](StudyPackageSetup.md): Guides you through the steps to install the study package.
+- [Study execution](StudyExecution.md): Guides you through the steps to execute the study package.
 
 # Development status
 
-Under development. Do not use
+Ready for use
