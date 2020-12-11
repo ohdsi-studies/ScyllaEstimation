@@ -789,7 +789,7 @@
 			"Source" : "GitHub",
 			"RemoteType" : "github",
 			"RemoteHost" : "api.github.com",
-			"RemoteRepo" : "ScyllaEstimation",
+			"RemoteRepo" : "ScyllaCharacterization",
 			"RemoteUsername" : "ohdsi-studies",
 			"RemoteRef" : "896286a589e54ce1df09cffeba0e6536a6fd614f"
 		},
