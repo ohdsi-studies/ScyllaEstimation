@@ -792,12 +792,6 @@
 			"RemoteRepo" : "ScyllaEstimation",
 			"RemoteUsername" : "ohdsi-studies",
 			"RemoteRef" : "896286a589e54ce1df09cffeba0e6536a6fd614f"
-		}
-		"ScyllaCharacterization" : {
-			"Package" : "ScyllaCharacterization",
-			"Version" : "1.0.1",
-			"Source" : "Repository",
-			"Repository" : "CRAN"
 		},
 		"renv" : {
 			"Package" : "renv",
