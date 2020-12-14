@@ -599,7 +599,7 @@
 		},
 		"nloptr" : {
 			"Package" : "nloptr",
-			"Version" : "1.2.2.2",
+			"Version" : "1.2.2.1",
 			"Source" : "Repository",
 			"Repository" : "CRAN"
 		},

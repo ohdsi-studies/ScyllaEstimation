@@ -9,9 +9,15 @@ allDbsFolder <- "s:/ScyllaEstimation/AllDbs"
 connection <- sftpConnect(privateKeyFileName = "c:/home/keyfiles/study-coordinator-scylla",
                           userName = "study-coordinator-scylla")
 
+connection <- sftpConnect(privateKeyFileName = "c:/home/keyfiles/study-coordinator-covid19.dat",
+                          userName = "study-coordinator-covid19")
+
+
+
 # sftpMkdir(connection, "estimation")
 
 sftpCd(connection, "estimation")
+sftpCd(connection, "SCYLLAESTIMATION")
 files <- sftpLs(connection)
 files
 
@@ -42,7 +48,7 @@ connectionDetails <- createConnectionDetails(dbms = "postgresql",
 schema <- "scylla_estimation"
 
 # Do this only once!
-createResultsDataModel(connectionDetails, schema)
+# createResultsDataModel(connectionDetails, schema)
 
 # # After the tables have been created:
 # sql <- "grant select on all tables in schema scylla_estimation to scylla_ro_grp;"
@@ -57,6 +63,8 @@ createResultsDataModel(connectionDetails, schema)
 
 # Upload data
 # allDbsFolder <- "s:/ScyllaEstimation/OptumEhr/export"
+
+uploadedFolder <- file.path(allDbsFolder, "uploaded")
 
 zipFilesToUpload <- list.files(path = allDbsFolder,
                                pattern = ".zip",

@@ -1,3 +1,13 @@
+ScyllaEstimation 1.0.1
+======================
+
+Changes
+
+1. Using newer version of CohortMethod, which always generates likelihood profiles, not only when Cyclops is able to fit a model.
+
+2. Downgrading required version of `nloptr` to 1.2.2.1 to allow execution on R 3.5.1.
+
+
 ScyllaEstimation 1.0.0
 ======================
 
