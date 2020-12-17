@@ -222,3 +222,66 @@ WHERE outcome_id = -1
  AND  analysis_id = 419;"
 
 x <- renderTranslateQuerySql(connection, sql, schema = schema, snakeCaseToCamelCase = TRUE)
+
+# Power from results database -----------------------------------------------------------
+library(DatabaseConnector)
+connectionDetails <- createConnectionDetails(dbms = "postgresql",
+                                             server = paste(keyring::key_get("scyllaServer"),
+                                                            keyring::key_get("scyllaDatabase"),
+                                                            sep = "/"),
+                                             user = keyring::key_get("scyllaUser"),
+                                             password = keyring::key_get("scyllaPassword"))
+schema <- "scylla_estimation"
+connection <- connect(connectionDetails)
+sql <- "SELECT target_subjects,
+  comparator_subjects,
+  ABS(target_outcomes) + ABS(comparator_outcomes) AS total_outcomes,
+  CASE
+    WHEN target_outcomes < 0 OR comparator_outcomes < 0 THEN 1
+    ELSE 0
+  END AS smaller_than,
+  database_id,
+  cohort_method_result.target_id,
+  target.exposure_name AS target_name,
+  cohort_method_result.comparator_id,
+  comparator.exposure_name AS comparator_name,
+  cohort_method_result.outcome_id,
+  outcome_name,
+  cohort_method_result.analysis_id,
+  description AS analysis_description
+FROM @schema.cohort_method_result
+INNER JOIN @schema.exposure_of_interest target
+  ON cohort_method_result.target_id = target.exposure_id
+INNER JOIN @schema.exposure_of_interest comparator
+  ON cohort_method_result.comparator_id = comparator.exposure_id
+INNER JOIN @schema.outcome_of_interest
+  ON cohort_method_result.outcome_id = outcome_of_interest.outcome_id
+INNER JOIN @schema.cohort_method_analysis
+  ON cohort_method_result.analysis_id = cohort_method_analysis.analysis_id;"
+
+results <- renderTranslateQuerySql(connection, sql, schema = schema, snakeCaseToCamelCase = TRUE)
+disconnect(connection)
+
+unique(results$databaseId)
+
+alpha <- 0.05
+power <- 0.8
+z1MinAlpha <- qnorm(1 - alpha/2)
+zBeta <- -qnorm(1 - power)
+pA <- abs(results$targetSubjects)/(abs(results$targetSubjects) + abs(results$comparatorSubjects))
+pB <- 1 - pA
+results$mdrr <- exp(sqrt((zBeta + z1MinAlpha)^2/(results$totalOutcomes * pA * pB)))
+results$smallerThan <- as.logical(results$smallerThan)
+results$smallerThan <- results$smallerThan | results$targetSubjects < 0 | results$comparatorSubjects < 0
+results$mdrrText <- sprintf("%s%0.2f", sapply(results$smallerThan, function(x) if (x == 1) return(">") else return("")), results$mdrr)
+results <- results[order(results$mdrr), ]
+results <- results[results$databaseId != "Meta-analysis", ]
+results <- results[!is.na(results$mdrr) & !is.nan(results$mdrr) & !is.infinite(results$mdrr) & results$mdrr < 10, ]
+results <- results[results$targetSubjects > 0 & results$comparatorSubjects > 0, ]
+readr::write_csv(results, "s:/ScyllaEstimation/AllDbs/PowerOverview_AllDbs.csv")
+
+
+
+
+
+

@@ -98,6 +98,8 @@ execute <- function(connectionDetails,
     dir.create(getOption("andromedaTempFolder"), recursive = TRUE)
   }
 
+  verifyDependencies()
+
   if (createCohorts) {
     ParallelLogger::logInfo("Creating exposure and outcome cohorts")
     createCohorts(connectionDetails = connectionDetails,
@@ -137,4 +139,24 @@ execute <- function(connectionDetails,
   }
 
   invisible(NULL)
+}
+
+verifyDependencies <- function() {
+  ParallelLogger::logInfo("Checking whether correct package versions are installed")
+  expected <- RJSONIO::fromJSON("renv.lock")
+  expected <- dplyr::bind_rows(expected[[2]])
+  observedVersions <- sapply(sapply(expected$Package, packageVersion), paste, collapse = ".")
+  expectedVersions <- sapply(sapply(expected$Version, numeric_version), paste, collapse = ".")
+  mismatchIdx <- which(observedVersions != expectedVersions)
+  if (length(mismatchIdx) > 0) {
+
+    lines <- sapply(mismatchIdx, function(idx) sprintf("- Package %s version %s should be %s",
+                                              expected$Package[idx],
+                                              observedVersions[idx],
+                                              expectedVersions[idx]))
+    message <- paste(c("Mismatch between required and installed package versions. Did you forget to run renv::restore()?",
+                       lines),
+                       collapse = "\n")
+    stop(message)
+  }
 }
