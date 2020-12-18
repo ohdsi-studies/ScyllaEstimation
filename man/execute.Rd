@@ -14,6 +14,7 @@ execute(
   databaseId = "Unknown",
   databaseName = "Unknown",
   databaseDescription = "Unknown",
+  verifyDependencies = TRUE,
   createCohorts = TRUE,
   runAnalyses = TRUE,
   computeBalance = TRUE,
@@ -53,6 +54,8 @@ performance.}
 Synthetic Public Use Files (SynPUFs)').}
 
 \item{databaseDescription}{A short description (several sentences) of the database.}
+
+\item{verifyDependencies}{Check whether correct package versions are installed?}
 
 \item{createCohorts}{Create the cohortTable table with the exposure and outcome cohorts?}
 

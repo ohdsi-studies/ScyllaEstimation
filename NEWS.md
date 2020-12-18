@@ -1,3 +1,13 @@
+ScyllaEstimation 1.0.2
+======================
+
+Changes
+
+1. Now `execute()` checks whether correct versions of dependencies are installed.
+
+2. Changing install location for `EvidenceSynthesis` to GitHub again.
+
+
 ScyllaEstimation 1.0.1
 ======================
 
