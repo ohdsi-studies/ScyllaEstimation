@@ -112,6 +112,7 @@ execute <- function(connectionDetails,
                   cohortDatabaseSchema = cohortDatabaseSchema,
                   cohortTable = cohortTable,
                   oracleTempSchema = oracleTempSchema,
+                  databaseId = databaseId,
                   outputFolder = outputFolder)
   }
 

@@ -31,7 +31,8 @@ Imports:
 	survival,
 	plyr,
 	magrittr,
-    zip
+    zip,
+    methods
 Suggests:
     knitr,
     rmarkdown,

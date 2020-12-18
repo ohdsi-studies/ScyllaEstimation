@@ -14,6 +14,7 @@ createCohorts(
   cohortIdsToExcludeFromExecution = c(1100, 1101, 1102, 1103, 1104, 1105, 1106, 2001,
     2005, 2006),
   cohortGroups = ScyllaCharacterization::getUserSelectableCohortGroups(),
+  databaseId,
   minCellCount = 0,
   incremental = TRUE,
   outputFolder,

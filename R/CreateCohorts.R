@@ -31,6 +31,7 @@ createCohorts <- function(connectionDetails,
                                                               2001, # subgroup where covid19+ before hosp w/o required 1y prior obs
                                                               2005, 2006), # subgroup where covid19+ after intensive services
                           cohortGroups = ScyllaCharacterization::getUserSelectableCohortGroups(),
+                          databaseId,
                           minCellCount = 0,
                           incremental = TRUE,
                           outputFolder,

@@ -20,8 +20,10 @@
 "_PACKAGE"
 
 #' @importFrom stats aggregate density pnorm qnorm quantile
-#' @importFrom utils read.csv write.csv install.packages menu setTxtProgressBar txtProgressBar write.table
+#' @importFrom utils read.csv write.csv install.packages menu setTxtProgressBar txtProgressBar
+#'                   write.table installed.packages packageVersion
 #' @importFrom rlang .data
+#' @importFrom methods is
 #' @import dplyr
 #' @import DatabaseConnector
 NULL
