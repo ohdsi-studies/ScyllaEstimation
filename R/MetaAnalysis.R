@@ -27,9 +27,15 @@
 #' @export
 synthesizeResults <- function(allDbsFolder, maExportFolder, maxCores) {
   # library(dplyr)
-  if (file.exists(maExportFolder)) {
+  if (!file.exists(maExportFolder)) {
     dir.create(maExportFolder, recursive = TRUE)
   }
+
+  ParallelLogger::addDefaultFileLogger(file.path(maExportFolder, "log.txt"))
+  ParallelLogger::addDefaultErrorReportLogger(file.path(maExportFolder, "errorReportR.txt"))
+  on.exit(ParallelLogger::unregisterLogger("DEFAULT_FILE_LOGGER", silent = TRUE))
+  on.exit(ParallelLogger::unregisterLogger("DEFAULT_ERRORREPORT_LOGGER", silent = TRUE), add = TRUE)
+
 
   zipFiles <- list.files(allDbsFolder, "*zip")
   mainResults <- lapply(zipFiles, loadMainResults, allDbsFolder = allDbsFolder)
@@ -134,7 +140,7 @@ computeGroupMetaAnalysis <- function(group) {
   #     break
   #   }
   # }
-  # group = combined[[145]]
+  # group = combined[[146]]
   mainResults <- group$mainResults
   if (nrow(mainResults) == 0) {
     return(NULL)
@@ -142,7 +148,7 @@ computeGroupMetaAnalysis <- function(group) {
   analysisId <- mainResults$analysisId[1]
   targetId <- mainResults$targetId[1]
   comparatorId <- mainResults$comparatorId[1]
-  ParallelLogger::logTrace("Performing meta-analysis for target ", targetId, ", comparator ", comparatorId, ", analysis ", analysisId)
+  ParallelLogger::logInfo("Performing meta-analysis for target ", targetId, ", comparator ", comparatorId, ", analysis ", analysisId)
   outcomeIds <- unique(mainResults$outcomeId)
   outcomeGroupResults <- lapply(outcomeIds, computeSingleMetaAnalysis, group)
   groupResults <- do.call(rbind, outcomeGroupResults)
@@ -184,10 +190,16 @@ sumMinCellCount <- function(counts) {
 }
 
 computeSingleMetaAnalysis <- function(outcomeId, group) {
-  # outcomeId <- 152
+  # print(outcomeId)
+  # outcomeId <- 202
   rows <- group$mainResults[group$mainResults$outcomeId == outcomeId, ]
-  profileDbs <- if (is.null(group$profiles)) c() else group$profiles$databaseId[group$profiles$outcomeId == outcomeId]
-
+  profileDbs <- c()
+  if (!is.null(group$profiles)) {
+    profiles <- group$profiles[group$profiles$outcomeId == outcomeId, ]
+    profiles <- profiles[!grepl("NaN", profiles$profile), ]
+    profileDbs <- profiles$databaseId
+  }
+  # profileDbs <- if (is.null(group$profiles)) c() else group$profiles$databaseId[group$profiles$outcomeId == outcomeId]
   maRow <- rows[1, ]
   maRow$databaseId <- "Meta-analysis"
   maRow$targetSubjects <- sumMinCellCount(rows$targetSubjects)
@@ -214,8 +226,7 @@ computeSingleMetaAnalysis <- function(outcomeId, group) {
     maRow$traditionalLogRr <- rows$logRr[idx]
     maRow$traditionalSeLogRr <- rows$seLogRr[idx]
   } else {
-    profiles <- group$profiles$profile[group$profiles$outcomeId == outcomeId]
-    profiles <- strsplit(profiles, ";")
+    profiles <- strsplit(profiles$profile, ";")
     profiles <- as.data.frame(t(sapply(profiles, as.numeric)))
     colnames(profiles) <- seq(log(0.1), log(10), length.out = 1000)
     estimate <- EvidenceSynthesis::computeBayesianMetaAnalysis(profiles)

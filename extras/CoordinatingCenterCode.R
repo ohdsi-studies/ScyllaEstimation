@@ -15,6 +15,7 @@ connection <- sftpConnect(privateKeyFileName = "c:/home/keyfiles/study-coordinat
 
 
 # sftpMkdir(connection, "estimation")
+# sftpMkdir(connection, "SCYLLAESTIMATION")
 
 sftpCd(connection, "estimation")
 sftpCd(connection, "SCYLLAESTIMATION")
@@ -34,7 +35,7 @@ sftpDisconnect(connection)
 
 # Synthesize results across databases --------------------------------------------------------------------
 maExportFolder <- "s:/ScyllaEstimation/MetaAnalysis"
-synthesizeResults(allDbsFolder = allDbsFolder, maExportFolder = maExportFolder, maxCores = 10)
+synthesizeResults(allDbsFolder = file.path(allDbsFolder, "uploaded"), maExportFolder = maExportFolder, maxCores = 10)
 file.copy(file.path(maExportFolder, "Results_MetaAnalysis.zip"), file.path(allDbsFolder, "Results_MetaAnalysis.zip"))
 
 # Upload results to database -----------------------------------------------------------------------

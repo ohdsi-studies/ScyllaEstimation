@@ -275,7 +275,7 @@ results$smallerThan <- as.logical(results$smallerThan)
 results$smallerThan <- results$smallerThan | results$targetSubjects < 0 | results$comparatorSubjects < 0
 results$mdrrText <- sprintf("%s%0.2f", sapply(results$smallerThan, function(x) if (x == 1) return(">") else return("")), results$mdrr)
 results <- results[order(results$mdrr), ]
-results <- results[results$databaseId != "Meta-analysis", ]
+# results <- results[results$databaseId != "Meta-analysis", ]
 results <- results[!is.na(results$mdrr) & !is.nan(results$mdrr) & !is.infinite(results$mdrr) & results$mdrr < 10, ]
 results <- results[results$targetSubjects > 0 & results$comparatorSubjects > 0, ]
 readr::write_csv(results, "s:/ScyllaEstimation/AllDbs/PowerOverview_AllDbs.csv")
