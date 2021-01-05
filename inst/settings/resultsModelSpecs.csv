@@ -79,7 +79,7 @@ covariate_balance,comparator_mean_after,NUMERIC,No,No,Yes
 covariate_balance,std_diff_after,NUMERIC,No,No,Yes
 database,database_id,VARCHAR(255),Yes,Yes,Yes
 database,database_name,VARCHAR(255),Yes,No,Yes
-database,description,VARCHAR(255),Yes,No,Yes
+database,description,TEXT,Yes,No,Yes
 database,vocabularyVersion,VARCHAR(255),No,No,Yes
 database,minObsPeriodDate,DATE,Yes,No,Yes
 database,maxObsPeriodDate,DATE,Yes,No,Yes

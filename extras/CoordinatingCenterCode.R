@@ -18,7 +18,7 @@ connection <- sftpConnect(privateKeyFileName = "c:/home/keyfiles/study-coordinat
 # sftpMkdir(connection, "SCYLLAESTIMATION")
 
 sftpCd(connection, "estimation")
-sftpCd(connection, "SCYLLAESTIMATION")
+sftpCd(connection, "ScyllaEstimation")
 files <- sftpLs(connection)
 files
 
