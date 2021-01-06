@@ -42,6 +42,7 @@ execute(connectionDetails = connectionDetails,
         databaseDescription = databaseDescription,
         createCohorts = TRUE,
         runAnalyses = TRUE,
+        computeBalance = TRUE,
         packageResults = TRUE,
         maxCores = maxCores)
 
