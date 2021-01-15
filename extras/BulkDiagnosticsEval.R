@@ -206,11 +206,19 @@ INNER JOIN @schema.cohort_method_analysis
   ON tmp.analysis_id = cohort_method_analysis.analysis_id;"
 
 results <- renderTranslateQuerySql(connection, sql, schema = schema, snakeCaseToCamelCase = TRUE)
-disconnect(connection)
 results <- results[order(results$maxSd), ]
 readr::write_csv(results, "s:/ScyllaEstimation/AllDbs/BalanceOverview_AllDbs.csv")
 
-
+unblindList <- results[results$maxSd < 0.10, c("databaseId", "targetId", "comparatorId", "analysisId")]
+DatabaseConnector::insertTable(connection = connection,
+                               tableName = "scylla_estimation.unblind",
+                               data = unblindList,
+                               dropTableIfExists = TRUE,
+                               createTable = TRUE,
+                               tempTable = FALSE,
+                               progressBar = TRUE,
+                               camelCaseToSnakeCase = TRUE)
+disconnect(connection)
 
 
 sql <- "SELECT *
