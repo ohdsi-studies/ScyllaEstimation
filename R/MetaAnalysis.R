@@ -30,7 +30,10 @@ synthesizeResults <- function(allDbsFolder, maExportFolder, maxCores) {
   if (!file.exists(maExportFolder)) {
     dir.create(maExportFolder, recursive = TRUE)
   }
-
+  tempResultsFolder <- file.path(maExportFolder, "tempResults")
+  if (!file.exists(tempResultsFolder)) {
+    dir.create(tempResultsFolder, recursive = TRUE)
+  }
   ParallelLogger::addDefaultFileLogger(file.path(maExportFolder, "log.txt"))
   ParallelLogger::addDefaultErrorReportLogger(file.path(maExportFolder, "errorReportR.txt"))
   on.exit(ParallelLogger::unregisterLogger("DEFAULT_FILE_LOGGER", silent = TRUE))
@@ -51,7 +54,7 @@ synthesizeResults <- function(allDbsFolder, maExportFolder, maxCores) {
   rm(profiles)
   ParallelLogger::logInfo("Performing cross-database evidence synthesis")
   cluster <- ParallelLogger::makeCluster(min(maxCores, 10))
-  results <- ParallelLogger::clusterApply(cluster, combined, computeGroupMetaAnalysis)
+  results <- ParallelLogger::clusterApply(cluster, combined, computeGroupMetaAnalysis, tempResultsFolder = tempResultsFolder)
   ParallelLogger::stopCluster(cluster)
   results <- do.call(rbind, results)
   results$trueEffectSize <- NULL
@@ -129,7 +132,7 @@ loadDatabase <- function(zipFile, allDbsFolder) {
   return(profiles)
 }
 
-computeGroupMetaAnalysis <- function(group) {
+computeGroupMetaAnalysis <- function(group, tempResultsFolder) {
   # Find an example where more than one DB has data:
   # for (i in 1:length(combined)) {
   #   group = combined[[i]]
@@ -148,35 +151,41 @@ computeGroupMetaAnalysis <- function(group) {
   analysisId <- mainResults$analysisId[1]
   targetId <- mainResults$targetId[1]
   comparatorId <- mainResults$comparatorId[1]
-  ParallelLogger::logInfo("Performing meta-analysis for target ", targetId, ", comparator ", comparatorId, ", analysis ", analysisId)
-  outcomeIds <- unique(mainResults$outcomeId)
-  outcomeGroupResults <- lapply(outcomeIds, computeSingleMetaAnalysis, group)
-  groupResults <- do.call(rbind, outcomeGroupResults)
-  # View(groupResults[, c("logRr", "seLogRr", "traditionalLogRr", "traditionalSeLogRr")])
-  ncs <- groupResults[groupResults$trueEffectSize == 1, ]
-  validNcs <- ncs[!is.na(ncs$seLogRr), ]
-  if (nrow(validNcs) >= 5) {
-    null <- EmpiricalCalibration::fitMcmcNull(validNcs$logRr, validNcs$seLogRr)
-    calibratedP <- EmpiricalCalibration::calibrateP(null = null,
-                                                    logRr = groupResults$logRr,
-                                                    seLogRr = groupResults$seLogRr)
-    groupResults$calibratedP <- calibratedP$p
-
-    model <- EmpiricalCalibration::convertNullToErrorModel(null)
-    calibratedCi <- EmpiricalCalibration::calibrateConfidenceInterval(logRr = groupResults$logRr,
-                                                                      seLogRr = groupResults$seLogRr,
-                                                                      model = model)
-    groupResults$calibratedRr <- exp(calibratedCi$logRr)
-    groupResults$calibratedCi95Lb <- exp(calibratedCi$logLb95Rr)
-    groupResults$calibratedCi95Ub <- exp(calibratedCi$logUb95Rr)
-    groupResults$calibratedLogRr <- calibratedCi$logRr
-    groupResults$calibratedSeLogRr <- calibratedCi$seLogRr
+  tempResultsFile <- file.path(tempResultsFolder, sprintf("results_t%d_c%d_a%d.rds", targetId, comparatorId, analysisId))
+  if (file.exists(tempResultsFile)) {
+    groupResults <- readRDS(tempResultsFile)
   } else {
-    groupResults$calibratedP <- rep(NA, nrow(groupResults))
-    groupResults$calibratedCi95Lb <- rep(NA, nrow(groupResults))
-    groupResults$calibratedCi95Ub <- rep(NA, nrow(groupResults))
-    groupResults$calibratedLogRr <- rep(NA, nrow(groupResults))
-    groupResults$calibratedSeLogRr <- rep(NA, nrow(groupResults))
+    ParallelLogger::logInfo("Performing meta-analysis for target ", targetId, ", comparator ", comparatorId, ", analysis ", analysisId)
+    outcomeIds <- unique(mainResults$outcomeId)
+    outcomeGroupResults <- lapply(outcomeIds, computeSingleMetaAnalysis, group)
+    groupResults <- do.call(rbind, outcomeGroupResults)
+    # View(groupResults[, c("logRr", "seLogRr", "traditionalLogRr", "traditionalSeLogRr")])
+    ncs <- groupResults[groupResults$trueEffectSize == 1, ]
+    validNcs <- ncs[!is.na(ncs$seLogRr), ]
+    if (nrow(validNcs) >= 5) {
+      null <- EmpiricalCalibration::fitMcmcNull(validNcs$logRr, validNcs$seLogRr)
+      calibratedP <- EmpiricalCalibration::calibrateP(null = null,
+                                                      logRr = groupResults$logRr,
+                                                      seLogRr = groupResults$seLogRr)
+      groupResults$calibratedP <- calibratedP$p
+
+      model <- EmpiricalCalibration::convertNullToErrorModel(null)
+      calibratedCi <- EmpiricalCalibration::calibrateConfidenceInterval(logRr = groupResults$logRr,
+                                                                        seLogRr = groupResults$seLogRr,
+                                                                        model = model)
+      groupResults$calibratedRr <- exp(calibratedCi$logRr)
+      groupResults$calibratedCi95Lb <- exp(calibratedCi$logLb95Rr)
+      groupResults$calibratedCi95Ub <- exp(calibratedCi$logUb95Rr)
+      groupResults$calibratedLogRr <- calibratedCi$logRr
+      groupResults$calibratedSeLogRr <- calibratedCi$seLogRr
+    } else {
+      groupResults$calibratedP <- rep(NA, nrow(groupResults))
+      groupResults$calibratedCi95Lb <- rep(NA, nrow(groupResults))
+      groupResults$calibratedCi95Ub <- rep(NA, nrow(groupResults))
+      groupResults$calibratedLogRr <- rep(NA, nrow(groupResults))
+      groupResults$calibratedSeLogRr <- rep(NA, nrow(groupResults))
+    }
+    saveRDS(groupResults, tempResultsFile)
   }
   return(groupResults)
 }

@@ -288,8 +288,156 @@ results <- results[!is.na(results$mdrr) & !is.nan(results$mdrr) & !is.infinite(r
 results <- results[results$targetSubjects > 0 & results$comparatorSubjects > 0, ]
 readr::write_csv(results, "s:/ScyllaEstimation/AllDbs/PowerOverview_AllDbs.csv")
 
+# Negative controls from database -------------------------------
+
+library(DatabaseConnector)
+library(dplyr)
+connectionDetails <- createConnectionDetails(dbms = "postgresql",
+                                             server = paste(keyring::key_get("scyllaServer"),
+                                                            keyring::key_get("scyllaDatabase"),
+                                                            sep = "/"),
+                                             user = keyring::key_get("scyllaUser"),
+                                             password = keyring::key_get("scyllaPassword"))
+schema <- "scylla_estimation"
+connection <- connect(connectionDetails)
+sql <- "SELECT target_subjects,
+  comparator_subjects,
+  ABS(target_outcomes) + ABS(comparator_outcomes) AS total_outcomes,
+  CASE
+    WHEN target_outcomes < 0 OR comparator_outcomes < 0 THEN 1
+    ELSE 0
+  END AS smaller_than,
+  log_rr,
+  se_log_rr,
+  database_id,
+  cohort_method_result.target_id,
+  target.exposure_name AS target_name,
+  cohort_method_result.comparator_id,
+  comparator.exposure_name AS comparator_name,
+  cohort_method_result.outcome_id,
+  outcome_name,
+  cohort_method_result.analysis_id,
+  description AS analysis_description
+FROM @schema.cohort_method_result
+INNER JOIN @schema.exposure_of_interest target
+  ON cohort_method_result.target_id = target.exposure_id
+INNER JOIN @schema.exposure_of_interest comparator
+  ON cohort_method_result.comparator_id = comparator.exposure_id
+INNER JOIN @schema.negative_control_outcome
+  ON cohort_method_result.outcome_id = negative_control_outcome.outcome_id
+INNER JOIN @schema.cohort_method_analysis
+  ON cohort_method_result.analysis_id = cohort_method_analysis.analysis_id
+WHERE se_log_rr IS NOT NULL
+  AND database_id = 'Meta-analysis';"
+
+results <- renderTranslateQuerySql(connection, sql, schema = schema, snakeCaseToCamelCase = TRUE)
+disconnect(connection)
 
 
+readr::write_csv(results, "s:/ScyllaEstimation/AllDbs/Ncs_AllDbs.csv")
 
+results <- readr::read_csv("s:/ScyllaEstimation/AllDbs/Ncs_AllDbs.csv")
 
+computeEase <- function(subset) {
+  if (nrow(subset) < 5) {
+    return(NULL)
+  }
+  null <- EmpiricalCalibration::fitMcmcNull(subset$logRr, subset$seLogRr)
+  easeEst <- EmpiricalCalibration::computeExpectedAbsoluteSystematicError(null)
+  return(dplyr::tibble(databaseId = subset$databaseId[1],
+                       targetId = subset$targetId[1],
+                       targetName =  subset$targetName[1],
+                       comparatorId = subset$comparatorId[1],
+                       comparatorName = subset$comparatorName[1],
+                       analysisId = subset$analysisId[1],
+                       analysisDescription = subset$analysisDescription[1],
+                       ncs = nrow(subset),
+                       mu = null[1],
+                       sigma = 1/sqrt(null[2]),
+                       ease = easeEst$ease,
+                       ci95lb = easeEst$ciLb,
+                       ci95ub = easeEst$ciUb))
+}
+cluster <- ParallelLogger::makeCluster(20)
+counts <- ParallelLogger::clusterApply(cluster, split(results, paste(results$targetId, results$comparatorId, results$analysisId, results$databaseId)), computeEase)
+ParallelLogger::stopCluster(cluster)
+counts <- dplyr::bind_rows(counts)
+readr::write_csv(counts, "s:/ScyllaEstimation/AllDbs/NcCounts_AllDbs.csv")
+median(counts$ci95ub, na.rm = TRUE)
+min(counts$ci95ub, na.rm = TRUE)
+best <- counts[counts$ci95ub == min(counts$ci95ub, na.rm = TRUE), ]
+results[results$targetId == best$targetId & results$comparatorId == best$comparatorId & results$analysisId == best$analysisId, ]
 
+# Compare to LEGEND:
+
+library(DatabaseConnector)
+
+connectionDetails <- createConnectionDetails(dbms = "postgresql",
+                                             server = paste(Sys.getenv("legendServer"),
+                                                            Sys.getenv("legendDatabase"),
+                                                            sep = "/"),
+                                             port = Sys.getenv("legendPort"),
+                                             user = Sys.getenv("legendUser"),
+                                             password = Sys.getenv("legendPw"))
+
+connection <- connect(connectionDetails)
+sql <- "SELECT target_subjects,
+  comparator_subjects,
+  ABS(target_outcomes) + ABS(comparator_outcomes) AS total_outcomes,
+  CASE
+    WHEN target_outcomes < 0 OR comparator_outcomes < 0 THEN 1
+    ELSE 0
+  END AS smaller_than,
+  log_rr,
+  se_log_rr,
+  database_id,
+  cohort_method_result.target_id,
+  target.exposure_name AS target_name,
+  cohort_method_result.comparator_id,
+  comparator.exposure_name AS comparator_name,
+  cohort_method_result.outcome_id,
+  outcome_name,
+  cohort_method_result.analysis_id,
+  cohort_method_analysis.description AS analysis_description
+FROM @schema.cohort_method_result
+INNER JOIN @schema.single_exposure_of_interest target
+  ON cohort_method_result.target_id = target.exposure_id
+INNER JOIN @schema.single_exposure_of_interest comparator
+  ON cohort_method_result.comparator_id = comparator.exposure_id
+INNER JOIN @schema.negative_control_outcome
+  ON cohort_method_result.outcome_id = negative_control_outcome.outcome_id
+INNER JOIN @schema.cohort_method_analysis
+  ON cohort_method_result.analysis_id = cohort_method_analysis.analysis_id
+WHERE se_log_rr IS NOT NULL
+  AND database_id = 'Meta-analysis'
+  AND cohort_method_result.analysis_id = 3;"
+
+results <- renderTranslateQuerySql(connection, sql, schema = Sys.getenv("legendSchema"), snakeCaseToCamelCase = TRUE)
+disconnect(connection)
+
+computeEase <- function(subset) {
+  if (nrow(subset) < 5) {
+    return(NULL)
+  }
+  null <- EmpiricalCalibration::fitMcmcNull(subset$logRr, subset$seLogRr)
+  easeEst <- EmpiricalCalibration::computeExpectedAbsoluteSystematicError(null)
+  return(dplyr::tibble(databaseId = subset$databaseId[1],
+                       targetId = subset$targetId[1],
+                       targetName =  subset$targetName[1],
+                       comparatorId = subset$comparatorId[1],
+                       comparatorName = subset$comparatorName[1],
+                       analysisId = subset$analysisId[1],
+                       analysisDescription = subset$analysisDescription[1],
+                       ncs = nrow(subset),
+                       mu = null[1],
+                       sigma = 1/sqrt(null[2]),
+                       ease = easeEst$ease,
+                       ci95lb = easeEst$ciLb,
+                       ci95ub = easeEst$ciUb))
+}
+cluster <- ParallelLogger::makeCluster(10)
+results <- ParallelLogger::clusterApply(cluster, split(results, paste(results$targetId, results$comparatorId, results$analysisId, results$databaseId)), computeEase)
+ParallelLogger::stopCluster(cluster)
+results <- dplyr::bind_rows(results)
+readr::write_csv(results, "s:/ScyllaEstimation/AllDbs/NcCounts_Legend.csv")
+median(results$ci95ub, na.rm = TRUE)

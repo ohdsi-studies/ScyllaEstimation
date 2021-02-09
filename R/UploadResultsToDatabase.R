@@ -344,10 +344,14 @@ uploadResultsToDatabase <- function(connectionDetails = NULL,
                          data = chunk)
       }
     }
-
+    if (file == "likelihood_profile.csv") {
+      chunkSize <- 1e5
+    } else {
+      chunkSize <- 1e7
+    }
     readr::read_csv_chunked(file = file.path(unzipFolder, file),
                             callback = uploadChunk,
-                            chunk_size = 1e7,
+                            chunk_size = chunkSize,
                             col_types = readr::cols(),
                             guess_max = 1e6,
                             progress = FALSE)
