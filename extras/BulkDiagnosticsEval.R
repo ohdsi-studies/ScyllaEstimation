@@ -333,7 +333,6 @@ WHERE se_log_rr IS NOT NULL
 results <- renderTranslateQuerySql(connection, sql, schema = schema, snakeCaseToCamelCase = TRUE)
 disconnect(connection)
 
-
 readr::write_csv(results, "s:/ScyllaEstimation/AllDbs/Ncs_AllDbs.csv")
 
 results <- readr::read_csv("s:/ScyllaEstimation/AllDbs/Ncs_AllDbs.csv")
@@ -366,7 +365,8 @@ readr::write_csv(counts, "s:/ScyllaEstimation/AllDbs/NcCounts_AllDbs.csv")
 median(counts$ci95ub, na.rm = TRUE)
 min(counts$ci95ub, na.rm = TRUE)
 best <- counts[counts$ci95ub == min(counts$ci95ub, na.rm = TRUE), ]
-results[results$targetId == best$targetId & results$comparatorId == best$comparatorId & results$analysisId == best$analysisId, ]
+ncs <- results[results$targetId == best$targetId & results$comparatorId == best$comparatorId & results$analysisId == best$analysisId, ]
+EmpiricalCalibration::plotCalibrationEffect(ncs$logRr, ncs$seLogRr, showCis = TRUE, fileName =  "s:/ScyllaEstimation/AllDbs/BestNcs.png")
 
 # Compare to LEGEND:
 
